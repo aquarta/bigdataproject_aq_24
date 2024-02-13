@@ -18,7 +18,8 @@ def waitFor(c,cname="db-mongo", comment="MongoDB"):
     healty = False
     for i in range(100):
         res = c.run(onlydocker_cmd + " inspect --format='{{.State.Health.Status}}' " + cname, echo=True)
-        if res.stdout.find("healthy")>=0:
+        # avoid unealthy match
+        if res.stdout.find("healthy")==0:
             healty=True
             break
         sleep(1)
