@@ -9,7 +9,7 @@ dockerCmd="podman-compose"
 onlydocker_cmd = "podman"
 
 @task
-def up_service(c, dfile="orion-wilma"):
+def up_service(c, dfile="orion-wilma-perseo"):
     c.run(f"{dockerCmd} -f docker-compose/{dfile}.yml up -d --remove-orphans", echo=True)
 
 
@@ -32,7 +32,7 @@ def waitFor(c,cname="db-mongo", comment="MongoDB"):
 @task
 def step2(c):
     waitFor(c,cname="fiware-keyrock", comment="KeyRock")
-    waitFor(c,"db-mongo", "MongoDB")
+    #waitFor(c,"db-mongo", "MongoDB")
     os.environ["ORION_URL"]="http://orion:"+os.environ["ORION_PORT"]
     first_cmd = """ exec db-mongo mongosh --eval '
 	conn = new Mongo();db.createCollection("orion");
@@ -75,3 +75,23 @@ def import_data(c):
         --entrypoint /bin/ash quay.io/curl/curl /provision-devices """
     c.run(onlydocker_cmd + second_cmd)
 
+
+
+@task
+def remove_db_volumes(c):
+    c.run(onlydocker_cmd+ " volume rm fiware_mysql-db",echo=True)
+    c.run(onlydocker_cmd+ " volume rm fiware_mongo-db",echo=True)
+
+@task
+def down(c, dfile="orion-wilma-perseo"):
+    c.run(onlydocker_cmd+f" compose -f docker-compose/{dfile}.yml down", echo=True)
+
+@task
+def rem_network(c, net="fiware_default"):
+    c.run(onlydocker_cmd+f"  network rm {net}")
+
+@task
+def purge(c):
+    down(c)
+    remove_db_volumes(c)
+    rem_network(c)
