@@ -95,8 +95,8 @@ services:
       - IDM_PORT=${KEYROCK_PORT}
       - IDM_HTTPS_ENABLED=${IDM_HTTPS_ENABLED}
       - IDM_HTTPS_PORT=${KEYROCK_HTTPS_PORT}
-      - IDM_ADMIN_USER=alice
-      - IDM_ADMIN_EMAIL=alice-the-admin@test.com
+      - IDM_ADMIN_USER=antonio
+      - IDM_ADMIN_EMAIL=antonio-the-admin@test.com
       - IDM_ADMIN_PASS=test
       - IDM_CSP_FORM_ACTION=*
     secrets:
@@ -114,7 +114,7 @@ services:
     hostname: orion-proxy
     networks:
       default:
-        ipv4_address: 172.18.5.10
+        ipv4_address: 172.18.5.25
     depends_on:
       keyrock:
         condition: service_started
@@ -122,9 +122,9 @@ services:
       restart_policy:
         condition: on-failure
     ports:
-      - "${ORION_PROXY_PORT}:${ORION_PROXY_PORT}" # localhost:1027
+      - "7897:7897"
     expose:
-      - "${ORION_PROXY_PORT}"
+      - "7897"
     environment:
       - DEBUG=pep-proxy:*
       - PEP_PROXY_DEBUG=true
@@ -161,7 +161,7 @@ services:
         condition: service_started
     networks:
       default:
-        ipv4_address: 172.18.5.7
+        ipv4_address: 172.18.5.21
         aliases:
           - tutorial
           - context-provider
