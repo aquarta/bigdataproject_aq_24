@@ -29,7 +29,7 @@ services:
       - mongo-db
     networks:
       default:
-        ipv4_address: 172.18.5.9
+        ipv4_address: 172.18.5.19
     expose:
       - "${ORION_PORT}"
     ports:
@@ -206,6 +206,8 @@ services:
       - orion-v2
     ports:
       - "${PERSEO_CORE_PORT:-8080}:${PERSEO_CORE_PORT:-8080}"
+    environment:
+      - "PERSEO_FE_URL=http://fiware-perseo-fe:${PERSEO_ENDPOINT_PORT:-9090}"
 
   #perseo
   perseofe:
@@ -248,7 +250,28 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
-    
+
+  # Databases
+  # mongo-pe-db:
+  #   labels:
+  #     org.fiware: 'tutorial'
+  #   image: mongo:${MONGO_DB_VERSION}
+  #   hostname: mongo-pe-db
+  #   container_name: db-mongo-pe
+  #   expose:
+  #     - "${MONGO_DB_PE_PORT}"
+  #   ports:
+  #     - "${MONGO_DB_PE_PORT}:${MONGO_DB_PE_PORT}" # localhost:27018
+  #   networks:
+  #     - default
+  #   volumes:
+  #     - mongo-pe-db:/data
+  #   healthcheck:
+  #     test: ["CMD","mongosh", "--eval", "\"db.adminCommand('ping')\""]
+  #     interval: 5s
+  #     timeout: 5s
+  #     retries: 3
+  #     start_period: 5s
 
   mysql-db:
     restart: always
@@ -272,6 +295,43 @@ services:
       - ../mysql-data:/docker-entrypoint-initdb.d/:ro
     secrets:
       - my_secret_data
+  nginx:
+        restart: always
+        labels:
+           org.fiware: 'tutorial'
+        image: nginx:latest
+        hostname: nginx
+        ports:
+            - 10580:80
+        volumes:
+            - ./nginx.conf:/etc/nginx/nginx.conf:ro
+            - ./static:/var/www/static:ro
+        depends_on:
+            - wirecloud
+
+
+  postgres:
+      restart: always
+      labels:
+        org.fiware: 'tutorial'
+      hostname: postgres
+      image: postgres:latest
+      volumes:
+          - ./postgres-data:/var/lib/postgresql/data
+
+  wirecloud:
+      restart: always
+      labels:
+        org.fiware: 'tutorial'
+      hostname: wirecloud
+      image: fiware/wirecloud:latest-composable
+      environment:
+        - "DB_HOST=postgres"
+      depends_on:
+          - postgres
+      volumes:
+          - ./wirecloud_instance:/opt/wirecloud_instance
+          - ./static:/var/www/static
 networks:
   default:
     labels:
@@ -282,6 +342,7 @@ networks:
 volumes:
   mysql-db: ~
   mongo-db: ~
+  mongo-pe-db: ~
 
 secrets:
   my_secret_data:
