@@ -65,7 +65,7 @@ def import_data(c):
     #     -e TUTORIAL_APP_PORT="${TUTORIAL_APP_PORT}" \
     #     --entrypoint /bin/ash quay.io/curl/curl /import-data"""
     # c.run(onlydocker_cmd + first_command)
-    waitFor(c,cname="fiware-iot-agent",comment="IOT Agent")
+    #waitFor(c,cname="fiware-iot-agent",comment="IOT Agent")
     second_cmd = """ run --rm -v "$(pwd)/provision-devices":/provision-devices \
         --network fiware_default \
         -e ORION_PORT="${ORION_PORT}" \
@@ -73,7 +73,7 @@ def import_data(c):
         -e TUTORIAL_DUMMY_DEVICE_PORT="${TUTORIAL_DUMMY_DEVICE_PORT}" \
         -e IOTA_NORTH_PORT="${IOTA_NORTH_PORT}" \
         --entrypoint /bin/ash quay.io/curl/curl /provision-devices """
-    c.run(onlydocker_cmd + second_cmd)
+    c.run(onlydocker_cmd + second_cmd, echo=True)
 
 
 
