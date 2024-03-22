@@ -264,28 +264,39 @@ services:
             - wirecloud
 
 
-  postgres:
-      restart: always
-      labels:
+  mqtt:
+    image: eclipse-mosquitto
+    labels:
         org.fiware: 'tutorial'
-      hostname: postgres
-      image: postgres:latest
-      volumes:
-          - ./postgres-data:/var/lib/postgresql/data
+    hostname: mqtt
+    container_name: fiware-mqtt
+    volumes:
+      - ./mosquitto/config:/mosquitto/config:rw
+      - mqtt_data:/mosquitto/data/:rw
+    ports:
+      - 1883:1883
+      - 9001:9001
+    networks:
+      default:
+        ipv4_address: 172.18.5.35
 
-  wirecloud:
-      restart: always
-      labels:
+  iotagent-lora:
+    image: ioeari/iotagent-lora
+    container_name: fiware-iota-lora
+    ports:
+      - 6041:4041
+    labels:
         org.fiware: 'tutorial'
-      hostname: wirecloud
-      image: fiware/wirecloud:latest-composable
-      environment:
-        - "DB_HOST=postgres"
-      depends_on:
-          - postgres
-      volumes:
-          - ./wirecloud_instance:/opt/wirecloud_instance
-          - ./static:/var/www/static
+    depends_on:
+        - mongodb
+        - orion
+        - mqtt
+    hostname: iotagent-lora
+    entrypoint: bin/iotagent-lora docker/config-docker.js
+    networks:
+      default:
+        ipv4_address: 172.18.5.55
+
 networks:
   default:
     labels:
@@ -297,6 +308,7 @@ volumes:
   mysql-db: ~
   mongo-db: ~
   mongo-pe-db: ~
+  mqtt_data: ~
 
 secrets:
   my_secret_data:
