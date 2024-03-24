@@ -9,7 +9,7 @@ dockerCmd="podman-compose"
 onlydocker_cmd = "podman"
 
 @task
-def up_service(c, dfile="orion-wilma-perseo"):
+def up_docker_compose(c, dfile="orion-wilma-perseo"):
     c.run(f"{dockerCmd} -f docker-compose/{dfile}.yml up -d --remove-orphans", echo=True)
 
 
