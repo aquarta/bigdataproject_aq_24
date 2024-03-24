@@ -81,6 +81,8 @@ def import_data(c):
 def remove_db_volumes(c):
     c.run(onlydocker_cmd+ " volume rm fiware_mysql-db",echo=True)
     c.run(onlydocker_cmd+ " volume rm fiware_mongo-db",echo=True)
+    c.run(onlydocker_cmd+ " volume rm fiware_mqtt_data",echo=True)
+     
 
 @task
 def down(c, dfile="orion-wilma-perseo"):
