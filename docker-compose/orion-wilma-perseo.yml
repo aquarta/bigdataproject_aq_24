@@ -155,7 +155,6 @@ services:
     container_name: fiware-perseo-core
     hostname: fiware-perseo-core
     depends_on:
-      depends_on:
       - mongo-db
       - orion-v2
     ports:
@@ -249,19 +248,19 @@ services:
       - ../mysql-data:/docker-entrypoint-initdb.d/:ro
     secrets:
       - my_secret_data
-  nginx:
-        restart: always
-        labels:
-           org.fiware: 'bdataprj'
-        image: nginx:latest
-        hostname: nginx
-        ports:
-            - 10580:80
-        volumes:
-            - ./nginx.conf:/etc/nginx/nginx.conf:ro
-            - ./static:/var/www/static:ro
-        depends_on:
-            - wirecloud
+  # nginx:
+  #       restart: always
+  #       labels:
+  #          org.fiware: 'bdataprj'
+  #       image: nginx:latest
+  #       hostname: nginx
+  #       ports:
+  #           - 10580:80
+  #       volumes:
+  #           - ./nginx.conf:/etc/nginx/nginx.conf:ro
+  #           - ./static:/var/www/static:ro
+  #       depends_on:
+  #           - wirecloud
 
 
   mqtt:
@@ -293,8 +292,8 @@ services:
     labels:
         org.fiware: 'bdataprj'
     depends_on:
-        - mongodb
-        - orion
+        - mongo-db
+        - orion-v2
         - mqtt
     hostname: iotagent-lora
     entrypoint: bin/iotagent-lora docker/config-docker.js
