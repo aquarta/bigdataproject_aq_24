@@ -273,6 +273,9 @@ services:
     volumes:
       - ./mosquitto/config:/mosquitto/config:rw
       - mqtt_data:/mosquitto/data/:rw
+    expose:
+      - 1883
+      - 9001
     ports:
       - 1883:1883
       - 9001:9001
@@ -283,6 +286,8 @@ services:
   iotagent-lora:
     image: ioeari/iotagent-lora
     container_name: fiware-iota-lora
+    expose:
+      - 6041
     ports:
       - 6041:4041
     labels:
@@ -293,6 +298,11 @@ services:
         - mqtt
     hostname: iotagent-lora
     entrypoint: bin/iotagent-lora docker/config-docker.js
+    environment:
+      - IOTA_MONGO_HOST=mongo-db # The host name of MongoDB
+      - IOTA_MONGO_PORT=${MONGO_DB_PORT} # The port mongoDB is listening on
+      - IOTA_MONGO_DB=iotagentul
+      #- IOTA_MONGO_DB=iotagentlora # The name of the database used in mongoDB
     networks:
       default:
         ipv4_address: 172.18.5.55
