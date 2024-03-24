@@ -17,3 +17,13 @@ It use:
 - Fiware IOTAgent lora
 - Fiware Wilma
 - Fiware perseo
+
+## starting docker compose
+
+The project require, python, invoke python package and python-loadenv python package.
+
+then type:
+
+```
+invoke -c services up-docker-compose
+```
