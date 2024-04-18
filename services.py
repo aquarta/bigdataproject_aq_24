@@ -5,12 +5,18 @@ import os
 #loading the .env file in dir
 load_dotenv()
 
-dockerCmd="podman-compose"
-onlydocker_cmd = "podman"
+dockerCmd="docker-compose"
+onlydocker_cmd = "docker"
 
 @task
 def up_docker_compose(c, dfile="orion-wilma-perseo"):
     c.run(f"{dockerCmd} -f docker-compose/{dfile}.yml up -d --remove-orphans", echo=True)
+
+
+@task
+def pepproxy_build(c, dfile="wilma"):
+    c.run(f"{dockerCmd} -f docker-compose/{dfile}.yml up -d", echo=True)
+    
 
 
 def waitFor(c,cname="db-mongo", comment="MongoDB"):

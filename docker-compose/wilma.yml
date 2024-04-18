@@ -1,0 +1,38 @@
+version: "3.8"
+services:
+# PEP Proxy for Orion
+  orion-proxy:
+    labels:
+      org.fiware: 'bdataprj'
+    image: quay.io/fiware/pep-proxy:${WILMA_VERSION}
+    container_name: fiware-orion-proxy
+    hostname: orion-proxy
+    networks:
+      default:
+        ipv4_address: 172.18.5.25
+    deploy:
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "7897:7897"
+    expose:
+      - "7897"
+    environment:
+      - DEBUG=pep-proxy:*
+      - PEP_PROXY_DEBUG=true
+      - PEP_PROXY_APP_HOST=iot-agent
+      - PEP_PROXY_APP_PORT=${IOTA_SOUTH_PORT}
+      - PEP_PROXY_PORT=${PEP_PROXY_PORT}
+      - PEP_PROXY_IDM_HOST=keyrock
+      - PEP_PROXY_HTTPS_ENABLED=false
+      - PEP_PROXY_AUTH_ENABLED=false
+      - PEP_PROXY_IDM_SSL_ENABLED=false
+      - PEP_PROXY_IDM_PORT=${KEYROCK_PORT}
+      - PEP_PROXY_APP_ID=8f14fd2c-7072-4acb-99ba-280c3f0c0485
+      - PEP_PROXY_USERNAME=pep_proxy_65b131b0-abc0-45db-9ace-69a2e01ab577
+      - PEP_PASSWORD=pep_proxy_d7afa456-7203-4cfd-a589-63b2d613290e
+      - PEP_PROXY_PDP=idm
+      - PEP_PROXY_MAGIC_KEY=1234
+      - PEP_PROXY_PUBLIC_PATHS=/version
+    healthcheck:
+      interval: 50s

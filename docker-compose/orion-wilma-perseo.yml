@@ -51,6 +51,9 @@ services:
       - orion-v2
     networks:
       - default
+    expose:
+      - ${IOTA_NORTH_PORT}
+      - ${IOTA_SOUTH_PORT}
     ports:
       - "${IOTA_NORTH_PORT}:${IOTA_NORTH_PORT}" # localhost:4041
       - "${IOTA_SOUTH_PORT}:${IOTA_SOUTH_PORT}" # localhost:7896
@@ -106,44 +109,44 @@ services:
 
 
   # PEP Proxy for Orion
-  orion-proxy:
-    labels:
-      org.fiware: 'bdataprj'
-    image: quay.io/fiware/pep-proxy:${WILMA_VERSION}
-    container_name: fiware-orion-proxy
-    hostname: orion-proxy
-    networks:
-      default:
-        ipv4_address: 172.18.5.25
-    depends_on:
-      keyrock:
-        condition: service_started
-    deploy:
-      restart_policy:
-        condition: on-failure
-    ports:
-      - "7897:7897"
-    expose:
-      - "7897"
-    environment:
-      - DEBUG=pep-proxy:*
-      - PEP_PROXY_DEBUG=true
-      - PEP_PROXY_APP_HOST=orion
-      - PEP_PROXY_APP_PORT=${ORION_PORT}
-      - PEP_PROXY_PORT=${ORION_PROXY_PORT}
-      - PEP_PROXY_IDM_HOST=keyrock
-      - PEP_PROXY_HTTPS_ENABLED=false
-      - PEP_PROXY_AUTH_ENABLED=false
-      - PEP_PROXY_IDM_SSL_ENABLED=false
-      - PEP_PROXY_IDM_PORT=${KEYROCK_PORT}
-      - PEP_PROXY_APP_ID=tutorial-dckr-site-0000-xpresswebapp
-      - PEP_PROXY_USERNAME=pep_proxy_00000000-0000-0000-0000-000000000000
-      - PEP_PASSWORD=test
-      - PEP_PROXY_PDP=idm
-      - PEP_PROXY_MAGIC_KEY=1234
-      - PEP_PROXY_PUBLIC_PATHS=/version
-    healthcheck:
-      interval: 50s
+  # orion-proxy:
+  #   labels:
+  #     org.fiware: 'bdataprj'
+  #   image: quay.io/fiware/pep-proxy:${WILMA_VERSION}
+  #   container_name: fiware-orion-proxy
+  #   hostname: orion-proxy
+  #   networks:
+  #     default:
+  #       ipv4_address: 172.18.5.25
+  #   depends_on:
+  #     keyrock:
+  #       condition: service_started
+  #   deploy:
+  #     restart_policy:
+  #       condition: on-failure
+  #   ports:
+  #     - "7897:7897"
+  #   expose:
+  #     - "7897"
+  #   environment:
+  #     - DEBUG=pep-proxy:*
+  #     - PEP_PROXY_DEBUG=true
+  #     - PEP_PROXY_APP_HOST=orion
+  #     - PEP_PROXY_APP_PORT=${ORION_PORT}
+  #     - PEP_PROXY_PORT=${ORION_PROXY_PORT}
+  #     - PEP_PROXY_IDM_HOST=keyrock
+  #     - PEP_PROXY_HTTPS_ENABLED=false
+  #     - PEP_PROXY_AUTH_ENABLED=false
+  #     - PEP_PROXY_IDM_SSL_ENABLED=false
+  #     - PEP_PROXY_IDM_PORT=${KEYROCK_PORT}
+  #     - PEP_PROXY_APP_ID=tutorial-dckr-site-0000-xpresswebapp
+  #     - PEP_PROXY_USERNAME=pep_proxy_00000000-0000-0000-0000-000000000000
+  #     - PEP_PASSWORD=test
+  #     - PEP_PROXY_PDP=idm
+  #     - PEP_PROXY_MAGIC_KEY=1234
+  #     - PEP_PROXY_PUBLIC_PATHS=/version
+  #   healthcheck:
+  #     interval: 50s
 
 
 
