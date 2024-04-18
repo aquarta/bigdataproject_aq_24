@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Flask Leaflet Website</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/universal.css') }}" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+  integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+  crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+  integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+  crossorigin=""></script>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div id="map"></div>
+  
+  <script src="{{ url_for('static', filename='js/universal.js') }}" /></script>
+  <script>
+    var markers_map = {};
+    const ok_color = '#76b57d' // green
+    const bad_color = '#de5f5f' // red
+
+    const markerHtmlStyles_ok = `
+      background-color: ${ok_color};
+      width: 3rem;
+      height: 3rem;
+      display: block;
+      left: -1.5rem;
+      top: -1.5rem;
+      position: relative;
+      border-radius: 3rem 3rem 0;
+      transform: rotate(45deg);
+      border: 1px solid #FFFFFF`
+    
+    const markerHtmlStyles_bad = `
+      background-color: ${bad_color};
+      width: 3rem;
+      height: 3rem;
+      display: block;
+      left: -1.5rem;
+      top: -1.5rem;
+      position: relative;
+      border-radius: 3rem 3rem 0;
+      transform: rotate(45deg);
+      border: 1px solid #FFFFFF`
+
+    const ok_icon = L.divIcon({
+      className: "ok-pin",
+      iconAnchor: [0, 24],
+      labelAnchor: [-6, 0],
+      popupAnchor: [0, -36],
+      html: `<span style="${markerHtmlStyles_ok}" />`
+    })
+    const bad_icon = L.divIcon({
+      className: "bad-pin",
+      iconAnchor: [0, 24],
+      labelAnchor: [-6, 0],
+      popupAnchor: [0, -36],
+      html: `<span style="${markerHtmlStyles_bad}" />`
+    })
+    {% for marker in markers %}
+          if ("{{marker['status']}}" == "good"){
+            icon = ok_icon;
+          }else{
+            icon = bad_icon;
+          }
+      markers_map["{{marker['id']}}"] = L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}],{icon: icon}).addTo(map)
+      .bindPopup("{{ marker['popup'] }}")
+      .openPopup();
+    {% endfor %}
+    namespace = '/'
+    console.log(document.domain)
+    //socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
+    socket = io.connect("https://8000-aquarta-bigdataprojecta-oe6lq79ertz.ws-eu110.gitpod.io"+namespace);
+    // io('connection', socket => {
+    //   socket.on('update_bridge_status', (msg) => {
+    //     markers_map['urn:ngsi-ld:way:31061690'].setIcon(bad_icon)
+    //     console.log('message: ' + msg);
+    //   });
+    // }
+    // );
+    
+      
+
+      // client-side
+      socket.on("connect", () => {
+
+        console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+        socket.on('update_bridge_status', (msg) => {
+          console.log("update_bridge_status received");
+          console.log('message: ' + msg);
+          if (msg.status == "good"){
+            markers_map[msg.bridgeid].setIcon(ok_icon);
+          }else{
+            markers_map[msg.bridgeid].setIcon(bad_icon);
+          }
+          
+          
+        });
+      });
+    
+    
+      socket.on("connect_error", (err) => {
+      // the reason of the error, for example "xhr poll error"
+      console.log(err.message);
+
+      // some additional description, for example the status code of the initial HTTP response
+      console.log(err.description);
+
+      // some additional context, for example the XMLHttpRequest object
+      console.log(err.context);
+    });
+
+  </script>
+</body>
+
+</html>
