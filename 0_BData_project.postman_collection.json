@@ -7,6 +7,287 @@
 	},
 	"item": [
 		{
+			"name": "Add Bridge to orion and",
+			"item": [
+				{
+					"name": "Add Bridges to Orion",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "fiware-service",
+								"value": "{{fw-service-name}}",
+								"type": "text"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "{{fw-service-path}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"actionType\": \"APPEND\",\r\n  \"entities\": [\r\n    {\r\n      \"id\": \"urn:ngsi-ld:way:31061690\",\r\n      \"type\": \"Bridge\",\r\n      \"location\": {\r\n        \"type\": \"geo:json\",\r\n        \"value\": {\r\n          \"type\": \"Point\",\r\n          \"coordinates\": [\r\n            16.381560309072327,\r\n            39.337421188797606\r\n          ]\r\n        }\r\n      },\r\n      \"bridge_status\":{\r\n            \"type\":\"Text\",\r\n            \"value\":\"good\"\r\n            \r\n        },\r\n      \"name\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Strada Statale 107 Silana Crotonese\"\r\n      }\r\n    },\r\n    {\r\n      \"id\": \"urn:ngsi-ld:way:37879441\",\r\n      \"type\": \"Bridge\",\r\n      \"location\": {\r\n        \"type\": \"geo:json\",\r\n        \"value\": {\r\n          \"type\": \"Point\",\r\n          \"coordinates\": [\r\n            16.239320649913104,\r\n            39.72125070033673\r\n          ]\r\n        }\r\n        \r\n        \r\n      },\r\n      \"bridge_status\":{\r\n            \"type\":\"Text\",\r\n            \"value\":\"good\"\r\n            \r\n        },\r\n      \"name\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Strada Statale 534 di Cammarata e degli Stombi\"\r\n      }\r\n    },\r\n    {\r\n      \"id\": \"urn:ngsi-ld:way:95461703\",\r\n      \"type\": \"Bridge\",\r\n      \"location\": {\r\n        \"type\": \"geo:json\",\r\n        \"value\": {\r\n          \"type\": \"Point\",\r\n          \"coordinates\": [\r\n            16.128998449469233,\r\n            39.87926034327192\r\n          ]\r\n        }\r\n      },\r\n      \"bridge_status\":{\r\n            \"type\":\"Text\",\r\n            \"value\":\"good\"\r\n            \r\n        },\r\n      \"name\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Viadotto Rago\"\r\n      }\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{orion_url}}/v2/op/update",
+							"host": [
+								"{{orion_url}}"
+							],
+							"path": [
+								"v2",
+								"op",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add sensor to bridge relationship",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "fiware-service",
+								"value": "{{fw-service-name}}",
+								"type": "text"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "{{fw-service-path}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"devices\": [\r\n    {\r\n      \"device_id\": \"esensor:31061690\",\r\n      \"static_attributes\": [\r\n        {\"name\":\"refSens\",\r\n        \"type\": \"Relationship\",\r\n        \"value\": \"urn:ngsi-ld:way:31061690\"\r\n            }\r\n       ]\r\n      \r\n    },\r\n    {\r\n      \"device_id\": \"esensor:37879441\",\r\n      \"static_attributes\": [\r\n        {\"name\":\"refSens\",\r\n        \"type\": \"Relationship\",\r\n        \"value\": \"urn:ngsi-ld:way:37879441\"\r\n            }\r\n       ]\r\n      \r\n    },\r\n    {\r\n      \"device_id\": \"esensor:95461703\",\r\n       \"static_attributes\": [\r\n        {\"name\":\"refSens\",\r\n        \"type\": \"Relationship\",\r\n        \"value\": \"urn:ngsi-ld:way:95461703\"\r\n            }\r\n       ]\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{iota_north}}/iot/devices",
+							"host": [
+								"{{iota_north}}"
+							],
+							"path": [
+								"iot",
+								"devices"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get sensor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "fiware-service",
+								"value": "{{fw-service-name}}",
+								"type": "text"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "{{fw-service-path}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"devices\": [\r\n    {\r\n      \"device_id\": \"esensor:31061690\",\r\n      \"static_attributes\": [\r\n        {\"name\":\"refSens\",\r\n        \"type\": \"Relationship\",\r\n        \"value\": \"urn:ngsi-ld:way:31061690\"\r\n            }\r\n       ]\r\n    },\r\n    {\r\n      \"device_id\": \"esensor:37879441\",\r\n      \"static_attributes\": [\r\n        {\"name\":\"refSens\",\r\n        \"type\": \"Relationship\",\r\n        \"value\": \"urn:ngsi-ld:way:37879441\"\r\n            }\r\n       ]\r\n      \r\n    },\r\n    {\r\n      \"device_id\": \"esensor:95461703\",\r\n       \"static_attributes\": [\r\n        {\"name\":\"refSens\",\r\n        \"type\": \"Relationship\",\r\n        \"value\": \"urn:ngsi-ld:way:95461703\"\r\n            }\r\n       ]\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{iota_north}}/iot/devices/esensor:31061690",
+							"host": [
+								"{{iota_north}}"
+							],
+							"path": [
+								"iot",
+								"devices",
+								"esensor:31061690"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Add sensor to bridge relationship Copy",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "fiware-service",
+										"value": "{{fw-service-name}}",
+										"type": "text"
+									},
+									{
+										"key": "fiware-servicepath",
+										"value": "{{fw-service-path}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"devices\": [\r\n    {\r\n      \"device_id\": \"esensor:31061690\",\r\n      \"static_attributes\": [\r\n        {\"name\":\"refSens\",\r\n        \"type\": \"Relationship\",\r\n        \"value\": \"urn:ngsi-ld:way:31061690\"\r\n            }\r\n       ]\r\n    },\r\n    {\r\n      \"device_id\": \"esensor:37879441\",\r\n      \"static_attributes\": [\r\n        {\"name\":\"refSens\",\r\n        \"type\": \"Relationship\",\r\n        \"value\": \"urn:ngsi-ld:way:37879441\"\r\n            }\r\n       ]\r\n      \r\n    },\r\n    {\r\n      \"device_id\": \"esensor:95461703\",\r\n       \"static_attributes\": [\r\n        {\"name\":\"refSens\",\r\n        \"type\": \"Relationship\",\r\n        \"value\": \"urn:ngsi-ld:way:95461703\"\r\n            }\r\n       ]\r\n    }\r\n  ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{iota_north}}/iot/devices/esensor:31061690",
+									"host": [
+										"{{iota_north}}"
+									],
+									"path": [
+										"iot",
+										"devices",
+										"esensor:31061690"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Length",
+									"value": "304"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 18 Apr 2024 14:06:10 GMT"
+								},
+								{
+									"key": "Etag",
+									"value": "W/\"130-1P8xko2aU9WsaKEgjJEi/6+22AU\""
+								},
+								{
+									"key": "Fiware-Correlator",
+									"value": "d5bd43d0-a2a4-4347-9870-546869fcbea5"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"device_id\": \"esensor:31061690\",\n    \"service\": \"openiot\",\n    \"service_path\": \"/\",\n    \"entity_name\": \"ElevationSens:esensor:31061690\",\n    \"entity_type\": \"ElevationSens\",\n    \"polling\": true,\n    \"transport\": \"HTTP\",\n    \"lazy\": [],\n    \"commands\": [],\n    \"static_attributes\": [\n        {\n            \"name\": \"refSens\",\n            \"type\": \"Relationship\",\n            \"value\": \"urn:ngsi-ld:way:31061690\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Get entities",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "fiware-service",
+								"value": "{{fw-service-name}}",
+								"type": "text"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "{{fw-service-path}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{orion_url}}/v2/entities/",
+							"host": [
+								"{{orion_url}}"
+							],
+							"path": [
+								"v2",
+								"entities",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "In this folder are collected the all rest api call required to add the buildings to context provider\n\n[<img src=\"https://mermaid.ink/img/pako:eNqdUk1vwyAM_SsW56RarhyrfRymSZV6mDRx8YLbIoGJgGyrqv73QUi6T-0wcwA_Pz8jHifRe01CirZtFSeTLElYa0wIt-YVA4FJ5KLi3vPO7KVigHQgl1nPGKmkA2pteC-hu1I8ySyLwrXBfUBXaADr0djChG61cshH2BJHH-4eQcIBYyVdsK5tuzmToPI1raU-wS54p0TllhlfhE81LxFTKIjRsLn_gTI6msG6nRepy_jfpP7SydF7N1h6uxC_if5HcvDRJOMZrO-xHD5KhhOQpZdP8Fk0wlFwaHR2dBqnxOSWEuUNmcYU0CrR1NLsXCkW70r7OGTv6Uab5IOQKYzUCByT3x65X_LKma0Vcoc2ZpSmnof6m6ZP1eQB_OT9wjm_A1sNw5Y?type=png\">](https://mermaid.live/edit#pako:eNqdUk1vwyAM_SsW56RarhyrfRymSZV6mDRx8YLbIoGJgGyrqv73QUi6T-0wcwA_Pz8jHifRe01CirZtFSeTLElYa0wIt-YVA4FJ5KLi3vPO7KVigHQgl1nPGKmkA2pteC-hu1I8ySyLwrXBfUBXaADr0djChG61cshH2BJHH-4eQcIBYyVdsK5tuzmToPI1raU-wS54p0TllhlfhE81LxFTKIjRsLn_gTI6msG6nRepy_jfpP7SydF7N1h6uxC_if5HcvDRJOMZrO-xHD5KhhOQpZdP8Fk0wlFwaHR2dBqnxOSWEuUNmcYU0CrR1NLsXCkW70r7OGTv6Uab5IOQKYzUCByT3x65X_LKma0Vcoc2ZpSmnof6m6ZP1eQB_OT9wjm_A1sNw5Y)"
+		},
+		{
 			"name": "Provision Service, Devices and Bridges",
 			"item": [
 				{
@@ -182,69 +463,23 @@
 			]
 		},
 		{
-			"name": "Add Bridge to orion and",
+			"name": "Add perseo subscription to Orion",
 			"item": [
 				{
-					"name": "Add Bridges to Orion",
+					"name": "Subscribe perseo to orion sensors elevation changes",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 201\", function () {\r",
-									"    pm.response.to.have.status(201);\r",
-									"});"
+									"pm.collectionVariables.set(\"variable_key\", \"variable_value\");\r",
+									"pm.fold"
 								],
 								"type": "text/javascript",
 								"packages": {}
 							}
 						}
 					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "fiware-service",
-								"value": "{{fw-service-name}}",
-								"type": "text"
-							},
-							{
-								"key": "fiware-servicepath",
-								"value": "{{fw-service-path}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"actionType\": \"APPEND\",\r\n  \"entities\": [\r\n    {\r\n      \"id\": \"urn:ngsi-ld:way:31061690\",\r\n      \"type\": \"Bridge\",\r\n      \"location\": {\r\n        \"type\": \"geo:json\",\r\n        \"value\": {\r\n          \"type\": \"Point\",\r\n          \"coordinates\": [\r\n            16.381560309072327,\r\n            39.337421188797606\r\n          ]\r\n        }\r\n      },\r\n      \"name\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Strada Statale 107 Silana Crotonese\"\r\n      }\r\n    },\r\n    {\r\n      \"id\": \"urn:ngsi-ld:way:37879441\",\r\n      \"type\": \"Bridge\",\r\n      \"location\": {\r\n        \"type\": \"geo:json\",\r\n        \"value\": {\r\n          \"type\": \"Point\",\r\n          \"coordinates\": [\r\n            16.239320649913104,\r\n            39.72125070033673\r\n          ]\r\n        }\r\n      },\r\n      \"name\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Strada Statale 534 di Cammarata e degli Stombi\"\r\n      }\r\n    },\r\n    {\r\n      \"id\": \"urn:ngsi-ld:way:95461703\",\r\n      \"type\": \"Bridge\",\r\n      \"location\": {\r\n        \"type\": \"geo:json\",\r\n        \"value\": {\r\n          \"type\": \"Point\",\r\n          \"coordinates\": [\r\n            16.128998449469233,\r\n            39.87926034327192\r\n          ]\r\n        }\r\n      },\r\n      \"name\": {\r\n        \"type\": \"Text\",\r\n        \"value\": \"Viadotto Rago\"\r\n      }\r\n    }\r\n  ]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{orion_url}}/v2/op/update",
-							"host": [
-								"{{orion_url}}"
-							],
-							"path": [
-								"v2",
-								"op",
-								"update"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"description": "In this folder are collected the all rest api call required to add the buildings to context provider\n\n[<img src=\"https://mermaid.ink/img/pako:eNqdUk1vwyAM_SsW56RarhyrfRymSZV6mDRx8YLbIoGJgGyrqv73QUi6T-0wcwA_Pz8jHifRe01CirZtFSeTLElYa0wIt-YVA4FJ5KLi3vPO7KVigHQgl1nPGKmkA2pteC-hu1I8ySyLwrXBfUBXaADr0djChG61cshH2BJHH-4eQcIBYyVdsK5tuzmToPI1raU-wS54p0TllhlfhE81LxFTKIjRsLn_gTI6msG6nRepy_jfpP7SydF7N1h6uxC_if5HcvDRJOMZrO-xHD5KhhOQpZdP8Fk0wlFwaHR2dBqnxOSWEuUNmcYU0CrR1NLsXCkW70r7OGTv6Uab5IOQKYzUCByT3x65X_LKma0Vcoc2ZpSmnof6m6ZP1eQB_OT9wjm_A1sNw5Y?type=png\">](https://mermaid.live/edit#pako:eNqdUk1vwyAM_SsW56RarhyrfRymSZV6mDRx8YLbIoGJgGyrqv73QUi6T-0wcwA_Pz8jHifRe01CirZtFSeTLElYa0wIt-YVA4FJ5KLi3vPO7KVigHQgl1nPGKmkA2pteC-hu1I8ySyLwrXBfUBXaADr0djChG61cshH2BJHH-4eQcIBYyVdsK5tuzmToPI1raU-wS54p0TllhlfhE81LxFTKIjRsLn_gTI6msG6nRepy_jfpP7SydF7N1h6uxC_if5HcvDRJOMZrO-xHD5KhhOQpZdP8Fk0wlFwaHR2dBqnxOSWEuUNmcYU0CrR1NLsXCkW70r7OGTv6Uab5IOQKYzUCByT3x65X_LKma0Vcoc2ZpSmnof6m6ZP1eQB_OT9wjm_A1sNw5Y)"
-		},
-		{
-			"name": "Add perseo subscription to Orion",
-			"item": [
-				{
-					"name": "[DBG] Subscribe to perseo",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -262,6 +497,57 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n  \"description\": \"Notify perseo of all elevation changes\",\r\n  \"subject\": {\r\n    \"entities\": [{\"idPattern\": \".*\", \"type\": \"ElevationSens\"}],\r\n    \"condition\": {\r\n      \"attrs\": [ \"elevation\" ]\r\n    }\r\n  },\r\n  \"notification\": {\r\n    \"http\": {\r\n      \"url\": \"{{perseo-fe-url}}/notices\"\r\n    },\r\n    \"metadata\": [ \"previousValue\" ]\r\n  },\r\n   \"attrs\": [ \"elevation\", \"e\" ]\r\n   \r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{orion_url}}/v2/subscriptions",
+							"host": [
+								"{{orion_url}}"
+							],
+							"path": [
+								"v2",
+								"subscriptions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Subscribe perseo to orion Bridge Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"variable_key\", \"variable_value\");\r",
+									"pm.fold"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Fiware-Service",
+								"value": "{{fw-service-name}}",
+								"type": "text"
+							},
+							{
+								"key": "Fiware-ServicePath",
+								"value": "{{fw-service-path}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"description\": \"Notify perseo of all bridge status changes\",\r\n  \"subject\": {\r\n    \"entities\": [{\"idPattern\": \".*\", \"type\": \"Bridge\"}],\r\n    \"condition\": {\r\n      \"attrs\": [ \"bridge_status\" ]\r\n    }\r\n  },\r\n  \"notification\": {\r\n    \"http\": {\r\n      \"url\": \"{{perseo-fe-url}}/notices\"\r\n    },\r\n    \"metadata\": [ \"previousValue\" ]\r\n  },\r\n   \"attrs\": [ \"bridge_status\" ]\r\n   \r\n}\r\n\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -323,22 +609,26 @@
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "Perseo rules",
-			"item": [
+				},
 				{
-					"name": "[WORKS] Update rule to perseo Every C Motion Docker",
+					"name": "[DBG] GET Subscription Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
-						"method": "PUT",
+						"method": "DELETE",
 						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json",
-								"type": "text"
-							},
 							{
 								"key": "fiware-service",
 								"value": "{{fw-service-name}}",
@@ -350,99 +640,40 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n   \"name\":\"Quota_rule_update_8\",\r\n   \"text\":\"select *,count(*) as evtc, type as evttype, id as evtsensid, refStore? as evtstore, quota? as evtquota from iotEvent where cast(quota?,int)>30\",\r\n   \"action\":{\r\n      \"type\":\"post\",\r\n      \"parameters\":{\r\n        \"url\": \"{{local_flask}}/perseo_post\",\r\n         \"method\": \"PUT\",\r\n         \"headers\": {\r\n            \"Content-type\": \"text/plain\"\r\n         },\r\n         \"qs\":{\r\n            \"text\":\"8_put_motion_count_low ${evtc}, type: ${evttype} -- ${evtstore} -- ${evtsensid}, ${evtquota}\"\r\n         }\r\n      }\r\n   }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "http://localhost:9090/rules/Quota_rule_update_8",
-							"protocol": "http",
+							"raw": "{{orion_url}}/v2/subscriptions",
 							"host": [
-								"localhost"
+								"{{orion_url}}"
 							],
-							"port": "9090",
 							"path": [
-								"rules",
-								"Quota_rule_update_8"
+								"v2",
+								"subscriptions"
 							]
 						}
 					},
-					"response": [
-						{
-							"name": "[DBG] Subscribe local flask api Copy 2",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "content-type",
-										"value": "application/json",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n   \"name\":\"Price_low\",\r\n   \"text\":\"select * from iotEvent \",\r\n   \"action\":{\r\n      \"type\":\"post\",\r\n      \"parameters\":{\r\n        \"url\": \"{{local_flask}}/perseo_post\",\r\n         \"method\": \"PUT\",\r\n         \"headers\": {\r\n            \"Content-type\": \"text/plain\"\r\n         },\r\n         \"text\":\"price_low\"\r\n      }\r\n   }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{perseo-fe-url}}/rules",
-									"host": [
-										"{{perseo-fe-url}}"
-									],
-									"path": [
-										"rules"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "X-Powered-By",
-									"value": "Express"
-								},
-								{
-									"key": "fiware-correlator",
-									"value": "7343b437-45d1-4e7a-a1c8-3d7d98fbb639; node=NjsvTFom2E; perseocep=306"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "Content-Length",
-									"value": "856"
-								},
-								{
-									"key": "Date",
-									"value": "Sat, 09 Mar 2024 10:27:32 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								},
-								{
-									"key": "Keep-Alive",
-									"value": "timeout=5"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"error\": null,\n    \"data\": [\n        false,\n        [\n            {\n                \"code\": 200,\n                \"body\": {\n                    \"name\": \"ctxt$unknownt$\",\n                    \"timeLastStateChange\": 1709980050677,\n                    \"text\": \"create context ctxt$unknownt$ partition by service from iotEvent(service=\\\"unknownt\\\" and subservice=\\\"/\\\")\",\n                    \"state\": false\n                }\n            },\n            {\n                \"code\": 200,\n                \"body\": {\n                    \"name\": \"Price_low@unknownt/\",\n                    \"timeLastStateChange\": 1709980052593,\n                    \"text\": \"context ctxt$unknownt$ select \\\"Price_low\\\" as ruleName, * from iotEvent\",\n                    \"state\": false\n                }\n            },\n            null\n        ],\n        {\n            \"result\": {\n                \"n\": 1,\n                \"ok\": 1\n            },\n            \"connection\": {\n                \"id\": 1,\n                \"host\": \"mongo-db\",\n                \"port\": 27017\n            },\n            \"ops\": [\n                {\n                    \"name\": \"Price_low\",\n                    \"text\": \"select \\\"Price_low\\\" as ruleName, * from iotEvent \",\n                    \"action\": {\n                        \"type\": \"post\",\n                        \"parameters\": {\n                            \"url\": \"http://192.168.188.75:1800/perseo_post\",\n                            \"method\": \"PUT\",\n                            \"headers\": \"{\\\"Content-type\\\":\\\"text/plain\\\"}\",\n                            \"text\": \"price_low\"\n                        }\n                    },\n                    \"subservice\": \"/\",\n                    \"service\": \"unknownt\",\n                    \"_id\": \"65ec3994d379ef4b8ed64eea\"\n                }\n            ],\n            \"n\": 1,\n            \"ok\": 1\n        },\n        null\n    ]\n}"
-						}
-					]
-				},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Perseo rules",
+			"item": [
 				{
-					"name": "[WORKS] Add rule to perseo Every C Motion Docker",
+					"name": "Add Delta Elevation rule to perseo Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -464,7 +695,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n   \"name\":\"Every_Motion_to_dflask_post_qs_7\",\r\n   \"text\":\"select *, count(*) as evtcount from pattern [every ev=iotEvent() ]\",\r\n   \"action\":{\r\n      \"type\":\"post\",\r\n      \"parameters\":{\r\n        \"url\": \"{{local_flask}}/perseo_post\",\r\n         \"method\": \"PUT\",\r\n         \"headers\": {\r\n            \"Content-type\": \"text/plain\"\r\n         },\r\n         \"qs\":{\r\n            \"text\":\"8_motion_count_low ${evtcount}\"\r\n         }\r\n      }\r\n   }\r\n}",
+							"raw": "{\r\n   \"name\":\"elevation_delta_greater_than_2\",\r\n   \"text\":\"select *,cast(cast(elevation?,String),float)-cast(cast(elevation__metadata__previousValue?,String),float) as DELTA, id as evt_id from iotEvent where (cast(cast(elevation?,String),float)-cast(cast(elevation__metadata__previousValue?,String),float) )>2\",\r\n    \r\n   \"action\":{\r\n      \"type\":\"post\",\r\n      \"parameters\":{\r\n        \"url\": \"{{flask_dash}}/sens_move\",\r\n         \"method\": \"PUT\",\r\n         \"headers\": {\r\n            \"Content-type\": \"application/json\"\r\n         },\r\n         \"json\":{\"sensid\":\"${evt_id}\"}\r\n         \r\n      }\r\n   }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -481,271 +712,24 @@
 							]
 						}
 					},
-					"response": [
-						{
-							"name": "[DBG] Subscribe local flask api Copy 2",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "content-type",
-										"value": "application/json",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n   \"name\":\"Price_low\",\r\n   \"text\":\"select * from iotEvent \",\r\n   \"action\":{\r\n      \"type\":\"post\",\r\n      \"parameters\":{\r\n        \"url\": \"{{local_flask}}/perseo_post\",\r\n         \"method\": \"PUT\",\r\n         \"headers\": {\r\n            \"Content-type\": \"text/plain\"\r\n         },\r\n         \"text\":\"price_low\"\r\n      }\r\n   }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{perseo-fe-url}}/rules",
-									"host": [
-										"{{perseo-fe-url}}"
-									],
-									"path": [
-										"rules"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "X-Powered-By",
-									"value": "Express"
-								},
-								{
-									"key": "fiware-correlator",
-									"value": "7343b437-45d1-4e7a-a1c8-3d7d98fbb639; node=NjsvTFom2E; perseocep=306"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "Content-Length",
-									"value": "856"
-								},
-								{
-									"key": "Date",
-									"value": "Sat, 09 Mar 2024 10:27:32 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								},
-								{
-									"key": "Keep-Alive",
-									"value": "timeout=5"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"error\": null,\n    \"data\": [\n        false,\n        [\n            {\n                \"code\": 200,\n                \"body\": {\n                    \"name\": \"ctxt$unknownt$\",\n                    \"timeLastStateChange\": 1709980050677,\n                    \"text\": \"create context ctxt$unknownt$ partition by service from iotEvent(service=\\\"unknownt\\\" and subservice=\\\"/\\\")\",\n                    \"state\": false\n                }\n            },\n            {\n                \"code\": 200,\n                \"body\": {\n                    \"name\": \"Price_low@unknownt/\",\n                    \"timeLastStateChange\": 1709980052593,\n                    \"text\": \"context ctxt$unknownt$ select \\\"Price_low\\\" as ruleName, * from iotEvent\",\n                    \"state\": false\n                }\n            },\n            null\n        ],\n        {\n            \"result\": {\n                \"n\": 1,\n                \"ok\": 1\n            },\n            \"connection\": {\n                \"id\": 1,\n                \"host\": \"mongo-db\",\n                \"port\": 27017\n            },\n            \"ops\": [\n                {\n                    \"name\": \"Price_low\",\n                    \"text\": \"select \\\"Price_low\\\" as ruleName, * from iotEvent \",\n                    \"action\": {\n                        \"type\": \"post\",\n                        \"parameters\": {\n                            \"url\": \"http://192.168.188.75:1800/perseo_post\",\n                            \"method\": \"PUT\",\n                            \"headers\": \"{\\\"Content-type\\\":\\\"text/plain\\\"}\",\n                            \"text\": \"price_low\"\n                        }\n                    },\n                    \"subservice\": \"/\",\n                    \"service\": \"unknownt\",\n                    \"_id\": \"65ec3994d379ef4b8ed64eea\"\n                }\n            ],\n            \"n\": 1,\n            \"ok\": 1\n        },\n        null\n    ]\n}"
-						}
-					]
-				},
-				{
-					"name": "[WORKS] Add rule to perseo Every C Motion Docker Copy",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "fiware-service",
-								"value": "{{fw-service-name}}",
-								"type": "text"
-							},
-							{
-								"key": "fiware-servicepath",
-								"value": "{{fw-service-path}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n   \"name\":\"count_rule_update_5\",\r\n   \"text\":\"select *,count(*) as evtc, elevation? as elev from iotEvent\",\r\n   \"action\":{\r\n      \"type\":\"post\",\r\n      \"parameters\":{\r\n        \"url\": \"{{local_flask}}/perseo_post\",\r\n         \"method\": \"PUT\",\r\n         \"headers\": {\r\n            \"Content-type\": \"text/plain\"\r\n         },\r\n         \"qs\":{\r\n            \"text\":\"5_motion_count_low ${evtc} elev ${elev}\"\r\n         }\r\n      }\r\n   }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{addr-perseo-host-fwd}}/rules",
-							"host": [
-								"{{addr-perseo-host-fwd}}"
-							],
-							"path": [
-								"rules"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "[DBG] Subscribe local flask api Copy 2",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "content-type",
-										"value": "application/json",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n   \"name\":\"Price_low\",\r\n   \"text\":\"select * from iotEvent \",\r\n   \"action\":{\r\n      \"type\":\"post\",\r\n      \"parameters\":{\r\n        \"url\": \"{{local_flask}}/perseo_post\",\r\n         \"method\": \"PUT\",\r\n         \"headers\": {\r\n            \"Content-type\": \"text/plain\"\r\n         },\r\n         \"text\":\"price_low\"\r\n      }\r\n   }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{perseo-fe-url}}/rules",
-									"host": [
-										"{{perseo-fe-url}}"
-									],
-									"path": [
-										"rules"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "X-Powered-By",
-									"value": "Express"
-								},
-								{
-									"key": "fiware-correlator",
-									"value": "7343b437-45d1-4e7a-a1c8-3d7d98fbb639; node=NjsvTFom2E; perseocep=306"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "Content-Length",
-									"value": "856"
-								},
-								{
-									"key": "Date",
-									"value": "Sat, 09 Mar 2024 10:27:32 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								},
-								{
-									"key": "Keep-Alive",
-									"value": "timeout=5"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"error\": null,\n    \"data\": [\n        false,\n        [\n            {\n                \"code\": 200,\n                \"body\": {\n                    \"name\": \"ctxt$unknownt$\",\n                    \"timeLastStateChange\": 1709980050677,\n                    \"text\": \"create context ctxt$unknownt$ partition by service from iotEvent(service=\\\"unknownt\\\" and subservice=\\\"/\\\")\",\n                    \"state\": false\n                }\n            },\n            {\n                \"code\": 200,\n                \"body\": {\n                    \"name\": \"Price_low@unknownt/\",\n                    \"timeLastStateChange\": 1709980052593,\n                    \"text\": \"context ctxt$unknownt$ select \\\"Price_low\\\" as ruleName, * from iotEvent\",\n                    \"state\": false\n                }\n            },\n            null\n        ],\n        {\n            \"result\": {\n                \"n\": 1,\n                \"ok\": 1\n            },\n            \"connection\": {\n                \"id\": 1,\n                \"host\": \"mongo-db\",\n                \"port\": 27017\n            },\n            \"ops\": [\n                {\n                    \"name\": \"Price_low\",\n                    \"text\": \"select \\\"Price_low\\\" as ruleName, * from iotEvent \",\n                    \"action\": {\n                        \"type\": \"post\",\n                        \"parameters\": {\n                            \"url\": \"http://192.168.188.75:1800/perseo_post\",\n                            \"method\": \"PUT\",\n                            \"headers\": \"{\\\"Content-type\\\":\\\"text/plain\\\"}\",\n                            \"text\": \"price_low\"\n                        }\n                    },\n                    \"subservice\": \"/\",\n                    \"service\": \"unknownt\",\n                    \"_id\": \"65ec3994d379ef4b8ed64eea\"\n                }\n            ],\n            \"n\": 1,\n            \"ok\": 1\n        },\n        null\n    ]\n}"
-						}
-					]
-				},
-				{
-					"name": "Add rule to perseo Copy 2",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "fiware-service",
-								"value": "{{fw-service-name}}",
-								"type": "text"
-							},
-							{
-								"key": "fiware-servicepath",
-								"value": "{{fw-service-path}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n   \"name\":\"elevation_greater_than_20_int_2\",\r\n   \"text\":\"select *,elevation? as evt_elev, id as evt_id from iotEvent where cast(elevation?,int)>20\",\r\n   \"action\":{\r\n      \"type\":\"post\",\r\n      \"parameters\":{\r\n        \"url\": \"{{local_flask}}/perseo_post\",\r\n         \"method\": \"PUT\",\r\n         \"headers\": {\r\n            \"Content-type\": \"text/plain\"\r\n         },\r\n         \"text\":\"2_Elevation of ${evt_id} ${evt_elev}\"\r\n      }\r\n   }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{addr-perseo-host-fwd}}/rules",
-							"host": [
-								"{{addr-perseo-host-fwd}}"
-							],
-							"path": [
-								"rules"
-							]
-						}
-					},
 					"response": []
 				},
 				{
-					"name": "Update rule to perseo Copy 3",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "fiware-service",
-								"value": "{{fw-service-name}}",
-								"type": "text"
-							},
-							{
-								"key": "fiware-servicepath",
-								"value": "{{fw-service-path}}",
-								"type": "text"
+					"name": "[bck] Add Delta Elevation rule to perseo Copy 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
 							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n   \"name\":\"elevation_greater_than_20_int_2\",\r\n   \"text\":\"select *,elevation? as evt_elev, id as evt_id, cast(cast(elevation?,String),float)-cast(cast(elevation__metadata__previousValue?,String),float) as DELTA from iotEvent where cast(elevation?,int)>20\",\r\n   \"action\":{\r\n      \"type\":\"post\",\r\n      \"parameters\":{\r\n        \"url\": \"{{local_flask}}/perseo_post\",\r\n         \"method\": \"POST\",\r\n         \"headers\": {\r\n            \"Content-type\": \"text/plain\"\r\n         },\r\n         \"qs\":{\"text\":\"2_Elevation of ${evt_id} - ${evt_elev} -- ${DELTA}\"}\r\n         \r\n      }\r\n   }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{addr-perseo-host-fwd}}/rules/elevation_greater_than_20_int_2",
-							"host": [
-								"{{addr-perseo-host-fwd}}"
-							],
-							"path": [
-								"rules",
-								"elevation_greater_than_20_int_2"
-							]
 						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add Delta Elevation rule to perseo",
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -787,6 +771,176 @@
 					"response": []
 				},
 				{
+					"name": "Add Bridge status rule to perseo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "content-type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "fiware-service",
+								"value": "{{fw-service-name}}",
+								"type": "text"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "{{fw-service-path}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"name\":\"bridge_status_update\",\r\n   \"text\":\"select *, cast(bridge_status?,String) as bstatus, id as evt_id, cast(type?,String) as stype from iotEvent where cast(type?,String)='Bridge'\",    \r\n   \"action\":{\r\n      \"type\":\"post\",\r\n      \"parameters\":{\r\n        \"url\": \"{{flask_dash}}/map_update\",\r\n         \"method\": \"PUT\",\r\n         \"headers\": {\r\n            \"Content-type\": \"text/plain\"\r\n         },\r\n         \"qs\":{\"status\":\"${bstatus}\", \"bridgeid\":\"${evt_id}\"}\r\n      }\r\n   }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{addr-perseo-host-fwd}}/rules",
+							"host": [
+								"{{addr-perseo-host-fwd}}"
+							],
+							"path": [
+								"rules"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Delta Elevation rule to perseo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "content-type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "fiware-service",
+								"value": "{{fw-service-name}}",
+								"type": "text"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "{{fw-service-path}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"name\":\"elevation_delta_greater_than_2\",\r\n   \"text\":\"select *,cast(cast(elevation?,String),float)-cast(cast(elevation__metadata__previousValue?,String),float) as DELTA, id as evt_id from iotEvent where (cast(cast(elevation?,String),float)-cast(cast(elevation__metadata__previousValue?,String),float) )>2\",\r\n    \r\n   \"action\":{\r\n      \"type\":\"post\",\r\n      \"parameters\":{\r\n        \"url\": \"{{flask_dash}}/sens_move\",\r\n         \"method\": \"PUT\",\r\n         \"headers\": {\r\n            \"Content-type\": \"application/json\"\r\n         },\r\n         \"json\":{\"sensid\":\"${evt_id}\"}\r\n         \r\n      }\r\n   }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{addr-perseo-host-fwd}}/rules/elevation_delta_greater_than_2",
+							"host": [
+								"{{addr-perseo-host-fwd}}"
+							],
+							"path": [
+								"rules",
+								"elevation_delta_greater_than_2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Brdige Status rule to perseo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "content-type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "fiware-service",
+								"value": "{{fw-service-name}}",
+								"type": "text"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "{{fw-service-path}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"name\":\"bridge_status_update\",\r\n   \"text\":\"select *, cast(bridge_status?,String) as bstatus, id as evt_id, cast(type?,String) as stype from iotEvent where cast(type?,String)='Bridge'\",    \r\n   \"action\":{\r\n      \"type\":\"post\",\r\n      \"parameters\":{\r\n        \"url\": \"{{flask_dash}}/map_update\",\r\n         \"method\": \"PUT\",\r\n         \"headers\": {\r\n            \"Content-type\": \"text/plain\"\r\n         },\r\n         \"qs\":{\"status\":\"${bstatus}\", \"bridgeid\":\"${evt_id}\"}\r\n      }\r\n   }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{addr-perseo-host-fwd}}/rules/bridge_status_update",
+							"host": [
+								"{{addr-perseo-host-fwd}}"
+							],
+							"path": [
+								"rules",
+								"bridge_status_update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get Perseo Rules",
 					"request": {
 						"method": "GET",
@@ -803,9 +957,9 @@
 							}
 						],
 						"url": {
-							"raw": "{{perseo-fe-url}}/rules",
+							"raw": "{{addr-perseo-host-fwd}}/rules",
 							"host": [
-								"{{perseo-fe-url}}"
+								"{{addr-perseo-host-fwd}}"
 							],
 							"path": [
 								"rules"
@@ -815,112 +969,44 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"description": "In this folder there are the calls required to add perseo plain rules for Delta elevation updates that exeeds a defined trigger value."
 		},
 		{
 			"name": "Keyrock",
 			"item": [
 				{
-					"name": "Keyrock_version_request",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{keyrock_url}}/version",
-							"host": [
-								"{{keyrock_url}}"
-							],
-							"path": [
-								"version"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Keyrock_login",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.oneOf([200, 201])\r",
-									"    //pm.response.to.have.status(201);\r",
-									"});\r",
-									"\r",
-									"\r",
-									"const login_ret_token = pm.response.headers.get('X-Subject-Token')\r",
-									"\r",
-									"pm.environment.set(\"login_token\", login_ret_token);\r",
-									"\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"antonio-the-admin@test.com\",\r\n  \"password\": \"test\"\r\n}"
-						},
-						"url": {
-							"raw": "{{keyrock_url}}/v1/auth/tokens",
-							"host": [
-								"{{keyrock_url}}"
-							],
-							"path": [
-								"v1",
-								"auth",
-								"tokens"
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "alice-the-admin@test.com",
-									"disabled": true
-								},
-								{
-									"key": "password",
-									"value": "test",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": [
+					"name": "First Keyrock Login",
+					"item": [
 						{
 							"name": "Keyrock_login",
-							"originalRequest": {
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.expect(pm.response.code).to.be.oneOf([200, 201])\r",
+											"    //pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"const login_ret_token = pm.response.headers.get('X-Subject-Token')\r",
+											"\r",
+											"//pm.environment.set(\"X-Auth-token\", login_ret_token);\r",
+											"pm.collectionVariables.set(\"X-Auth-token\", login_ret_token);\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
 								"method": "POST",
 								"header": [
 									{
@@ -931,7 +1017,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"name\": \"alice-the-admin@test.com\",\r\n  \"password\": \"test\"\r\n}"
+									"raw": "{\r\n  \"name\": \"antonio-the-admin@test.com\",\r\n  \"password\": \"test\"\r\n}"
 								},
 								"url": {
 									"raw": "{{keyrock_url}}/v1/auth/tokens",
@@ -957,206 +1043,155 @@
 									]
 								}
 							},
-							"status": "Created",
-							"code": 201,
-							"_postman_previewlanguage": "json",
-							"header": [
+							"response": [
 								{
-									"key": "Content-Security-Policy-Report-Only",
-									"value": "default-src *;font-src *;img-src *;script-src *;style-src *;form-action *;base-uri 'self';block-all-mixed-content;frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
-								},
-								{
-									"key": "X-DNS-Prefetch-Control",
-									"value": "off"
-								},
-								{
-									"key": "Expect-CT",
-									"value": "max-age=0"
-								},
-								{
-									"key": "X-Frame-Options",
-									"value": "SAMEORIGIN"
-								},
-								{
-									"key": "Strict-Transport-Security",
-									"value": "max-age=15552000; includeSubDomains"
-								},
-								{
-									"key": "X-Download-Options",
-									"value": "noopen"
-								},
-								{
-									"key": "X-Content-Type-Options",
-									"value": "nosniff"
-								},
-								{
-									"key": "X-Permitted-Cross-Domain-Policies",
-									"value": "none"
-								},
-								{
-									"key": "Referrer-Policy",
-									"value": "no-referrer"
-								},
-								{
-									"key": "X-XSS-Protection",
-									"value": "0"
-								},
-								{
-									"key": "Cache-Control",
-									"value": "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
-								},
-								{
-									"key": "X-Subject-Token",
-									"value": "7cf90c1c-ede6-4d11-bcc1-96796b0daff0"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "Content-Length",
-									"value": "138"
-								},
-								{
-									"key": "ETag",
-									"value": "W/\"8a-pqA5hkCD3sNW+BPGmIB9qKluBDA\""
-								},
-								{
-									"key": "Date",
-									"value": "Sat, 09 Mar 2024 07:57:23 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								},
-								{
-									"key": "Keep-Alive",
-									"value": "timeout=5"
+									"name": "Keyrock_login",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"alice-the-admin@test.com\",\r\n  \"password\": \"test\"\r\n}"
+										},
+										"url": {
+											"raw": "{{keyrock_url}}/v1/auth/tokens",
+											"host": [
+												"{{keyrock_url}}"
+											],
+											"path": [
+												"v1",
+												"auth",
+												"tokens"
+											],
+											"query": [
+												{
+													"key": "name",
+													"value": "alice-the-admin@test.com",
+													"disabled": true
+												},
+												{
+													"key": "password",
+													"value": "test",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Security-Policy-Report-Only",
+											"value": "default-src *;font-src *;img-src *;script-src *;style-src *;form-action *;base-uri 'self';block-all-mixed-content;frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+										},
+										{
+											"key": "X-DNS-Prefetch-Control",
+											"value": "off"
+										},
+										{
+											"key": "Expect-CT",
+											"value": "max-age=0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "SAMEORIGIN"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=15552000; includeSubDomains"
+										},
+										{
+											"key": "X-Download-Options",
+											"value": "noopen"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-Permitted-Cross-Domain-Policies",
+											"value": "none"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "no-referrer"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+										},
+										{
+											"key": "X-Subject-Token",
+											"value": "7cf90c1c-ede6-4d11-bcc1-96796b0daff0"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "138"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"8a-pqA5hkCD3sNW+BPGmIB9qKluBDA\""
+										},
+										{
+											"key": "Date",
+											"value": "Sat, 09 Mar 2024 07:57:23 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"token\": {\n        \"methods\": [\n            \"password\"\n        ],\n        \"expires_at\": \"2024-03-09T08:57:23.650Z\"\n    },\n    \"idm_authorization_config\": {\n        \"level\": \"basic\",\n        \"authzforce\": false\n    }\n}"
 								}
-							],
-							"cookie": [],
-							"body": "{\n    \"token\": {\n        \"methods\": [\n            \"password\"\n        ],\n        \"expires_at\": \"2024-03-09T08:57:23.650Z\"\n    },\n    \"idm_authorization_config\": {\n        \"level\": \"basic\",\n        \"authzforce\": false\n    }\n}"
+							]
 						}
 					]
 				},
 				{
-					"name": "get token info",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "apikey",
-							"apikey": [
-								{
-									"key": "value",
-									"value": "{{login_token}}",
-									"type": "string"
-								},
-								{
-									"key": "key",
-									"value": "X-Auth-token",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "X-Subject-token",
-								"value": "{{login_token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{keyrock_url}}/v1/auth/tokens",
-							"host": [
-								"{{keyrock_url}}"
-							],
-							"path": [
-								"v1",
-								"auth",
-								"tokens"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add application",
-					"event": [
+					"name": "Keyrock Authenticated requests",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const response = pm.response.json();\r",
-									"pm.environment.set('app2-id', response.application.id);\r",
-									"pm.environment.set('app2-secrect', response.application.secret);"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "apikey",
-							"apikey": [
-								{
-									"key": "value",
-									"value": "{{login_token}}",
-									"type": "string"
-								},
-								{
-									"key": "key",
-									"value": "X-Auth-token",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+							"name": "get token info",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
 							},
-							{
-								"key": "X-Auth-token",
-								"value": "{{admin-token}}",
-								"type": "text",
-								"disabled": true
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"application\": {\r\n    \"name\": \"Proj Sogei Application PEP Proxy\",\r\n    \"description\": \"Proj Sogei Application PEP Proxy\",\r\n    \"redirect_uri\": \"http://{{wilma_url}}/login\",\r\n    \"url\": \"http://{{wilma_url}}\",\r\n    \"grant_type\": [\r\n      \"authorization_code\",\r\n      \"implicit\",\r\n      \"password\"\r\n    ],\r\n    \"token_types\": [\"permanent\"]\r\n  }\r\n}"
-						},
-						"url": {
-							"raw": "{{keyrock_url}}/v1/applications",
-							"host": [
-								"{{keyrock_url}}"
-							],
-							"path": [
-								"v1",
-								"applications"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "example adding application",
-							"originalRequest": {
-								"method": "POST",
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{login_token}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "X-Auth-token",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
 								"header": [
 									{
 										"key": "Content-Type",
@@ -1164,109 +1199,65 @@
 										"type": "text"
 									},
 									{
-										"key": "X-Auth-token",
-										"value": "{{admin-token}}",
+										"key": "X-Subject-token",
+										"value": "{{login_token}}",
 										"type": "text"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"application\": {\r\n    \"name\": \"Proj Sogei Application\",\r\n    \"description\": \"Sogei applicaiton\",\r\n    \"redirect_uri\": \"http://prjsogei/login\",\r\n    \"url\": \"http://prjsogei\",\r\n    \"grant_type\": [\r\n      \"authorization_code\",\r\n      \"implicit\",\r\n      \"password\"\r\n    ],\r\n    \"token_types\": [\"permanent\"]\r\n  }\r\n}"
+									"raw": ""
 								},
 								"url": {
-									"raw": "{{keyrock_url}}/v1/applications",
+									"raw": "{{keyrock_url}}/v1/auth/tokens",
 									"host": [
 										"{{keyrock_url}}"
 									],
 									"path": [
 										"v1",
-										"applications"
+										"auth",
+										"tokens"
 									]
 								}
 							},
-							"status": "Created",
-							"code": 201,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Security-Policy-Report-Only",
-									"value": "default-src *;font-src *;img-src *;script-src *;style-src *;form-action *;base-uri 'self';block-all-mixed-content;frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
-								},
-								{
-									"key": "X-DNS-Prefetch-Control",
-									"value": "off"
-								},
-								{
-									"key": "Expect-CT",
-									"value": "max-age=0"
-								},
-								{
-									"key": "X-Frame-Options",
-									"value": "SAMEORIGIN"
-								},
-								{
-									"key": "Strict-Transport-Security",
-									"value": "max-age=15552000; includeSubDomains"
-								},
-								{
-									"key": "X-Download-Options",
-									"value": "noopen"
-								},
-								{
-									"key": "X-Content-Type-Options",
-									"value": "nosniff"
-								},
-								{
-									"key": "X-Permitted-Cross-Domain-Policies",
-									"value": "none"
-								},
-								{
-									"key": "Referrer-Policy",
-									"value": "no-referrer"
-								},
-								{
-									"key": "X-XSS-Protection",
-									"value": "0"
-								},
-								{
-									"key": "Cache-Control",
-									"value": "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
-								},
-								{
-									"key": "X-Powered-By",
-									"value": "Express"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "Content-Length",
-									"value": "401"
-								},
-								{
-									"key": "ETag",
-									"value": "W/\"191-HFjwkl6EiZI+59K8ZpVqSx2zn7A\""
-								},
-								{
-									"key": "Date",
-									"value": "Sun, 11 Feb 2024 17:32:28 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								},
-								{
-									"key": "Keep-Alive",
-									"value": "timeout=5"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"application\": {\n        \"id\": \"d076a7fd-9577-420d-8baf-7d1408c025f4\",\n        \"secret\": \"0736a861-66c7-440c-9349-db478773aa3b\",\n        \"image\": \"default\",\n        \"jwt_secret\": null,\n        \"name\": \"Proj Sogei Application\",\n        \"description\": \"Sogei applicaiton\",\n        \"redirect_uri\": \"http://prjsogei/login\",\n        \"url\": \"http://prjsogei\",\n        \"grant_type\": \"password,authorization_code,implicit\",\n        \"token_types\": \"permanent,bearer\",\n        \"response_type\": \"code,token\",\n        \"scope\": null\n    }\n}"
+							"response": []
 						},
 						{
 							"name": "Add application",
-							"originalRequest": {
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"//pm.environment.set('app2-id', response.application.id);\r",
+											"//pm.environment.set('app2-secrect', response.application.secret);\r",
+											"\r",
+											"pm.collectionVariables.set('app2-id', response.application.id);\r",
+											"pm.collectionVariables.set('app2-secrect', response.application.secret);\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{X-Auth-token}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "X-Auth-token",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [
 									{
@@ -1283,7 +1274,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"application\": {\r\n    \"name\": \"Proj Sogei Application PEP Proxy\",\r\n    \"description\": \"Proj Sogei Application PEP Proxy\",\r\n    \"redirect_uri\": \"http://{{pep_proxy_url}}/login\",\r\n    \"url\": \"http://{{pep_proxy_url}}\",\r\n    \"grant_type\": [\r\n      \"authorization_code\",\r\n      \"implicit\",\r\n      \"password\"\r\n    ],\r\n    \"token_types\": [\"permanent\"]\r\n  }\r\n}"
+									"raw": "{\r\n  \"application\": {\r\n    \"name\": \"Proj Sogei Application PEP Proxy\",\r\n    \"description\": \"Proj Sogei Application PEP Proxy\",\r\n    \"redirect_uri\": \"http://{{wilma_url}}/login\",\r\n    \"url\": \"http://{{wilma_url}}\",\r\n    \"grant_type\": [\r\n      \"authorization_code\",\r\n      \"implicit\",\r\n      \"password\"\r\n    ],\r\n    \"token_types\": [\"permanent\"]\r\n  }\r\n}"
 								},
 								"url": {
 									"raw": "{{keyrock_url}}/v1/applications",
@@ -1296,85 +1287,1290 @@
 									]
 								}
 							},
-							"status": "Created",
-							"code": 201,
-							"_postman_previewlanguage": "json",
-							"header": [
+							"response": [
 								{
-									"key": "Content-Security-Policy-Report-Only",
-									"value": "default-src *;font-src *;img-src *;script-src *;style-src *;form-action *;base-uri 'self';block-all-mixed-content;frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+									"name": "example adding application",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "X-Auth-token",
+												"value": "{{admin-token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"application\": {\r\n    \"name\": \"Proj Sogei Application\",\r\n    \"description\": \"Sogei applicaiton\",\r\n    \"redirect_uri\": \"http://prjsogei/login\",\r\n    \"url\": \"http://prjsogei\",\r\n    \"grant_type\": [\r\n      \"authorization_code\",\r\n      \"implicit\",\r\n      \"password\"\r\n    ],\r\n    \"token_types\": [\"permanent\"]\r\n  }\r\n}"
+										},
+										"url": {
+											"raw": "{{keyrock_url}}/v1/applications",
+											"host": [
+												"{{keyrock_url}}"
+											],
+											"path": [
+												"v1",
+												"applications"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Security-Policy-Report-Only",
+											"value": "default-src *;font-src *;img-src *;script-src *;style-src *;form-action *;base-uri 'self';block-all-mixed-content;frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+										},
+										{
+											"key": "X-DNS-Prefetch-Control",
+											"value": "off"
+										},
+										{
+											"key": "Expect-CT",
+											"value": "max-age=0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "SAMEORIGIN"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=15552000; includeSubDomains"
+										},
+										{
+											"key": "X-Download-Options",
+											"value": "noopen"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-Permitted-Cross-Domain-Policies",
+											"value": "none"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "no-referrer"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+										},
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "401"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"191-HFjwkl6EiZI+59K8ZpVqSx2zn7A\""
+										},
+										{
+											"key": "Date",
+											"value": "Sun, 11 Feb 2024 17:32:28 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"application\": {\n        \"id\": \"d076a7fd-9577-420d-8baf-7d1408c025f4\",\n        \"secret\": \"0736a861-66c7-440c-9349-db478773aa3b\",\n        \"image\": \"default\",\n        \"jwt_secret\": null,\n        \"name\": \"Proj Sogei Application\",\n        \"description\": \"Sogei applicaiton\",\n        \"redirect_uri\": \"http://prjsogei/login\",\n        \"url\": \"http://prjsogei\",\n        \"grant_type\": \"password,authorization_code,implicit\",\n        \"token_types\": \"permanent,bearer\",\n        \"response_type\": \"code,token\",\n        \"scope\": null\n    }\n}"
 								},
 								{
-									"key": "X-DNS-Prefetch-Control",
-									"value": "off"
-								},
+									"name": "Add application",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "X-Auth-token",
+												"value": "{{admin-token}}",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"application\": {\r\n    \"name\": \"Proj Sogei Application PEP Proxy\",\r\n    \"description\": \"Proj Sogei Application PEP Proxy\",\r\n    \"redirect_uri\": \"http://{{pep_proxy_url}}/login\",\r\n    \"url\": \"http://{{pep_proxy_url}}\",\r\n    \"grant_type\": [\r\n      \"authorization_code\",\r\n      \"implicit\",\r\n      \"password\"\r\n    ],\r\n    \"token_types\": [\"permanent\"]\r\n  }\r\n}"
+										},
+										"url": {
+											"raw": "{{keyrock_url}}/v1/applications",
+											"host": [
+												"{{keyrock_url}}"
+											],
+											"path": [
+												"v1",
+												"applications"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Security-Policy-Report-Only",
+											"value": "default-src *;font-src *;img-src *;script-src *;style-src *;form-action *;base-uri 'self';block-all-mixed-content;frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+										},
+										{
+											"key": "X-DNS-Prefetch-Control",
+											"value": "off"
+										},
+										{
+											"key": "Expect-CT",
+											"value": "max-age=0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "SAMEORIGIN"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=15552000; includeSubDomains"
+										},
+										{
+											"key": "X-Download-Options",
+											"value": "noopen"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-Permitted-Cross-Domain-Policies",
+											"value": "none"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "no-referrer"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+										},
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "432"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"1b0-/ohK+LcDH/TVFfeonoXrkgoe64E\""
+										},
+										{
+											"key": "Date",
+											"value": "Sun, 17 Mar 2024 10:31:05 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"application\": {\n        \"id\": \"15018938-303d-4421-88ea-a7a60a493583\",\n        \"secret\": \"9dbd49e2-5298-4e4f-be4d-ef6e0fe17261\",\n        \"image\": \"default\",\n        \"jwt_secret\": null,\n        \"name\": \"Proj Sogei Application PEP Proxy\",\n        \"description\": \"Proj Sogei Application PEP Proxy\",\n        \"redirect_uri\": \"http://172.18.5.11/login\",\n        \"url\": \"http://172.18.5.11\",\n        \"grant_type\": \"password,authorization_code,implicit\",\n        \"token_types\": \"permanent,bearer\",\n        \"response_type\": \"code,token\",\n        \"scope\": null\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Get applications",
+							"event": [
 								{
-									"key": "Expect-CT",
-									"value": "max-age=0"
-								},
-								{
-									"key": "X-Frame-Options",
-									"value": "SAMEORIGIN"
-								},
-								{
-									"key": "Strict-Transport-Security",
-									"value": "max-age=15552000; includeSubDomains"
-								},
-								{
-									"key": "X-Download-Options",
-									"value": "noopen"
-								},
-								{
-									"key": "X-Content-Type-Options",
-									"value": "nosniff"
-								},
-								{
-									"key": "X-Permitted-Cross-Domain-Policies",
-									"value": "none"
-								},
-								{
-									"key": "Referrer-Policy",
-									"value": "no-referrer"
-								},
-								{
-									"key": "X-XSS-Protection",
-									"value": "0"
-								},
-								{
-									"key": "Cache-Control",
-									"value": "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
-								},
-								{
-									"key": "X-Powered-By",
-									"value": "Express"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "Content-Length",
-									"value": "432"
-								},
-								{
-									"key": "ETag",
-									"value": "W/\"1b0-/ohK+LcDH/TVFfeonoXrkgoe64E\""
-								},
-								{
-									"key": "Date",
-									"value": "Sun, 17 Mar 2024 10:31:05 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								},
-								{
-									"key": "Keep-Alive",
-									"value": "timeout=5"
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"//pm.environment.set('app2-id', response.application.id);\r",
+											"//pm.environment.set('app2-secrect', response.application.secret);\r",
+											"\r",
+											"pm.collectionVariables.set('app2-id', response.application.id);\r",
+											"pm.collectionVariables.set('app2-secrect', response.application.secret);\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
 								}
 							],
-							"cookie": [],
-							"body": "{\n    \"application\": {\n        \"id\": \"15018938-303d-4421-88ea-a7a60a493583\",\n        \"secret\": \"9dbd49e2-5298-4e4f-be4d-ef6e0fe17261\",\n        \"image\": \"default\",\n        \"jwt_secret\": null,\n        \"name\": \"Proj Sogei Application PEP Proxy\",\n        \"description\": \"Proj Sogei Application PEP Proxy\",\n        \"redirect_uri\": \"http://172.18.5.11/login\",\n        \"url\": \"http://172.18.5.11\",\n        \"grant_type\": \"password,authorization_code,implicit\",\n        \"token_types\": \"permanent,bearer\",\n        \"response_type\": \"code,token\",\n        \"scope\": null\n    }\n}"
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{X-Auth-token}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "X-Auth-token",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "X-Auth-token",
+										"value": "{{admin-token}}",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{keyrock_url}}/v1/applications",
+									"host": [
+										"{{keyrock_url}}"
+									],
+									"path": [
+										"v1",
+										"applications"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "example adding application",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "X-Auth-token",
+												"value": "{{admin-token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"application\": {\r\n    \"name\": \"Proj Sogei Application\",\r\n    \"description\": \"Sogei applicaiton\",\r\n    \"redirect_uri\": \"http://prjsogei/login\",\r\n    \"url\": \"http://prjsogei\",\r\n    \"grant_type\": [\r\n      \"authorization_code\",\r\n      \"implicit\",\r\n      \"password\"\r\n    ],\r\n    \"token_types\": [\"permanent\"]\r\n  }\r\n}"
+										},
+										"url": {
+											"raw": "{{keyrock_url}}/v1/applications",
+											"host": [
+												"{{keyrock_url}}"
+											],
+											"path": [
+												"v1",
+												"applications"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Security-Policy-Report-Only",
+											"value": "default-src *;font-src *;img-src *;script-src *;style-src *;form-action *;base-uri 'self';block-all-mixed-content;frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+										},
+										{
+											"key": "X-DNS-Prefetch-Control",
+											"value": "off"
+										},
+										{
+											"key": "Expect-CT",
+											"value": "max-age=0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "SAMEORIGIN"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=15552000; includeSubDomains"
+										},
+										{
+											"key": "X-Download-Options",
+											"value": "noopen"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-Permitted-Cross-Domain-Policies",
+											"value": "none"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "no-referrer"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+										},
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "401"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"191-HFjwkl6EiZI+59K8ZpVqSx2zn7A\""
+										},
+										{
+											"key": "Date",
+											"value": "Sun, 11 Feb 2024 17:32:28 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"application\": {\n        \"id\": \"d076a7fd-9577-420d-8baf-7d1408c025f4\",\n        \"secret\": \"0736a861-66c7-440c-9349-db478773aa3b\",\n        \"image\": \"default\",\n        \"jwt_secret\": null,\n        \"name\": \"Proj Sogei Application\",\n        \"description\": \"Sogei applicaiton\",\n        \"redirect_uri\": \"http://prjsogei/login\",\n        \"url\": \"http://prjsogei\",\n        \"grant_type\": \"password,authorization_code,implicit\",\n        \"token_types\": \"permanent,bearer\",\n        \"response_type\": \"code,token\",\n        \"scope\": null\n    }\n}"
+								},
+								{
+									"name": "Add application",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "X-Auth-token",
+												"value": "{{admin-token}}",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"application\": {\r\n    \"name\": \"Proj Sogei Application PEP Proxy\",\r\n    \"description\": \"Proj Sogei Application PEP Proxy\",\r\n    \"redirect_uri\": \"http://{{pep_proxy_url}}/login\",\r\n    \"url\": \"http://{{pep_proxy_url}}\",\r\n    \"grant_type\": [\r\n      \"authorization_code\",\r\n      \"implicit\",\r\n      \"password\"\r\n    ],\r\n    \"token_types\": [\"permanent\"]\r\n  }\r\n}"
+										},
+										"url": {
+											"raw": "{{keyrock_url}}/v1/applications",
+											"host": [
+												"{{keyrock_url}}"
+											],
+											"path": [
+												"v1",
+												"applications"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Security-Policy-Report-Only",
+											"value": "default-src *;font-src *;img-src *;script-src *;style-src *;form-action *;base-uri 'self';block-all-mixed-content;frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+										},
+										{
+											"key": "X-DNS-Prefetch-Control",
+											"value": "off"
+										},
+										{
+											"key": "Expect-CT",
+											"value": "max-age=0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "SAMEORIGIN"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=15552000; includeSubDomains"
+										},
+										{
+											"key": "X-Download-Options",
+											"value": "noopen"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-Permitted-Cross-Domain-Policies",
+											"value": "none"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "no-referrer"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+										},
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "432"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"1b0-/ohK+LcDH/TVFfeonoXrkgoe64E\""
+										},
+										{
+											"key": "Date",
+											"value": "Sun, 17 Mar 2024 10:31:05 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"application\": {\n        \"id\": \"15018938-303d-4421-88ea-a7a60a493583\",\n        \"secret\": \"9dbd49e2-5298-4e4f-be4d-ef6e0fe17261\",\n        \"image\": \"default\",\n        \"jwt_secret\": null,\n        \"name\": \"Proj Sogei Application PEP Proxy\",\n        \"description\": \"Proj Sogei Application PEP Proxy\",\n        \"redirect_uri\": \"http://172.18.5.11/login\",\n        \"url\": \"http://172.18.5.11\",\n        \"grant_type\": \"password,authorization_code,implicit\",\n        \"token_types\": \"permanent,bearer\",\n        \"response_type\": \"code,token\",\n        \"scope\": null\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Create new pep proxy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"//pm.environment.set('pepproxy-app2-id', response.pep_proxy.id);\r",
+											"//pm.environment.set('pepproxy-secrect', response.pep_proxy.password);\r",
+											"\r",
+											"pm.collectionVariables.set('pepproxy-app2-id', response.pep_proxy.id);\r",
+											"pm.collectionVariables.set('pepproxy-secrect', response.pep_proxy.password);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{keyrock_url}}/v1/applications/{{app2-id}}/pep_proxies",
+									"host": [
+										"{{keyrock_url}}"
+									],
+									"path": [
+										"v1",
+										"applications",
+										"{{app2-id}}",
+										"pep_proxies"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Create new pep proxy",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{keyrock_url}}/v1/applications/{{app2-id}}/pep_proxies",
+											"host": [
+												"{{keyrock_url}}"
+											],
+											"path": [
+												"v1",
+												"applications",
+												"{{app2-id}}",
+												"pep_proxies"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Security-Policy-Report-Only",
+											"value": "default-src *;font-src *;img-src *;script-src *;style-src *;form-action *;base-uri 'self';block-all-mixed-content;frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+										},
+										{
+											"key": "X-DNS-Prefetch-Control",
+											"value": "off"
+										},
+										{
+											"key": "Expect-CT",
+											"value": "max-age=0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "SAMEORIGIN"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=15552000; includeSubDomains"
+										},
+										{
+											"key": "X-Download-Options",
+											"value": "noopen"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-Permitted-Cross-Domain-Policies",
+											"value": "none"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "no-referrer"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+										},
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "129"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"81-hFqSR9BA1Y09Ro7Q1t9ATb8UCBM\""
+										},
+										{
+											"key": "Date",
+											"value": "Sun, 17 Mar 2024 10:31:30 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"pep_proxy\": {\n        \"id\": \"pep_proxy_fbc8919a-a0dc-4e97-85eb-ae10b804e805\",\n        \"password\": \"pep_proxy_d427d5fa-2a8d-4dc0-81a7-366948b628c7\"\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Get Application pep proxy",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{keyrock_url}}/v1/applications/{{app2-id}}/pep_proxies",
+									"host": [
+										"{{keyrock_url}}"
+									],
+									"path": [
+										"v1",
+										"applications",
+										"{{app2-id}}",
+										"pep_proxies"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Get Application pep proxy",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{keyrock_url}}/v1/applications/{{app2-id}}/pep_proxies",
+											"host": [
+												"{{keyrock_url}}"
+											],
+											"path": [
+												"v1",
+												"applications",
+												"{{app2-id}}",
+												"pep_proxies"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Security-Policy-Report-Only",
+											"value": "default-src *;font-src *;img-src *;script-src *;style-src *;form-action *;base-uri 'self';block-all-mixed-content;frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+										},
+										{
+											"key": "X-DNS-Prefetch-Control",
+											"value": "off"
+										},
+										{
+											"key": "Expect-CT",
+											"value": "max-age=0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "SAMEORIGIN"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=15552000; includeSubDomains"
+										},
+										{
+											"key": "X-Download-Options",
+											"value": "noopen"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-Permitted-Cross-Domain-Policies",
+											"value": "none"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "no-referrer"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+										},
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "126"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"7e-V85i3DBF7OKzAN066fgNIJSqkHQ\""
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 07 Mar 2024 07:04:33 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"pep_proxy\": {\n        \"id\": \"pep_proxy_7793726a-9c95-41a7-b918-c67ca23635f5\",\n        \"oauth_client_id\": \"9fa0d825-723a-42c8-9c6e-a304e85a8000\"\n    }\n}"
+								},
+								{
+									"name": "Get Application pep proxy",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{keyrock_url}}/v1/applications/{{app2-id}}/pep_proxies",
+											"host": [
+												"{{keyrock_url}}"
+											],
+											"path": [
+												"v1",
+												"applications",
+												"{{app2-id}}",
+												"pep_proxies"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Security-Policy-Report-Only",
+											"value": "default-src *;font-src *;img-src *;script-src *;style-src *;form-action *;base-uri 'self';block-all-mixed-content;frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+										},
+										{
+											"key": "X-DNS-Prefetch-Control",
+											"value": "off"
+										},
+										{
+											"key": "Expect-CT",
+											"value": "max-age=0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "SAMEORIGIN"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=15552000; includeSubDomains"
+										},
+										{
+											"key": "X-Download-Options",
+											"value": "noopen"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-Permitted-Cross-Domain-Policies",
+											"value": "none"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "no-referrer"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+										},
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "126"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"7e-fJwutitPKUGfnoX+it9CVcVAi3Q\""
+										},
+										{
+											"key": "Date",
+											"value": "Sun, 17 Mar 2024 10:31:41 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"pep_proxy\": {\n        \"id\": \"pep_proxy_fbc8919a-a0dc-4e97-85eb-ae10b804e805\",\n        \"oauth_client_id\": \"15018938-303d-4421-88ea-a7a60a493583\"\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Create new IOT Agent",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"pm.environment.set('iot_sensor1-app2-id', response.iot_agent.id);\r",
+											"pm.environment.set('iot_sensor1-secrect', response.iot_agent.password);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{keyrock_url}}/v1/applications/{{app2-id}}/iot_agents",
+									"host": [
+										"{{keyrock_url}}"
+									],
+									"path": [
+										"v1",
+										"applications",
+										"{{app2-id}}",
+										"iot_agents"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Create new iot agent example",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{keyrock_url}}/v1/applications/{{app2-id}}/iot_agents",
+											"host": [
+												"{{keyrock_url}}"
+											],
+											"path": [
+												"v1",
+												"applications",
+												"{{app2-id}}",
+												"iot_agents"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Security-Policy-Report-Only",
+											"value": "default-src *;font-src *;img-src *;script-src *;style-src *;form-action *;base-uri 'self';block-all-mixed-content;frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+										},
+										{
+											"key": "X-DNS-Prefetch-Control",
+											"value": "off"
+										},
+										{
+											"key": "Expect-CT",
+											"value": "max-age=0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "SAMEORIGIN"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=15552000; includeSubDomains"
+										},
+										{
+											"key": "X-Download-Options",
+											"value": "noopen"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-Permitted-Cross-Domain-Policies",
+											"value": "none"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "no-referrer"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+										},
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "131"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"83-ExOJRqVB15WxOWu2fTGenuTvliE\""
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 05 Mar 2024 20:01:17 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"iot_agent\": {\n        \"id\": \"iot_sensor_d9e537e1-8618-4b77-9287-d1ea90a119a2\",\n        \"password\": \"iot_sensor_4e07463b-7f13-45fd-8f1c-8aa93e206117\"\n    }\n}"
+								},
+								{
+									"name": "Create new IOT Agent",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{keyrock_url}}/v1/applications/{{app2-id}}/iot_agents",
+											"host": [
+												"{{keyrock_url}}"
+											],
+											"path": [
+												"v1",
+												"applications",
+												"{{app2-id}}",
+												"iot_agents"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Security-Policy-Report-Only",
+											"value": "default-src *;font-src *;img-src *;script-src *;style-src *;form-action *;base-uri 'self';block-all-mixed-content;frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+										},
+										{
+											"key": "X-DNS-Prefetch-Control",
+											"value": "off"
+										},
+										{
+											"key": "Expect-CT",
+											"value": "max-age=0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "SAMEORIGIN"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=15552000; includeSubDomains"
+										},
+										{
+											"key": "X-Download-Options",
+											"value": "noopen"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-Permitted-Cross-Domain-Policies",
+											"value": "none"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "no-referrer"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+										},
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "131"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"83-oZ265pGzMSVdPRL+zsB+oUEZhFs\""
+										},
+										{
+											"key": "Date",
+											"value": "Sun, 17 Mar 2024 10:31:51 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"iot_agent\": {\n        \"id\": \"iot_sensor_b398304d-f437-4bb3-822b-2c0f6b2dd94b\",\n        \"password\": \"iot_sensor_a1adb19f-c244-4440-a6e9-39a7b1339534\"\n    }\n}"
+								},
+								{
+									"name": "Create new IOT Agent",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{keyrock_url}}/v1/applications/{{app2-id}}/iot_agents",
+											"host": [
+												"{{keyrock_url}}"
+											],
+											"path": [
+												"v1",
+												"applications",
+												"{{app2-id}}",
+												"iot_agents"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Security-Policy-Report-Only",
+											"value": "default-src *;font-src *;img-src *;script-src *;style-src *;form-action *;base-uri 'self';block-all-mixed-content;frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+										},
+										{
+											"key": "X-DNS-Prefetch-Control",
+											"value": "off"
+										},
+										{
+											"key": "Expect-CT",
+											"value": "max-age=0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "SAMEORIGIN"
+										},
+										{
+											"key": "Strict-Transport-Security",
+											"value": "max-age=15552000; includeSubDomains"
+										},
+										{
+											"key": "X-Download-Options",
+											"value": "noopen"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-Permitted-Cross-Domain-Policies",
+											"value": "none"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "no-referrer"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+										},
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "131"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"83-6s8a+V5T2K117NHDCzP4lk9eErM\""
+										},
+										{
+											"key": "Date",
+											"value": "Sun, 17 Mar 2024 10:32:14 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"iot_agent\": {\n        \"id\": \"iot_sensor_828fd085-e4f7-475d-ad20-e5696eae5ea9\",\n        \"password\": \"iot_sensor_f1327b51-536b-45f5-bd3b-f64dbf0a3aa4\"\n    }\n}"
+								}
+							]
+						}
+					],
+					"auth": {
+						"type": "apikey",
+						"apikey": [
+							{
+								"key": "value",
+								"value": "{{X-Auth-token}}",
+								"type": "string"
+							},
+							{
+								"key": "key",
+								"value": "X-Auth-token",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
 						}
 					]
 				},
@@ -1496,735 +2692,37 @@
 					]
 				},
 				{
-					"name": "Create new pep proxy",
+					"name": "Keyrock_version_request",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"const response = pm.response.json();\r",
-									"pm.environment.set('pepproxy-app2-id', response.pep_proxy.id);\r",
-									"pm.environment.set('pepproxy-secrect', response.pep_proxy.password);"
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
 								],
 								"type": "text/javascript"
 							}
 						}
 					],
 					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{keyrock_url}}/v1/applications/{{app2-id}}/pep_proxies",
-							"host": [
-								"{{keyrock_url}}"
-							],
-							"path": [
-								"v1",
-								"applications",
-								"{{app2-id}}",
-								"pep_proxies"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "Create new pep proxy",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{keyrock_url}}/v1/applications/{{app2-id}}/pep_proxies",
-									"host": [
-										"{{keyrock_url}}"
-									],
-									"path": [
-										"v1",
-										"applications",
-										"{{app2-id}}",
-										"pep_proxies"
-									]
-								}
-							},
-							"status": "Created",
-							"code": 201,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Security-Policy-Report-Only",
-									"value": "default-src *;font-src *;img-src *;script-src *;style-src *;form-action *;base-uri 'self';block-all-mixed-content;frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
-								},
-								{
-									"key": "X-DNS-Prefetch-Control",
-									"value": "off"
-								},
-								{
-									"key": "Expect-CT",
-									"value": "max-age=0"
-								},
-								{
-									"key": "X-Frame-Options",
-									"value": "SAMEORIGIN"
-								},
-								{
-									"key": "Strict-Transport-Security",
-									"value": "max-age=15552000; includeSubDomains"
-								},
-								{
-									"key": "X-Download-Options",
-									"value": "noopen"
-								},
-								{
-									"key": "X-Content-Type-Options",
-									"value": "nosniff"
-								},
-								{
-									"key": "X-Permitted-Cross-Domain-Policies",
-									"value": "none"
-								},
-								{
-									"key": "Referrer-Policy",
-									"value": "no-referrer"
-								},
-								{
-									"key": "X-XSS-Protection",
-									"value": "0"
-								},
-								{
-									"key": "Cache-Control",
-									"value": "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
-								},
-								{
-									"key": "X-Powered-By",
-									"value": "Express"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "Content-Length",
-									"value": "129"
-								},
-								{
-									"key": "ETag",
-									"value": "W/\"81-hFqSR9BA1Y09Ro7Q1t9ATb8UCBM\""
-								},
-								{
-									"key": "Date",
-									"value": "Sun, 17 Mar 2024 10:31:30 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								},
-								{
-									"key": "Keep-Alive",
-									"value": "timeout=5"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"pep_proxy\": {\n        \"id\": \"pep_proxy_fbc8919a-a0dc-4e97-85eb-ae10b804e805\",\n        \"password\": \"pep_proxy_d427d5fa-2a8d-4dc0-81a7-366948b628c7\"\n    }\n}"
-						}
-					]
-				},
-				{
-					"name": "Get Application pep proxy",
-					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
-							"raw": "{{keyrock_url}}/v1/applications/{{app2-id}}/pep_proxies",
+							"raw": "{{keyrock_url}}/version",
 							"host": [
 								"{{keyrock_url}}"
 							],
 							"path": [
-								"v1",
-								"applications",
-								"{{app2-id}}",
-								"pep_proxies"
+								"version"
 							]
 						}
 					},
-					"response": [
-						{
-							"name": "Get Application pep proxy",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{keyrock_url}}/v1/applications/{{app2-id}}/pep_proxies",
-									"host": [
-										"{{keyrock_url}}"
-									],
-									"path": [
-										"v1",
-										"applications",
-										"{{app2-id}}",
-										"pep_proxies"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Security-Policy-Report-Only",
-									"value": "default-src *;font-src *;img-src *;script-src *;style-src *;form-action *;base-uri 'self';block-all-mixed-content;frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
-								},
-								{
-									"key": "X-DNS-Prefetch-Control",
-									"value": "off"
-								},
-								{
-									"key": "Expect-CT",
-									"value": "max-age=0"
-								},
-								{
-									"key": "X-Frame-Options",
-									"value": "SAMEORIGIN"
-								},
-								{
-									"key": "Strict-Transport-Security",
-									"value": "max-age=15552000; includeSubDomains"
-								},
-								{
-									"key": "X-Download-Options",
-									"value": "noopen"
-								},
-								{
-									"key": "X-Content-Type-Options",
-									"value": "nosniff"
-								},
-								{
-									"key": "X-Permitted-Cross-Domain-Policies",
-									"value": "none"
-								},
-								{
-									"key": "Referrer-Policy",
-									"value": "no-referrer"
-								},
-								{
-									"key": "X-XSS-Protection",
-									"value": "0"
-								},
-								{
-									"key": "Cache-Control",
-									"value": "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
-								},
-								{
-									"key": "X-Powered-By",
-									"value": "Express"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "Content-Length",
-									"value": "126"
-								},
-								{
-									"key": "ETag",
-									"value": "W/\"7e-V85i3DBF7OKzAN066fgNIJSqkHQ\""
-								},
-								{
-									"key": "Date",
-									"value": "Thu, 07 Mar 2024 07:04:33 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								},
-								{
-									"key": "Keep-Alive",
-									"value": "timeout=5"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"pep_proxy\": {\n        \"id\": \"pep_proxy_7793726a-9c95-41a7-b918-c67ca23635f5\",\n        \"oauth_client_id\": \"9fa0d825-723a-42c8-9c6e-a304e85a8000\"\n    }\n}"
-						},
-						{
-							"name": "Get Application pep proxy",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{keyrock_url}}/v1/applications/{{app2-id}}/pep_proxies",
-									"host": [
-										"{{keyrock_url}}"
-									],
-									"path": [
-										"v1",
-										"applications",
-										"{{app2-id}}",
-										"pep_proxies"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Security-Policy-Report-Only",
-									"value": "default-src *;font-src *;img-src *;script-src *;style-src *;form-action *;base-uri 'self';block-all-mixed-content;frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
-								},
-								{
-									"key": "X-DNS-Prefetch-Control",
-									"value": "off"
-								},
-								{
-									"key": "Expect-CT",
-									"value": "max-age=0"
-								},
-								{
-									"key": "X-Frame-Options",
-									"value": "SAMEORIGIN"
-								},
-								{
-									"key": "Strict-Transport-Security",
-									"value": "max-age=15552000; includeSubDomains"
-								},
-								{
-									"key": "X-Download-Options",
-									"value": "noopen"
-								},
-								{
-									"key": "X-Content-Type-Options",
-									"value": "nosniff"
-								},
-								{
-									"key": "X-Permitted-Cross-Domain-Policies",
-									"value": "none"
-								},
-								{
-									"key": "Referrer-Policy",
-									"value": "no-referrer"
-								},
-								{
-									"key": "X-XSS-Protection",
-									"value": "0"
-								},
-								{
-									"key": "Cache-Control",
-									"value": "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
-								},
-								{
-									"key": "X-Powered-By",
-									"value": "Express"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "Content-Length",
-									"value": "126"
-								},
-								{
-									"key": "ETag",
-									"value": "W/\"7e-fJwutitPKUGfnoX+it9CVcVAi3Q\""
-								},
-								{
-									"key": "Date",
-									"value": "Sun, 17 Mar 2024 10:31:41 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								},
-								{
-									"key": "Keep-Alive",
-									"value": "timeout=5"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"pep_proxy\": {\n        \"id\": \"pep_proxy_fbc8919a-a0dc-4e97-85eb-ae10b804e805\",\n        \"oauth_client_id\": \"15018938-303d-4421-88ea-a7a60a493583\"\n    }\n}"
-						}
-					]
-				},
-				{
-					"name": "Create new IOT Agent",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const response = pm.response.json();\r",
-									"pm.environment.set('iot_sensor1-app2-id', response.iot_agent.id);\r",
-									"pm.environment.set('iot_sensor1-secrect', response.iot_agent.password);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{keyrock_url}}/v1/applications/{{app2-id}}/iot_agents",
-							"host": [
-								"{{keyrock_url}}"
-							],
-							"path": [
-								"v1",
-								"applications",
-								"{{app2-id}}",
-								"iot_agents"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "Create new iot agent example",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{keyrock_url}}/v1/applications/{{app2-id}}/iot_agents",
-									"host": [
-										"{{keyrock_url}}"
-									],
-									"path": [
-										"v1",
-										"applications",
-										"{{app2-id}}",
-										"iot_agents"
-									]
-								}
-							},
-							"status": "Created",
-							"code": 201,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Security-Policy-Report-Only",
-									"value": "default-src *;font-src *;img-src *;script-src *;style-src *;form-action *;base-uri 'self';block-all-mixed-content;frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
-								},
-								{
-									"key": "X-DNS-Prefetch-Control",
-									"value": "off"
-								},
-								{
-									"key": "Expect-CT",
-									"value": "max-age=0"
-								},
-								{
-									"key": "X-Frame-Options",
-									"value": "SAMEORIGIN"
-								},
-								{
-									"key": "Strict-Transport-Security",
-									"value": "max-age=15552000; includeSubDomains"
-								},
-								{
-									"key": "X-Download-Options",
-									"value": "noopen"
-								},
-								{
-									"key": "X-Content-Type-Options",
-									"value": "nosniff"
-								},
-								{
-									"key": "X-Permitted-Cross-Domain-Policies",
-									"value": "none"
-								},
-								{
-									"key": "Referrer-Policy",
-									"value": "no-referrer"
-								},
-								{
-									"key": "X-XSS-Protection",
-									"value": "0"
-								},
-								{
-									"key": "Cache-Control",
-									"value": "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
-								},
-								{
-									"key": "X-Powered-By",
-									"value": "Express"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "Content-Length",
-									"value": "131"
-								},
-								{
-									"key": "ETag",
-									"value": "W/\"83-ExOJRqVB15WxOWu2fTGenuTvliE\""
-								},
-								{
-									"key": "Date",
-									"value": "Tue, 05 Mar 2024 20:01:17 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								},
-								{
-									"key": "Keep-Alive",
-									"value": "timeout=5"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"iot_agent\": {\n        \"id\": \"iot_sensor_d9e537e1-8618-4b77-9287-d1ea90a119a2\",\n        \"password\": \"iot_sensor_4e07463b-7f13-45fd-8f1c-8aa93e206117\"\n    }\n}"
-						},
-						{
-							"name": "Create new IOT Agent",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{keyrock_url}}/v1/applications/{{app2-id}}/iot_agents",
-									"host": [
-										"{{keyrock_url}}"
-									],
-									"path": [
-										"v1",
-										"applications",
-										"{{app2-id}}",
-										"iot_agents"
-									]
-								}
-							},
-							"status": "Created",
-							"code": 201,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Security-Policy-Report-Only",
-									"value": "default-src *;font-src *;img-src *;script-src *;style-src *;form-action *;base-uri 'self';block-all-mixed-content;frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
-								},
-								{
-									"key": "X-DNS-Prefetch-Control",
-									"value": "off"
-								},
-								{
-									"key": "Expect-CT",
-									"value": "max-age=0"
-								},
-								{
-									"key": "X-Frame-Options",
-									"value": "SAMEORIGIN"
-								},
-								{
-									"key": "Strict-Transport-Security",
-									"value": "max-age=15552000; includeSubDomains"
-								},
-								{
-									"key": "X-Download-Options",
-									"value": "noopen"
-								},
-								{
-									"key": "X-Content-Type-Options",
-									"value": "nosniff"
-								},
-								{
-									"key": "X-Permitted-Cross-Domain-Policies",
-									"value": "none"
-								},
-								{
-									"key": "Referrer-Policy",
-									"value": "no-referrer"
-								},
-								{
-									"key": "X-XSS-Protection",
-									"value": "0"
-								},
-								{
-									"key": "Cache-Control",
-									"value": "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
-								},
-								{
-									"key": "X-Powered-By",
-									"value": "Express"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "Content-Length",
-									"value": "131"
-								},
-								{
-									"key": "ETag",
-									"value": "W/\"83-oZ265pGzMSVdPRL+zsB+oUEZhFs\""
-								},
-								{
-									"key": "Date",
-									"value": "Sun, 17 Mar 2024 10:31:51 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								},
-								{
-									"key": "Keep-Alive",
-									"value": "timeout=5"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"iot_agent\": {\n        \"id\": \"iot_sensor_b398304d-f437-4bb3-822b-2c0f6b2dd94b\",\n        \"password\": \"iot_sensor_a1adb19f-c244-4440-a6e9-39a7b1339534\"\n    }\n}"
-						},
-						{
-							"name": "Create new IOT Agent",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{keyrock_url}}/v1/applications/{{app2-id}}/iot_agents",
-									"host": [
-										"{{keyrock_url}}"
-									],
-									"path": [
-										"v1",
-										"applications",
-										"{{app2-id}}",
-										"iot_agents"
-									]
-								}
-							},
-							"status": "Created",
-							"code": 201,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Security-Policy-Report-Only",
-									"value": "default-src *;font-src *;img-src *;script-src *;style-src *;form-action *;base-uri 'self';block-all-mixed-content;frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
-								},
-								{
-									"key": "X-DNS-Prefetch-Control",
-									"value": "off"
-								},
-								{
-									"key": "Expect-CT",
-									"value": "max-age=0"
-								},
-								{
-									"key": "X-Frame-Options",
-									"value": "SAMEORIGIN"
-								},
-								{
-									"key": "Strict-Transport-Security",
-									"value": "max-age=15552000; includeSubDomains"
-								},
-								{
-									"key": "X-Download-Options",
-									"value": "noopen"
-								},
-								{
-									"key": "X-Content-Type-Options",
-									"value": "nosniff"
-								},
-								{
-									"key": "X-Permitted-Cross-Domain-Policies",
-									"value": "none"
-								},
-								{
-									"key": "Referrer-Policy",
-									"value": "no-referrer"
-								},
-								{
-									"key": "X-XSS-Protection",
-									"value": "0"
-								},
-								{
-									"key": "Cache-Control",
-									"value": "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
-								},
-								{
-									"key": "X-Powered-By",
-									"value": "Express"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "Content-Length",
-									"value": "131"
-								},
-								{
-									"key": "ETag",
-									"value": "W/\"83-6s8a+V5T2K117NHDCzP4lk9eErM\""
-								},
-								{
-									"key": "Date",
-									"value": "Sun, 17 Mar 2024 10:32:14 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								},
-								{
-									"key": "Keep-Alive",
-									"value": "timeout=5"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"iot_agent\": {\n        \"id\": \"iot_sensor_828fd085-e4f7-475d-ad20-e5696eae5ea9\",\n        \"password\": \"iot_sensor_f1327b51-536b-45f5-bd3b-f64dbf0a3aa4\"\n    }\n}"
-						}
-					]
+					"response": []
 				},
 				{
 					"name": "Get Application Iot agents Copy",
@@ -2802,16 +3300,16 @@
 					},
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
+							"type": "apikey",
+							"apikey": [
 								{
-									"key": "password",
-									"value": "{{app2-secrect}}",
+									"key": "value",
+									"value": "{{iot_sensor1-access-token}}",
 									"type": "string"
 								},
 								{
-									"key": "username",
-									"value": "{{app2-id}}",
+									"key": "key",
+									"value": "X-Auth-Token",
 									"type": "string"
 								}
 							]
@@ -2825,13 +3323,14 @@
 							},
 							{
 								"key": "X-Auth-Token",
-								"value": "{{iot_sensor1-access-token}}",
-								"type": "text"
+								"value": "",
+								"type": "text",
+								"disabled": true
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "e|27\r\n"
+							"raw": "e|46"
 						},
 						"url": {
 							"raw": "{{wilma_url}}/iot/d?k=1063597744&i=esensor31061690",
@@ -2850,6 +3349,168 @@
 								{
 									"key": "i",
 									"value": "esensor31061690"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Add authenticate measure with sensor",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "X-Auth-Token",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "e|46"
+								},
+								"url": {
+									"raw": "{{wilma_url}}/iot/d?k=1063597744&i=esensor31061690",
+									"host": [
+										"{{wilma_url}}"
+									],
+									"path": [
+										"iot",
+										"d"
+									],
+									"query": [
+										{
+											"key": "k",
+											"value": "1063597744"
+										},
+										{
+											"key": "i",
+											"value": "esensor31061690"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/plain; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Apr 2024 17:58:29 GMT"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "Add measure with sensor from south",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.log(pm.request);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true,
+							"connection": true,
+							"accept-encoding": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{iot_sensor1-access-token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "X-Auth-Token",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-Auth-Token",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "e|46\r\n"
+						},
+						"url": {
+							"raw": "{{iota_south_url}}/iot/d?k=1063597744&i=esensor37879441",
+							"host": [
+								"{{iota_south_url}}"
+							],
+							"path": [
+								"iot",
+								"d"
+							],
+							"query": [
+								{
+									"key": "k",
+									"value": "1063597744"
+								},
+								{
+									"key": "i",
+									"value": "esensor37879441"
 								}
 							]
 						}
@@ -2883,7 +3544,33 @@
 	],
 	"variable": [
 		{
+			"key": "iota_north",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "keyrock_url",
 			"value": ""
+		},
+		{
+			"key": "addr-perseo-host-fwd",
+			"value": "http://localhost:9090",
+			"type": "string"
+		},
+		{
+			"key": "wilma_url",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "orion_url",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "perseo-fe-url",
+			"value": "",
+			"type": "string"
 		},
 		{
 			"key": "dockerflask",
@@ -2905,14 +3592,43 @@
 			"type": "string"
 		},
 		{
-			"key": "addr-perseo-host-fwd",
+			"key": "fw-iota-lora",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"key": "fw-iota-lora",
+			"key": "X-Auth-token",
+			"value": ""
+		},
+		{
+			"key": "flask_dash",
 			"value": "",
 			"type": "string"
+		},
+		{
+			"key": "iota_south_url",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "variable_key",
+			"value": ""
+		},
+		{
+			"key": "app2-id",
+			"value": ""
+		},
+		{
+			"key": "app2-secrect",
+			"value": ""
+		},
+		{
+			"key": "pepproxy-app2-id",
+			"value": ""
+		},
+		{
+			"key": "pepproxy-secrect",
+			"value": ""
 		}
 	]
 }
