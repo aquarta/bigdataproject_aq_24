@@ -64,23 +64,12 @@ def step2(c):
 
 @task
 def import_data(c):
+    """ use newman to import data with postman collection """
+    c.run('newman run -e pman_env.json --folder "Add Bridges to Orion" --folder "Add service to IOT Agent" --folder "Add devices to IOT Agent" 0_BData_project.postman_collection.json')
 
-    # first_command = """ run --rm -v $(pwd)/import-data:/import-data \
-    #     --network fiware_default \
-    #     -e ORION_PORT="${ORION_PORT}" \
-    #     -e TUTORIAL_APP_PORT="${TUTORIAL_APP_PORT}" \
-    #     --entrypoint /bin/ash quay.io/curl/curl /import-data"""
-    # c.run(onlydocker_cmd + first_command)
-    #waitFor(c,cname="fiware-iot-agent",comment="IOT Agent")
-    second_cmd = """ run --rm -v "$(pwd)/provision-devices":/provision-devices \
-        --network fiware_default \
-        -e ORION_PORT="${ORION_PORT}" \
-        -e TUTORIAL_APP_PORT="${TUTORIAL_APP_PORT}" \
-        -e TUTORIAL_DUMMY_DEVICE_PORT="${TUTORIAL_DUMMY_DEVICE_PORT}" \
-        -e IOTA_NORTH_PORT="${IOTA_NORTH_PORT}" \
-        --entrypoint /bin/ash quay.io/curl/curl /provision-devices """
-    c.run(onlydocker_cmd + second_cmd, echo=True)
-
+@task
+def setup_orion_perseo_subs(c):
+    ...
 
 
 @task

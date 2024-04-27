@@ -16,8 +16,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 201\", function () {\r",
-									"    pm.response.to.have.status(201);\r",
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -641,13 +641,14 @@
 							}
 						],
 						"url": {
-							"raw": "{{orion_url}}/v2/subscriptions",
+							"raw": "{{orion_url}}/v2/subscriptions/662114f279636d184402af8a",
 							"host": [
 								"{{orion_url}}"
 							],
 							"path": [
 								"v2",
-								"subscriptions"
+								"subscriptions",
+								"662114f279636d184402af8a"
 							]
 						}
 					},
@@ -2194,7 +2195,8 @@
 											"pm.environment.set('iot_sensor1-app2-id', response.iot_agent.id);\r",
 											"pm.environment.set('iot_sensor1-secrect', response.iot_agent.password);"
 										],
-										"type": "text/javascript"
+										"type": "text/javascript",
+										"packages": {}
 									}
 								}
 							],
@@ -2208,7 +2210,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{keyrock_url}}/v1/applications/{{app2-id}}/iot_agents",
+									"raw": "{{keyrock_url}}/v1/applications/{{app2-id}}/iot_agents/{{iot_sensor1-app2-id}}",
 									"host": [
 										"{{keyrock_url}}"
 									],
@@ -2216,7 +2218,8 @@
 										"v1",
 										"applications",
 										"{{app2-id}}",
-										"iot_agents"
+										"iot_agents",
+										"{{iot_sensor1-app2-id}}"
 									]
 								}
 							},
@@ -3330,7 +3333,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "e|46"
+							"raw": "e|33"
 						},
 						"url": {
 							"raw": "{{wilma_url}}/iot/d?k=1063597744&i=esensor31061690",
