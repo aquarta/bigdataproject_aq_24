@@ -25,5 +25,5 @@ The project require, python, invoke python package and python-loadenv python pac
 then type:
 
 ```
-invoke -c services up-docker-compose
+invoke -c services up-docker-compose step2-ld
 ```

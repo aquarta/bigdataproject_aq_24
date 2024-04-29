@@ -15,6 +15,10 @@ def up_docker_compose(c, dfile="orion-wilma-perseo"):
 
 @task
 def pepproxy_build(c, dfile="wilma"):
+    is_gitpod_workspace = os.environ.get("GITPOD_REPO_ROOT", None) is not None
+    if is_gitpod_workspace:
+        # Make orion ports accessible from remote
+        c.run(f"gp ports visibility 1026:public", echo=True)    
     c.run(f"{dockerCmd} -f docker-compose/{dfile}.yml up -d", echo=True)
     
 
@@ -61,6 +65,42 @@ def step2(c):
 
     waitFor(c,cname="fiware-orion", comment="ORION")
     
+
+@task
+def step2_ld(c):
+    waitFor(c,cname="fiware-keyrock", comment="KeyRock")
+    waitFor(c,"db-mongo", "MongoDB")
+
+    first_cmd = """ exec db-mongo mongo --eval '
+	conn = new Mongo();db.createCollection("orion");
+	db = conn.getDB("orion");
+	db.createCollection("entities");
+	db.entities.createIndex({"_id.servicePath": 1, "_id.id": 1, "_id.type": 1}, {unique: true});
+	db.entities.createIndex({"_id.type": 1}); 
+	db.entities.createIndex({"_id.id": 1});'"""
+
+    second_cmd = """ exec db-mongo mongo --eval '
+	conn = new Mongo();db.createCollection("orion-openiot");
+	db = conn.getDB("orion-openiot");
+	db.createCollection("entities");
+	db.entities.createIndex({"_id.servicePath": 1, "_id.id": 1, "_id.type": 1}, {unique: true});
+	db.entities.createIndex({"_id.type": 1});
+	db.entities.createIndex({"_id.id": 1});'"""
+
+    third_cmd = """ exec db-mongo mongo --eval '
+	conn = new Mongo();
+	db = conn.getDB("iotagentul");
+	db.getCollectionNames().forEach(c=>db[c].drop());
+	db.createCollection("devices");
+	db.devices.createIndex({"_id.service": 1, "_id.id": 1, "_id.type": 1});
+	db.devices.createIndex({"_id.type": 1});
+	db.devices.createIndex({"_id.id": 1});
+	db.createCollection("groups");
+	db.groups.createIndex({"_id.resource": 1, "_id.apikey": 1, "_id.service": 1});
+	db.groups.createIndex({"_id.type": 1});'"""
+
+    for cmd in [first_cmd, second_cmd, third_cmd]:
+        c.run(onlydocker_cmd + cmd)
 
 @task
 def import_data(c):
