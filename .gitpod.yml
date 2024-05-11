@@ -1,6 +1,12 @@
 tasks:
   - name: Pull Images
     init: ./services create
+  - name: Start
+    init: pip install python-dotenv invoke
+    command: invoke -c services build step2-ld
+  - name: Postman
+    init: npm install -g newman
+    command: newman run -e pman_env.json --folder "Add Bridges to Orion" --folder "Add service to IOT Agent" --folder "Add devices to IOT Agent" 0_BData_project.postman_collection.json
 
 ports:
   - name: Orion
