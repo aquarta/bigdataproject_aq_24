@@ -7,18 +7,36 @@ load_dotenv()
 
 dockerCmd="docker-compose"
 onlydocker_cmd = "docker"
+IS_GITPOD_WORKSPACE = os.environ.get("GITPOD_REPO_ROOT", None) is not None
 
 @task
-def up_docker_compose(c, dfile="orion-wilma-perseo"):
+def create_ld(c, dfile="orion-wilma-perseo"):
+    build(c, dfile=dfile)
+    step2_ld(c)
+
+@task
+def set_gitpod_public_ports(c,):
+    if IS_GITPOD_WORKSPACE:
+        # Make orion ports accessible from remote
+        c.run(f"gp ports visibility 1026:public", echo=True)
+        c.run(f"gp ports visibility 14041:public", echo=True)
+        c.run(f"gp ports visibility 13005:public", echo=True)
+        c.run(f"gp ports visibility 7896:public", echo=True)
+
+
+@task
+def build(c, dfile="orion-wilma-perseo"):
+    set_gitpod_public_ports(c)
     c.run(f"{dockerCmd} -f docker-compose/{dfile}.yml up -d --remove-orphans", echo=True)
+
+@task
+def start_docker_compose(c, dfile="orion-wilma-perseo"):
+    set_gitpod_public_ports(c)
+    c.run(f"{dockerCmd} -f docker-compose/{dfile}.yml start", echo=True)
 
 
 @task
 def pepproxy_build(c, dfile="wilma"):
-    is_gitpod_workspace = os.environ.get("GITPOD_REPO_ROOT", None) is not None
-    if is_gitpod_workspace:
-        # Make orion ports accessible from remote
-        c.run(f"gp ports visibility 1026:public", echo=True)    
     c.run(f"{dockerCmd} -f docker-compose/{dfile}.yml up -d", echo=True)
     
 
