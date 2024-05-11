@@ -1,0 +1,73 @@
+--- 
+components: 
+  schemas: 
+
+    # This is the base definition of a building
+    Building: 
+      $ref: "https://fiware.github.io/tutorials.NGSI-LD/models/building.yaml#/Building"
+      properties:
+        sensor_height:
+            $ref: https://fiware.github.io/tutorials.NGSI-LD/models/saref-terms.yaml#/height
+
+
+    # This is all of the defined building categories within
+    # within the Smart Cities and Smart AgriFood domain
+    # This is reduced list of the defined building categories within
+    # the Smart AgriFood domain
+    BuildingCategories: 
+      enum:
+        # Accommodation
+        - bridge
+
+      description: |
+
+        ### Accommodation
+
+        -   `bridge` -  A bridge is a structure built to span a physical obstacle (such as a body of water, valley, road, or railway) without blocking the way underneath. It is constructed for the purpose of providing passage over the obstacle, which is usually something that is otherwise difficult or impossible to cross.
+
+      type: string
+      externalDocs: 
+        url: "https://wiki.openstreetmap.org/wiki/Map_Features#Building"
+      x-ngsi: 
+        uri-prefix: "https://wiki.openstreetmap.org/wiki/Tag:building%3D"
+
+    # This is the full list of IoT Device Categories
+    DeviceCategory: 
+      $ref: "https://fiware.github.io/tutorials.NGSI-LD/models/saref-terms.yaml#/Categories"
+    # This is a full list of context attributes measurable by devices
+    ControlledProperties: 
+      $ref: "https://fiware.github.io/tutorials.NGSI-LD/models/saref-terms.yaml#/ControlledProperties"
+
+     # Extend the existing IoT Device model to create a new type with an attribute 
+    HeightSensor:
+      type: object
+      required:
+        -  height
+      allOf:
+        - $ref: https://fiware.github.io/tutorials.NGSI-LD/models/device.yaml#/Device
+
+      description: >
+        A device that consists of a sensor, has category `saref:Sensor` and is used for the purpose of sensing the Height where is installed`.
+      
+      properties:
+        height:
+          $ref: https://fiware.github.io/tutorials.NGSI-LD/models/saref-terms.yaml#/height
+info: 
+  description: "Base Model Definitions from Smart Data Models"
+  title: Sogei Models
+  version: "1.0.0"
+openapi: "3.0.0"
+
+
+# These paths are merely representative.
+paths: 
+  /ngsi-ld/v1/entities: 
+    get: 
+      responses: 
+        ? "200"
+        : 
+          description:  OK
+          content: 
+            application/ld+json: 
+              schema: 
+                type: object
