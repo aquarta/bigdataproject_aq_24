@@ -1,0 +1,273 @@
+{
+    "@context": {
+        "type": "@type",
+        "id": "@id",
+        "ngsi-ld": "https://uri.etsi.org/ngsi-ld/",
+        "fiware": "https://uri.fiware.org/ns/data-models#",
+        "schema": "https://schema.org/",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "Building": "fiware:Building",
+        "HVAC": "https://w3id.org/saref#HVAC",
+        "HeightSensor": "fiware:HeightSensor",
+        "actuator": "https://w3id.org/saref#actuator",
+        "airPollution": "https://w3id.org/saref#airPollution",
+        "atmosphericPressure": "https://w3id.org/saref#atmosphericPressure",
+        "batteryLevel": {
+            "@id": "fiware:batteryLevel",
+            "@type": "xsd:number"
+        },
+        "bridge": "https://wiki.openstreetmap.org/wiki/Tag:building%3Dbridge",
+        "category": {
+            "@id": "fiware:category",
+            "@type": "@vocab"
+        },
+        "cdom": "https://w3id.org/saref#cdom",
+        "conductance": "https://w3id.org/saref#conductance",
+        "conductivity": "https://w3id.org/saref#conductivity",
+        "configuration": {
+            "@id": "fiware:configuration",
+            "@type": "xsd:string"
+        },
+        "controlledAsset": {
+            "@id": "fiware:controlledAsset",
+            "@type": "@id"
+        },
+        "controlledProperty": {
+            "@id": "fiware:controlledProperty",
+            "@type": "@vocab"
+        },
+        "dataProvider": {
+            "@id": "fiware:dataProvider",
+            "@type": "xsd:string"
+        },
+        "dateCreated": {
+            "@id": "fiware:dateCreated",
+            "@type": "xs:dateTime"
+        },
+        "dateFirstUsed": {
+            "@id": "fiware:dateFirstUsed",
+            "@type": "xs:dateTime"
+        },
+        "dateInstalled": {
+            "@id": "fiware:dateInstalled",
+            "@type": "xs:dateTime"
+        },
+        "dateLastCalibration": {
+            "@id": "fiware:dateLastCalibration",
+            "@type": "xs:dateTime"
+        },
+        "dateLastValueReported": {
+            "@id": "fiware:dateLastValueReported",
+            "@type": "xs:dateTime"
+        },
+        "dateManufactured": {
+            "@id": "fiware:dateManufactured",
+            "@type": "xs:dateTime"
+        },
+        "dateModified": {
+            "@id": "fiware:dateModified",
+            "@type": "xs:dateTime"
+        },
+        "depth": "https://w3id.org/saref#depth",
+        "description": {
+            "@id": "ngsi-ld:description",
+            "@type": "xsd:string"
+        },
+        "deviceState": {
+            "@id": "fiware:deviceState",
+            "@type": "xsd:string"
+        },
+        "eatingActivity": "https://w3id.org/saref#eatingActivity",
+        "electricityConsumption": "https://w3id.org/saref#electricityConsumption",
+        "endgun": "https://w3id.org/saref#endgun",
+        "energy": "https://w3id.org/saref#energy",
+        "fillingLevel": "https://w3id.org/saref#fillingLevel",
+        "firmwareVersion": {
+            "@id": "fiware:firmwareVersion",
+            "@type": "xsd:string"
+        },
+        "gasConsumption": "https://w3id.org/saref#gasConsumption",
+        "hardwareVersion": {
+            "@id": "fiware:hardwareVersion",
+            "@type": "xsd:string"
+        },
+        "heading": "https://w3id.org/saref#heading",
+        "height": {
+            "@id": "https://saref.etsi.org/saref4envi#Height",
+            "@type": "xsd:number"
+        },
+        "humidity": "https://w3id.org/saref#humidity",
+        "implement": "https://w3id.org/saref#implement",
+        "ipAddress": {
+            "@id": "fiware:ipAddress",
+            "@type": "xsd:string"
+        },
+        "irrSection": "https://w3id.org/saref#irrSection",
+        "irrSystem": "https://w3id.org/saref#irrSystem",
+        "light": "https://w3id.org/saref#light",
+        "location": "https://w3id.org/saref#location",
+        "macAddress": {
+            "@id": "fiware:macAddress",
+            "@type": "xsd:string"
+        },
+        "mcc": {
+            "@id": "fiware:mcc",
+            "@type": "xsd:string"
+        },
+        "meter": "https://w3id.org/saref#meter",
+        "milking": "https://w3id.org/saref#milking",
+        "mnc": {
+            "@id": "fiware:mnc",
+            "@type": "xsd:string"
+        },
+        "motion": "https://w3id.org/saref#motion",
+        "movementActivity": "https://w3id.org/saref#movementActivity",
+        "multimedia": "https://w3id.org/saref#multimedia",
+        "name": {
+            "@id": "ngsi-ld:name",
+            "@type": "xsd:string"
+        },
+        "network": "https://w3id.org/saref#network",
+        "noiseLevel": "https://w3id.org/saref#noiseLevel",
+        "occupancy": "https://w3id.org/saref#occupancy",
+        "orp": "https://w3id.org/saref#orp",
+        "osVersion": {
+            "@id": "fiware:osVersion",
+            "@type": "xsd:string"
+        },
+        "owner": {
+            "@id": "fiware:owner",
+            "@type": "@id"
+        },
+        "pH": "https://w3id.org/saref#pH",
+        "power": "https://w3id.org/saref#power",
+        "precipitation": "https://w3id.org/saref#precipitation",
+        "pressure": "https://w3id.org/saref#pressure",
+        "provider": {
+            "@id": "fiware:provider",
+            "@type": "xsd:string"
+        },
+        "refDeviceModel": {
+            "@id": "fiware:refDeviceModel",
+            "@type": "@id"
+        },
+        "rssi": {
+            "@id": "fiware:rssi",
+            "@type": "xsd:string"
+        },
+        "salinity": "https://w3id.org/saref#salinity",
+        "sensor": "https://w3id.org/saref#sensor",
+        "sensor_height": {
+            "@id": "https://saref.etsi.org/saref4envi#Height",
+            "@type": "xsd:number"
+        },
+        "serialNumber": {
+            "@id": "fiware:serialNumber",
+            "@type": "xsd:string"
+        },
+        "smoke": "https://w3id.org/saref#smoke",
+        "softwareVersion": {
+            "@id": "fiware:softwareVersion",
+            "@type": "xsd:string"
+        },
+        "soilMoisture": "https://w3id.org/saref#soilMoisture",
+        "solarRadiation": "https://w3id.org/saref#solarRadiation",
+        "source": {
+            "@id": "fiware:source",
+            "@type": "xsd:string"
+        },
+        "speed": "https://w3id.org/saref#speed",
+        "supportedProtocol": {
+            "@id": "fiware:supportedProtocol",
+            "@type": "@vocab"
+        },
+        "tds": "https://w3id.org/saref#tds",
+        "temperature": "https://w3id.org/saref#temperature",
+        "trafficFlow": "https://w3id.org/saref#trafficFlow",
+        "tss": "https://w3id.org/saref#tss",
+        "turbidity": "https://w3id.org/saref#turbidity",
+        "value": {
+            "@id": "fiware:value",
+            "@type": "xsd:string"
+        },
+        "waterConsumption": "https://w3id.org/saref#waterConsumption",
+        "waterPollution": "https://w3id.org/saref#waterPollution",
+        "weatherConditions": "https://w3id.org/saref#weatherConditions",
+        "weight": "https://w3id.org/saref#weight",
+        "windDirection": "https://w3id.org/saref#windDirection",
+        "windSpeed": "https://w3id.org/saref#windSpeed"
+    },
+    "@graph": [
+        {
+            "@id": "fiware:Building",
+            "@type": "rdfs:Class",
+            "rdfs:comment": [
+                {
+                    "@language": "en",
+                    "@value": "This entity contains a harmonised description of a Building. This entity is associated with the vertical segments of smart homes, smart cities, industry and related IoT applications.\nThis data model has been partially developed in cooperation with mobile operators and the [GSMA](https://www.gsma.com/iot/iot-big-data/), compared to GSMA data model following changes are introduced:\n-   the reference to `BuildingType` is removed, since `BuildingType` compared to\n    `category` attribute does not introduce significant information.\n\n-   `category` attribute is required.\n-   `openingHours` is introduced following schema.org data model to allow\n    fine-grained on building opening times. GSMA supported this as free text in\n    the `notes` attribute (removed as well).\n\n-   `refSubscriptionService` is not supported, since `SubscriptionService` model\n    is not supported currently.\n\n## Data Model\nFor a full description of the following attributes refer to GSMA [IoT Big Data Harmonised Data Model](https://github.com/GSMADeveloper/NGSI-LD-Entities)"
+                }
+            ],
+            "rdfs:label": [
+                {
+                    "@language": "en",
+                    "@value": "Building"
+                }
+            ],
+            "rdfs:subClassOf": {
+                "@id": "schema:Thing"
+            }
+        },
+        {
+            "@id": "fiware:HeightSensor",
+            "@type": "rdfs:Class",
+            "rdfs:comment": [
+                {
+                    "@language": "en",
+                    "@value": "A device that consists of a sensor, has category `saref:Sensor` and is used for the purpose of sensing the Height where is installed`."
+                }
+            ],
+            "rdfs:label": [
+                {
+                    "@language": "en",
+                    "@value": "HeightSensor"
+                }
+            ],
+            "rdfs:subClassOf": {
+                "@id": "schema:Thing"
+            }
+        },
+        {
+            "@id": "fiware:sensor_height",
+            "@type": "ngsi-ld:Property",
+            "rdfs:comment": [
+                {
+                    "@language": "en",
+                    "@value": "An individual representing the property height."
+                }
+            ],
+            "rdfs:label": [
+                {
+                    "@language": "en",
+                    "@value": "sensor_height"
+                }
+            ]
+        },
+        {
+            "@id": "fiware:height",
+            "@type": "ngsi-ld:Property",
+            "rdfs:comment": [
+                {
+                    "@language": "en",
+                    "@value": "An individual representing the property height."
+                }
+            ],
+            "rdfs:label": [
+                {
+                    "@language": "en",
+                    "@value": "height"
+                }
+            ]
+        }
+    ]
+}
