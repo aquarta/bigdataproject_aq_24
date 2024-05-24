@@ -22,6 +22,7 @@ def set_gitpod_public_ports(c,):
         c.run(f"gp ports visibility 14041:public", echo=True)
         c.run(f"gp ports visibility 13005:public", echo=True)
         c.run(f"gp ports visibility 7896:public", echo=True)
+        c.run(f"gp ports visibility 9090:public", echo=True)
 
 
 @task
@@ -38,6 +39,7 @@ def start_docker_compose(c, dfile="orion-wilma-perseo"):
 @task
 def pepproxy_build(c, dfile="wilma"):
     c.run(f"{dockerCmd} -f docker-compose/{dfile}.yml up -d", echo=True)
+    c.run(f"gp ports visibility 7896:public", echo=True)
     
 
 
