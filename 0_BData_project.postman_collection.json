@@ -1182,7 +1182,7 @@
 									"apikey": [
 										{
 											"key": "value",
-											"value": "{{login_token}}",
+											"value": "{{X-Auth-token}}",
 											"type": "string"
 										},
 										{
@@ -1201,7 +1201,7 @@
 									},
 									{
 										"key": "X-Subject-token",
-										"value": "{{login_token}}",
+										"value": "{{X-Auth-token}}",
 										"type": "text"
 									}
 								],
@@ -1525,8 +1525,8 @@
 											"//pm.environment.set('app2-id', response.application.id);\r",
 											"//pm.environment.set('app2-secrect', response.application.secret);\r",
 											"\r",
-											"pm.collectionVariables.set('app2-id', response.application.id);\r",
-											"pm.collectionVariables.set('app2-secrect', response.application.secret);\r",
+											"pm.collectionVariables.set('app2-id', response.applications[0].id);\r",
+											"pm.collectionVariables.set('app2-secrect', response.applications[0].secret);\r",
 											""
 										],
 										"type": "text/javascript",
