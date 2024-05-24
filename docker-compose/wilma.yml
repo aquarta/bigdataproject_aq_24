@@ -28,9 +28,9 @@ services:
       - PEP_PROXY_AUTH_ENABLED=false
       - PEP_PROXY_IDM_SSL_ENABLED=false
       - PEP_PROXY_IDM_PORT=${KEYROCK_PORT}
-      - PEP_PROXY_APP_ID=8f14fd2c-7072-4acb-99ba-280c3f0c0485
-      - PEP_PROXY_USERNAME=pep_proxy_65b131b0-abc0-45db-9ace-69a2e01ab577
-      - PEP_PASSWORD=pep_proxy_d7afa456-7203-4cfd-a589-63b2d613290e
+      - PEP_PROXY_APP_ID=${PP_APP_ID}
+      - PEP_PROXY_USERNAME=${PP_USER}
+      - PEP_PASSWORD=${PP_PASS}
       - PEP_PROXY_PDP=idm
       - PEP_PROXY_MAGIC_KEY=1234
       - PEP_PROXY_PUBLIC_PATHS=/version

@@ -89,6 +89,7 @@ services:
       - IOTA_MONGO_DB=iotagentul # The name of the database used in mongoDB
       - IOTA_HTTP_PORT=${IOTA_SOUTH_PORT} # The port used for device traffic over HTTP
       - IOTA_PROVIDER_URL=http://iot-agent:${IOTA_NORTH_PORT}
+      - IOTA_APPEND_MODE=true
     healthcheck:
       interval: 15s
 
@@ -269,7 +270,7 @@ services:
       - "MYSQL_ROOT_HOST=172.18.5.5" # Allow Keyrock to access this database
     volumes:
       - mysql-db:/var/lib/mysql
-      - ../mysql-data:/docker-entrypoint-initdb.d/:ro
+      #- ../mysql-data:/docker-entrypoint-initdb.d/:ro
     secrets:
       - my_secret_data
   # nginx:
