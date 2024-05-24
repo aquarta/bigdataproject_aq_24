@@ -94,7 +94,13 @@
         },
         "heading": "https://w3id.org/saref#heading",
         "height": {
-            "@id": "https://saref.etsi.org/saref4envi#Height",
+            
+            "@id": "https://saref.etsi.org/saref4envi/Height",
+            "@type": "xsd:number"
+        },
+        "height": {
+            
+            "@id": "https://saref.etsi.org/saref4envi/Height",
             "@type": "xsd:number"
         },
         "humidity": "https://w3id.org/saref#humidity",
