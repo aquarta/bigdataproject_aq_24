@@ -4,10 +4,20 @@ components:
 
     # This is the base definition of a building
     Building: 
-      $ref: "https://fiware.github.io/tutorials.NGSI-LD/models/building.yaml#/Building"
+      $ref: "https://aquarta.github.io/bigdataproject_aq_24/datamodels/building.yaml#/Building"
       properties:
         sensor_height:
-            $ref: https://fiware.github.io/tutorials.NGSI-LD/models/saref-terms.yaml#/height
+            #$ref: https://aquarta.github.io/bigdataproject_aq_24/datamodels/saref-terms.yaml#/height
+            $ref: https://aquarta.github.io/bigdataproject_aq_24/datamodels/height_s.yaml#/height
+        Buldingstatus:
+          description: "`ok`, `bad`, `verification`\n"
+          enum: 
+            - ok
+            - bad
+            - verification
+          type: string
+          x-ngsi: 
+            uri-prefix: "https://bigdataproject_aq_24.github.io/schema/"
 
 
     # This is all of the defined building categories within
@@ -33,10 +43,10 @@ components:
 
     # This is the full list of IoT Device Categories
     DeviceCategory: 
-      $ref: "https://fiware.github.io/tutorials.NGSI-LD/models/saref-terms.yaml#/Categories"
+      $ref: "https://aquarta.github.io/bigdataproject_aq_24/datamodels/saref-terms.yaml#/Categories"
     # This is a full list of context attributes measurable by devices
     ControlledProperties: 
-      $ref: "https://fiware.github.io/tutorials.NGSI-LD/models/saref-terms.yaml#/ControlledProperties"
+      $ref: "https://aquarta.github.io/bigdataproject_aq_24/datamodels/saref-terms.yaml#/ControlledProperties"
 
      # Extend the existing IoT Device model to create a new type with an attribute 
     HeightSensor:
@@ -44,14 +54,15 @@ components:
       required:
         -  height
       allOf:
-        - $ref: https://fiware.github.io/tutorials.NGSI-LD/models/device.yaml#/Device
+        - $ref: https://aquarta.github.io/bigdataproject_aq_24/datamodels/device.yaml#/Device
 
       description: >
         A device that consists of a sensor, has category `saref:Sensor` and is used for the purpose of sensing the Height where is installed`.
       
       properties:
         height:
-          $ref: https://fiware.github.io/tutorials.NGSI-LD/models/saref-terms.yaml#/height
+          $ref: https://aquarta.github.io/bigdataproject_aq_24/datamodels/height_s.yaml#/height
+
 info: 
   description: "Base Model Definitions from Smart Data Models"
   title: Sogei Models
