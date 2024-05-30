@@ -1,0 +1,116 @@
+--- 
+Building: 
+  allOf: 
+    - 
+      $ref: "./ngsi-ld.yaml#/Common"
+  description: |
+      This entity contains a harmonised description of a Building. This entity is associated with the vertical segments of smart homes, smart cities, industry and related IoT applications.
+      This data model has been partially developed in cooperation with mobile operators and the [GSMA](https://www.gsma.com/iot/iot-big-data/), compared to GSMA data model following changes are introduced:
+      -   the reference to `BuildingType` is removed, since `BuildingType` compared to
+          `category` attribute does not introduce significant information.
+      
+      -   `category` attribute is required.
+      -   `openingHours` is introduced following schema.org data model to allow
+          fine-grained on building opening times. GSMA supported this as free text in
+          the `notes` attribute (removed as well).
+      
+      -   `refSubscriptionService` is not supported, since `SubscriptionService` model
+          is not supported currently.
+      
+      ## Data Model
+      For a full description of the following attributes refer to GSMA [IoT Big Data Harmonised Data Model](https://github.com/GSMADeveloper/NGSI-LD-Entities)
+  properties: 
+    address: 
+      $ref: "./schema.org.yaml#/address"
+    category: 
+      description: "The categories that this building belongs to"
+      allOf:
+        - $ref: "./openstreetmap.yaml#/Categories"
+      type: string
+      x-ngsi: 
+        type: EnumProperty
+        uri-prefix: "https://wiki.openstreetmap.org/wiki/Tag:building%3D"
+    containedInPlace: 
+      description: "The URL this building resides within  "
+      format: URL
+      type: string
+      x-ngsi: 
+        model: "https://schema.org/URL"
+        type: Relationship
+    dataProvider: 
+      description: "Specifies the URL to information about the provider of this information"
+      format: URL
+      type: string
+      x-ngsi: 
+        model: "https://schema.org/URL"
+        type: Property
+    description: 
+      $ref: "./ngsi-ld.yaml#/description"
+    floorsAboveGround: 
+      description: "Number of floors above ground within the building"
+      format: int32
+      type: integer
+      x-ngsi: 
+        model: "https://schema.org/Integer"
+        type: Property
+    floorsBelowGround: 
+      description: "Number of floors below ground within the building"
+      format: int32
+      type: integer
+      x-ngsi: 
+        model: "https://schema.org/Integer"
+        type: Property
+    location: 
+      $ref: "./ngsi-ld.yaml#/location"
+    occupier: 
+      description: "Link to the occupiers of the building"
+      format: URL
+      type: string
+      x-ngsi: 
+        model: "https://schema.org/URL"
+        type: Relationship
+    openingHours: 
+      externalDocs: 
+        url: "https://schema.org/openingHours"
+      items: 
+        properties: 
+          type: 
+            type: string
+          values: 
+            items: 
+              type: string
+            type: array
+        type: object
+      type: array
+      x-ngsi: 
+        model: "https://schema.org/openingHours"
+        type: Property
+        uri: "https://schema.org/openingHours"
+    owner: 
+      description: "The owner of this building"
+      format: URL
+      type: string
+      x-ngsi: 
+        model: "https://schema.org/URL"
+        type: Relationship
+    refMap: 
+      description: "The URL holding a map of the building"
+      format: URL
+      type: string
+      x-ngsi: 
+        model: "https://schema.org/URL"
+        type: Property
+    source: 
+      description: "A sequence of characters giving the source of the entity data."
+      type: string
+      x-ngsi: 
+        model: 
+          - "https://schema.org/Text"
+          - "https://schema.org/URL"
+        type: Property
+  required: 
+    - address
+    - category
+  type: object
+Categories: 
+  $ref: "https://fiware.github.io/tutorials.NGSI-LD/models/openstreetmap.yaml#/Categories"
