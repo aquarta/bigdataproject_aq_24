@@ -34,11 +34,11 @@ services:
           read_only: true
     healthcheck:
       test: (wget --server-response --spider --quiet  http://ld-context/ngsi-context.jsonld 2>&1 | awk 'NR==1{print $$2}'|  grep -q -e "200") || exit 1
-  # Orion is an NGSI-v2 context broker
-  orion-v2:
+  # Orion is an NGSI-LD context broker
+  orion-ld:
     labels:
       org.fiware: 'bdataprj'
-    image: antonioquartaunisalento/bigdataorionld:1.5.1
+    image: fiware/orion-ld:latest
     hostname: orion
     container_name: fiware-orion
     depends_on:
@@ -55,6 +55,8 @@ services:
     healthcheck:
       test: curl --fail -s http://orion:1026/version || exit 1
       interval: 15s
+    environment:
+      - BROKER_LOG_LEVEL=DEBUG
 
   # IoT-Agent is configured for the UltraLight Protocol
   iot-agent:
@@ -65,7 +67,7 @@ services:
     container_name: fiware-iot-agent
     depends_on:
       - mongo-db
-      - orion-v2
+      - orion-ld
     networks:
       - default
     expose:
@@ -89,7 +91,8 @@ services:
       - IOTA_MONGO_DB=iotagentul # The name of the database used in mongoDB
       - IOTA_HTTP_PORT=${IOTA_SOUTH_PORT} # The port used for device traffic over HTTP
       - IOTA_PROVIDER_URL=http://iot-agent:${IOTA_NORTH_PORT}
-      - IOTA_APPEND_MODE=true
+      - IOTA_FALLBACK_TENANT=openiot
+
     healthcheck:
       interval: 15s
 
@@ -178,7 +181,7 @@ services:
     hostname: fiware-perseo-core
     depends_on:
       - mongo-db
-      - orion-v2
+      - orion-ld
     ports:
       - "${PERSEO_CORE_PORT:-8080}:${PERSEO_CORE_PORT:-8080}"
     environment:
@@ -288,48 +291,50 @@ services:
   #           - wirecloud
 
 
-  mqtt:
-    image: eclipse-mosquitto
-    labels:
-        org.fiware: 'bdataprj'
-    hostname: mqtt
-    container_name: fiware-mqtt
-    volumes:
-      - ./mosquitto/config:/mosquitto/config:rw
-      - mqtt_data:/mosquitto/data/:rw
-    expose:
-      - 1883
-      - 9001
-    ports:
-      - 1883:1883
-      - 9001:9001
-    networks:
-      default:
-        ipv4_address: 172.18.5.35
+  # mqtt:
+  #   image: eclipse-mosquitto
+  #   labels:
+  #       org.fiware: 'bdataprj'
+  #   hostname: mqtt
+  #   container_name: fiware-mqtt
+  #   volumes:
+  #     - ./mosquitto/config:/mosquitto/config:rw
+  #     - mqtt_data:/mosquitto/data/:rw
+  #   expose:
+  #     - 1883
+  #     - 9002
+  #   ports:
+  #     - 1883:1883
+  #     - 9002:9002
+  #   networks:
+  #     default:
+  #       ipv4_address: 172.18.5.35
 
-  iotagent-lora:
-    image: ioeari/iotagent-lora
-    container_name: fiware-iota-lora
-    expose:
-      - 6041
-    ports:
-      - 6041:4041
-    labels:
-        org.fiware: 'bdataprj'
-    depends_on:
-        - mongo-db
-        - orion-v2
-        - mqtt
-    hostname: iotagent-lora
-    entrypoint: bin/iotagent-lora docker/config-docker.js
-    environment:
-      - IOTA_MONGO_HOST=mongo-db # The host name of MongoDB
-      - IOTA_MONGO_PORT=${MONGO_DB_PORT} # The port mongoDB is listening on
-      - IOTA_MONGO_DB=iotagentul
-      #- IOTA_MONGO_DB=iotagentlora # The name of the database used in mongoDB
-    networks:
-      default:
-        ipv4_address: 172.18.5.55
+  # iotagent-lora:
+  #   image: ioeari/iotagent-lora
+  #   container_name: fiware-iota-lora
+  #   expose:
+  #     - 6041
+  #   ports:
+  #     - 6041:4041
+  #   labels:
+  #       org.fiware: 'bdataprj'
+  #   depends_on:
+  #       - mongo-db
+  #       - orion-ld
+  #       - mqtt
+  #   hostname: iotagent-lora
+  #   entrypoint: bin/iotagent-lora docker/config-docker.js
+  #   environment:
+  #     - IOTA_CB_HOST=orion # name of the context broker to update context
+  #     - IOTA_CB_PORT=${ORION_PORT} # port the context broker listens on to update context
+  #     - IOTA_MONGO_HOST=mongo-db # The host name of MongoDB
+  #     - IOTA_MONGO_PORT=${MONGO_DB_PORT} # The port mongoDB is listening on
+  #     - IOTA_MONGO_DB=iotagentul
+  #     #- IOTA_MONGO_DB=iotagentlora # The name of the database used in mongoDB
+  #   networks:
+  #     default:
+  #       ipv4_address: 172.18.5.55
 
 networks:
   default:
