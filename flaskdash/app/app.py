@@ -52,7 +52,7 @@ def perseo_post():
     return ''
 
 # Receive a message from the front end HTML
-@socketio.on('send_message')   
+@socketio.on('send_message')
 def message_recieved(data):
     app.logger.info(f"MESSAGE RECEIVED PYTHON: {data}")
     emit('message_from_server', {'text':'Message recieved!'})
@@ -66,7 +66,7 @@ def user_id(id):
 # Display the HTML Page & pass in a username parameter
 @app.route('/html/<username>')
 def html(username):
-    print(f"username {username}") 
+    print(f"username {username}")
     return render_template('index.html', username=username)
 
 def connect_event_callback(*args):
@@ -79,11 +79,11 @@ def map_update():
     content_type = request.headers.get('Content-Type')
     app.logger.info(f"status {status}")
     app.logger.info(f"content_type {content_type}")
-    app.logger.info(f"request-args {request.args}")    
+    app.logger.info(f"request-args {request.args}")
     emit('update_bridge_status', {'bridgeid':bridgeid, "status":status},namespace="/", broadcast=True)
     #emit('update_bridge_status', {'bridgeid':status},)
     return ""
-    
+
 @app.route('/sens_move', methods=["PUT"])
 def sens_move():
 
@@ -97,10 +97,10 @@ def sens_move():
         url,
         headers={"Accept": "application/json","fiware-service":"openiot", "fiware-servicepath":"/"}
     )
-    
-    
+
+
     content_type = request.headers.get('Content-Type')
-    
+
     app.logger.info(f"response {res.json()}")
     sattrs = res.json().get('static_attributes',None)
     if sattrs:
@@ -127,13 +127,13 @@ def sens_move():
             return "no bridge"
     return ""
 
-@app.route('/reset_bridge', methods=["PUT"])
+@app.route('/reset_building', methods=["PUT"])
 def reset_bridge():
-    bridgeid = request.form.get('bridgeid',None)
+    bridgeid = request.form.get('buildingid',None)
     if bridgeid:
         res = requests.request(
                 "PUT",
-                ORION_URL+"/v2/entities/"+bridgeid+"/attrs/bridge_status",
+                ORION_URL+"/v2/entities/"+bridgeid+"/attrs/status",
                 json={
                         "type":"Text",
                         "value":"good"
@@ -147,11 +147,11 @@ def reset_bridge():
 
 @app.route('/bad_bridge', methods=["PUT"])
 def bad_bridge():
-    bridgeid = request.form.get('bridgeid',None)
+    bridgeid = request.form.get('buildingid',None)
     if bridgeid:
         res = requests.request(
                 "PUT",
-                ORION_URL+"/v2/entities/"+bridgeid+"/attrs/bridge_status",
+                ORION_URL+"/v2/entities/"+bridgeid+"/attrs/status",
                 json={
                         "type":"Text",
                         "value":"bad"
@@ -166,7 +166,7 @@ def bad_bridge():
 
 @app.route('/map/')
 def map_view():
-    
+
 
     res = requests.request(
         "GET",
@@ -184,11 +184,11 @@ def map_view():
             'lon':bridge['location']['value']['coordinates'][0],
             'lat':bridge['location']['value']['coordinates'][1],
             "popup":bridge["name"]["value"],
-            "status":bridge["bridge_status"]["value"],
+            "status":bridge["status"]["value"],
             "id": bridge["id"],
         })
-    
-    
+
+
     return render_template('leaflet.html',  markers=markers)
 
 
