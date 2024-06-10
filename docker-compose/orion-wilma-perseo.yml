@@ -38,7 +38,7 @@ services:
   orion-ld:
     labels:
       org.fiware: 'bdataprj'
-    image: fiware/orion-ld:latest
+    image: fiware/orion-ld:1.6.0-PRE-1615
     hostname: orion
     container_name: fiware-orion
     depends_on:
@@ -85,7 +85,6 @@ services:
       - IOTA_TIMESTAMP=true # Supply timestamp information with each measurement
       - IOTA_CB_NGSI_VERSION=ld # use NGSIv2 when sending updates for active attributes
       - IOTA_JSON_LD_CONTEXT=http://context/datamodels.context.jsonld
-      - IOTA_AUTOCAST=true # Ensure Ultralight number values are read as numbers not strings
       - IOTA_MONGO_HOST=mongo-db # The host name of MongoDB
       - IOTA_MONGO_PORT=${MONGO_DB_PORT} # The port mongoDB is listening on
       - IOTA_MONGO_DB=iotagentul # The name of the database used in mongoDB
