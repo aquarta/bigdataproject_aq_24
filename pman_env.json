@@ -3,37 +3,37 @@
 	"values": [
 		{
 			"key": "orion_url",
-			"value": "https://1026-aquarta-bigdataprojecta-oe6lq79ertz.ws-eu110.gitpod.io",
+			"value": "https://1026-aquarta-bigdataprojecta-oe6lq79ertz.ws-eu114.gitpod.io",
 			"type": "default",
 			"enabled": true
 		},
         {
 			"key": "iota_north",
-			"value": "https://14041-aquarta-bigdataprojecta-oe6lq79ertz.ws-eu110.gitpod.io",
+			"value": "https://14041-aquarta-bigdataprojecta-oe6lq79ertz.ws-eu114.gitpod.io",
 			"type": "default",
 			"enabled": true
 		},
         {
 			"key": "iota_south_url",
-			"value": "https://7896-aquarta-bigdataprojecta-oe6lq79ertz.ws-eu110.gitpod.io",
+			"value": "https://7896-aquarta-bigdataprojecta-oe6lq79ertz.ws-eu114.gitpod.io",
 			"type": "default",
 			"enabled": true
 		},
         {
 			"key": "perseo-fe-url",
-			"value": "https://9090-aquarta-bigdataprojecta-oe6lq79ertz.ws-eu110.gitpod.io",
+			"value": "https://9090-aquarta-bigdataprojecta-oe6lq79ertz.ws-eu114.gitpod.io",
 			"type": "default",
 			"enabled": true
 		},
         {
 			"key": "wilma_url",
-			"value": "https://7897-aquarta-bigdataprojecta-oe6lq79ertz.ws-eu110.gitpod.io",
+			"value": "https://7897-aquarta-bigdataprojecta-oe6lq79ertz.ws-eu114.gitpod.io",
 			"type": "default",
 			"enabled": true
 		},
         {
 			"key": "keyrock_url",
-			"value": "https://13005-aquarta-bigdataprojecta-oe6lq79ertz.ws-eu110.gitpod.io",
+			"value": "https://13005-aquarta-bigdataprojecta-oe6lq79ertz.ws-eu114.gitpod.io",
 			"type": "default",
 			"enabled": true
 		},
