@@ -129,46 +129,6 @@ services:
       interval: 5s
 
 
-  # PEP Proxy for Orion
-  # orion-proxy:
-  #   labels:
-  #     org.fiware: 'bdataprj'
-  #   image: quay.io/fiware/pep-proxy:${WILMA_VERSION}
-  #   container_name: fiware-orion-proxy
-  #   hostname: orion-proxy
-  #   networks:
-  #     default:
-  #       ipv4_address: 172.18.5.25
-  #   depends_on:
-  #     keyrock:
-  #       condition: service_started
-  #   deploy:
-  #     restart_policy:
-  #       condition: on-failure
-  #   ports:
-  #     - "7897:7897"
-  #   expose:
-  #     - "7897"
-  #   environment:
-  #     - DEBUG=pep-proxy:*
-  #     - PEP_PROXY_DEBUG=true
-  #     - PEP_PROXY_APP_HOST=orion
-  #     - PEP_PROXY_APP_PORT=${ORION_PORT}
-  #     - PEP_PROXY_PORT=${ORION_PROXY_PORT}
-  #     - PEP_PROXY_IDM_HOST=keyrock
-  #     - PEP_PROXY_HTTPS_ENABLED=false
-  #     - PEP_PROXY_AUTH_ENABLED=false
-  #     - PEP_PROXY_IDM_SSL_ENABLED=false
-  #     - PEP_PROXY_IDM_PORT=${KEYROCK_PORT}
-  #     - PEP_PROXY_APP_ID=tutorial-dckr-site-0000-xpresswebapp
-  #     - PEP_PROXY_USERNAME=pep_proxy_00000000-0000-0000-0000-000000000000
-  #     - PEP_PASSWORD=test
-  #     - PEP_PROXY_PDP=idm
-  #     - PEP_PROXY_MAGIC_KEY=1234
-  #     - PEP_PROXY_PUBLIC_PATHS=/version
-  #   healthcheck:
-  #     interval: 50s
-
 
 
   # perseo
@@ -275,65 +235,53 @@ services:
       #- ../mysql-data:/docker-entrypoint-initdb.d/:ro
     secrets:
       - my_secret_data
-  # nginx:
-  #       restart: always
-  #       labels:
-  #          org.fiware: 'bdataprj'
-  #       image: nginx:latest
-  #       hostname: nginx
-  #       ports:
-  #           - 10580:80
-  #       volumes:
-  #           - ./nginx.conf:/etc/nginx/nginx.conf:ro
-  #           - ./static:/var/www/static:ro
-  #       depends_on:
-  #           - wirecloud
 
 
-  # mqtt:
-  #   image: eclipse-mosquitto
-  #   labels:
-  #       org.fiware: 'bdataprj'
-  #   hostname: mqtt
-  #   container_name: fiware-mqtt
-  #   volumes:
-  #     - ./mosquitto/config:/mosquitto/config:rw
-  #     - mqtt_data:/mosquitto/data/:rw
-  #   expose:
-  #     - 1883
-  #     - 9002
-  #   ports:
-  #     - 1883:1883
-  #     - 9002:9002
-  #   networks:
-  #     default:
-  #       ipv4_address: 172.18.5.35
 
-  # iotagent-lora:
-  #   image: ioeari/iotagent-lora
-  #   container_name: fiware-iota-lora
-  #   expose:
-  #     - 6041
-  #   ports:
-  #     - 6041:4041
-  #   labels:
-  #       org.fiware: 'bdataprj'
-  #   depends_on:
-  #       - mongo-db
-  #       - orion-ld
-  #       - mqtt
-  #   hostname: iotagent-lora
-  #   entrypoint: bin/iotagent-lora docker/config-docker.js
-  #   environment:
-  #     - IOTA_CB_HOST=orion # name of the context broker to update context
-  #     - IOTA_CB_PORT=${ORION_PORT} # port the context broker listens on to update context
-  #     - IOTA_MONGO_HOST=mongo-db # The host name of MongoDB
-  #     - IOTA_MONGO_PORT=${MONGO_DB_PORT} # The port mongoDB is listening on
-  #     - IOTA_MONGO_DB=iotagentul
-  #     #- IOTA_MONGO_DB=iotagentlora # The name of the database used in mongoDB
-  #   networks:
-  #     default:
-  #       ipv4_address: 172.18.5.55
+  mqtt:
+    image: eclipse-mosquitto
+    labels:
+        org.fiware: 'bdataprj'
+    hostname: mqtt
+    container_name: fiware-mqtt
+    volumes:
+      - ./mosquitto/config:/mosquitto/config:rw
+      - mqtt_data:/mosquitto/data/:rw
+    expose:
+      - 1883
+      - 9002
+    ports:
+      - 1883:1883
+      - 9002:9002
+    networks:
+      default:
+        ipv4_address: 172.18.5.35
+
+  iotagent-lora:
+    image: ioeari/iotagent-lora
+    container_name: fiware-iota-lora
+    expose:
+      - 6041
+    ports:
+      - 6041:4041
+    labels:
+        org.fiware: 'bdataprj'
+    depends_on:
+        - mongo-db
+        - orion-ld
+        - mqtt
+    hostname: iotagent-lora
+    entrypoint: bin/iotagent-lora docker/config-docker.js
+    environment:
+      - IOTA_CB_HOST=orion # name of the context broker to update context
+      - IOTA_CB_PORT=${ORION_PORT} # port the context broker listens on to update context
+      - IOTA_MONGO_HOST=mongo-db # The host name of MongoDB
+      - IOTA_MONGO_PORT=${MONGO_DB_PORT} # The port mongoDB is listening on
+      - IOTA_MONGO_DB=iotagentul
+      #- IOTA_MONGO_DB=iotagentlora # The name of the database used in mongoDB
+    networks:
+      default:
+        ipv4_address: 172.18.5.55
 
 networks:
   default:
