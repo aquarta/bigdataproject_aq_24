@@ -1,5 +1,5 @@
 services:
-  web: 
+  flaskdashweb: 
     build:
       context: app
       target: builder
@@ -8,4 +8,9 @@ services:
     stop_signal: SIGINT
     ports:
       - '8000:8000'
-  
+    networks:
+      - fiware_default
+
+networks:
+  fiware_default:
+    external: true

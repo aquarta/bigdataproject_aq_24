@@ -1,15 +1,26 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Response, Blueprint, url_for
 from flask_assets import Environment
 from flask_socketio import SocketIO, send, emit
 import os
 import requests
-
+import logging
 app = Flask(__name__)
 #socketio = SocketIO(app, cors_allowed_origins="*", logger=True, engineio_logger=True)
 socketio = SocketIO(app, cors_allowed_origins="*", )
 assets = Environment(app)
-ORION_URL = os.environ.get("ORION_URL", "https://1026-aquarta-bigdataprojecta-oe6lq79ertz.ws-eu110.gitpod.io")
-IOTA_NORTH_URL = os.environ.get("IOTA_NORTH_URL", "https://14041-aquarta-bigdataprojecta-oe6lq79ertz.ws-eu110.gitpod.io")
+
+ORION_URL = os.environ.get("ORION_URL", "http://orion:1026")
+IOTA_NORTH_URL = os.environ.get("IOTA_NORTH_URL", "http://iot-agent:14041")
+
+HEIGHT_SENSOR_TYPE_STR = "HeightSensor"
+FIWARE_SERVICE = "openiot"
+NGSI_PATH = "/"
+CONTEXT_URL = "http://context/datamodels.context.jsonld"
+
+api = Blueprint('api',__name__, )
+v1_api = Blueprint('v1_api', __name__,url_prefix='/v1')
+
+
 
 def print_request(r):
     app.logger.info("-"*100)
@@ -33,13 +44,6 @@ def empty():
 	return "Hello antonio!"
 
 
-@app.route("/hello",methods=['GET', 'POST'])
-def hello_world():
-    print_request(request)
-    return ''
-
-
-
 @app.route("/oauth2/token",methods=['GET', 'POST'])
 def postman_test():
     print_request(request)
@@ -51,26 +55,7 @@ def perseo_post():
     print_request(request)
     return ''
 
-# Receive a message from the front end HTML
-@socketio.on('send_message')
-def message_recieved(data):
-    app.logger.info(f"MESSAGE RECEIVED PYTHON: {data}")
-    emit('message_from_server', {'text':'Message recieved!'})
 
-
-# Prints the user id
-@app.route('/user/<id>')
-def user_id(id):
-    return str(id)
-
-# Display the HTML Page & pass in a username parameter
-@app.route('/html/<username>')
-def html(username):
-    print(f"username {username}")
-    return render_template('index.html', username=username)
-
-def connect_event_callback(*args):
-    print('#=> client called {0}'.format(inspect.stack()[0][-4:-2]))
 
 @app.route('/map_update', methods=["PUT"])
 def map_update():
@@ -84,20 +69,77 @@ def map_update():
     #emit('update_bridge_status', {'bridgeid':status},)
     return ""
 
-@app.route('/sens_move', methods=["PUT"])
-def sens_move():
+def get_sensor_attr_from_notification(data, attr_type):
+    if data is None:
+        return
+    for attr in data:
+        if attr.get("type",None) == attr_type:
+            return attr
+    return None
 
-    sensid = request.json.get('sensid',None)
+
+def update_building_status_upsert_strategy(bridgeid):
+    url = ORION_URL+"/ngsi-ld/v1/entityOperations/upsert/?options=update"
+    app.logger.info(f"Building URL  {url}")
+    res = requests.request(
+        "POST",
+        url,
+        json=[
+            {
+            "@context": CONTEXT_URL,
+            "id":bridgeid+"/",
+                "type":"Building",
+                "BuildingStatus": {
+                    "type": "Property",
+                    "value": "bad"
+                }
+            }
+            ],
+        headers={"Content-Type": "application/ld+json", "Accept": "application/ld+json","NGSILD-Tenant":FIWARE_SERVICE, "NGSILD-Path":"/"}
+    )
+    app.logger.info(f"response status code {bridgeid} put {res.status_code}")
+    app.logger.info(f"response put {res.content}")
+
+def update_building_status_patch_strategy(bridgeid, status):
+    url = ORION_URL+f"/ngsi-ld/v1/entities/{bridgeid}/attrs/BuildingStatus"
+    app.logger.info(f"Building URL  {url}")
+    res = requests.request(
+        "PATCH",
+        url,
+        json={
+        "type": "Property",
+        "value": status
+        },
+        headers={ "Accept": "application/ld+json","NGSILD-Tenant":FIWARE_SERVICE, "NGSILD-Path":"/","Link":f"<{CONTEXT_URL}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""}
+    )
+    app.logger.info(f"response status code {bridgeid} put {res.status_code}")
+    app.logger.info(f"response patch {res.content}")
+
+
+@v1_api.route('/sens_notify', methods=["POST"])
+def sens_move():
+    # Expected HeightSensor
+    notification_type = request.json.get('type',None)
+    sensor_attr = get_sensor_attr_from_notification(request.json.get('data',None), HEIGHT_SENSOR_TYPE_STR)
+    # if sensor_attr means that a sensorid is present
+    if sensor_attr:
+        sensid = sensor_attr.get('id',None)
+    else:
+        return Response(f"No sensor id {sensid} found.", 404)
+
+    # device_id is internal reference for IOT agent
+    device_id = sensid.split(":")[-1]
+    if notification_type != "Notification" or  sensor_attr['type'] != HEIGHT_SENSOR_TYPE_STR:
+        return Response(f"Wrong type, expected {HEIGHT_SENSOR_TYPE_STR}", 400)
     if not sensid:
-        return "No sensor id!"
-    url = IOTA_NORTH_URL+"/iot/devices/"+sensid
+        return Response(f"No sensor id {sensid} found.", 404)
+    url = IOTA_NORTH_URL+"/iot/devices/"+device_id
     app.logger.info(url)
     res = requests.request(
         "GET",
         url,
-        headers={"Accept": "application/json","fiware-service":"openiot", "fiware-servicepath":"/"}
+        headers={"Accept": "application/ld+json","Fiware-Service":FIWARE_SERVICE,"fiware-servicepath":"/", "NGSILD-Tenant":FIWARE_SERVICE, "NGSILD-Path":"/"}
     )
-
 
     content_type = request.headers.get('Content-Type')
 
@@ -106,25 +148,15 @@ def sens_move():
     if sattrs:
         bridgeid = None
         for satt in sattrs:
-            if satt.get("name") == "refSens" and satt.get("type") == "Relationship":
+            if satt.get("name") == "controlledAsset" and satt.get("type") == "Relationship":
                 bridgeid = satt.get("value")
                 break
+        app.logger.info(f"Bridge id extracted {bridgeid}")
         if bridgeid:
-            url = ORION_URL+"/v2/entities/"+bridgeid+"/attrs/bridge_status"
-            app.logger.info(f"Bridge URL  {url}")
-            res = requests.request(
-                "PUT",
-                url,
-                json={
-                        "type":"Text",
-                        "value":"bad"
-                    },
-                headers={"Accept": "application/json","fiware-service":"openiot"}
-            )
-            app.logger.info(f"response status code {bridgeid} put {res.status_code}")
-            app.logger.info(f"response put {res.content}")
+            #update_building_status_upsert_strategy(bridgeid)
+            update_building_status_patch_strategy(bridgeid, status="bad")
         else:
-            return "no bridge"
+            return Response(f"No Building id {bridgeid} found.", 404)
     return ""
 
 @app.route('/reset_building', methods=["PUT"])
@@ -138,7 +170,7 @@ def reset_bridge():
                         "type":"Text",
                         "value":"good"
                     },
-                headers={"Accept": "application/json","fiware-service":"openiot"}
+                headers={"Accept": "application/json","NGSILD-Tenant":FIWARE_SERVICE, "NGSILD-Path":"/"}
             )
         app.logger.info(f"response status code put {res.status_code}")
         app.logger.info(f"response put {res.content}")
@@ -156,7 +188,7 @@ def bad_bridge():
                         "type":"Text",
                         "value":"bad"
                     },
-                headers={"Accept": "application/json","fiware-service":"openiot"}
+                headers={"Accept": "application/json","NGSILD-Tenant":FIWARE_SERVICE, "NGSILD-Path":"/"}
             )
         app.logger.info(f"response status code put {res.status_code}")
         app.logger.info(f"response put {res.content}")
@@ -172,7 +204,7 @@ def map_view():
         "GET",
         ORION_URL+"/v2/entities",
         params={"type":"Bridge"},
-        headers={"Accept": "application/json","fiware-service":"openiot"}
+        headers={"Accept": "application/json","NGSILD-Tenant":FIWARE_SERVICE, "NGSILD-Path":"/"}
     )
 
     app.logger.info(res)
@@ -191,7 +223,14 @@ def map_view():
 
     return render_template('leaflet.html',  markers=markers)
 
+# this has to be configured after definition of routes
+api.register_blueprint(v1_api, url_prefix='/v1')
+app.register_blueprint(api, url_prefix='/api')
+
+
 
 if __name__ == '__main__':
 	#app.run(host='0.0.0.0', port=8000, debug=True)
+    app.logger.setLevel(logging.DEBUG)
+
     socketio.run(app, allow_unsafe_werkzeug=True, host='0.0.0.0', port=8000, debug=True)
