@@ -38,7 +38,7 @@ newman run -e pman_env.json --folder "Add Bridges to Orion" --folder "Add servic
 
 add subscription
 ```
-newman run -e pman_env.json --folder "Subscribe perseo to orion sensors elevation changes" --folder "Subscribe perseo to orion Bridge Status" --folder "[DBG] GET Subscription" 0_BData_project.postman_collection.json
+newman run -e pman_env.json --folder "Subscribe perseo to orion sensors Height changes"  0_BData_project.postman_collection.json
 ```
 
 setup perseo actions
