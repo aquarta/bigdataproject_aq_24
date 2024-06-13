@@ -202,8 +202,8 @@ def map_view():
 
     res = requests.request(
         "GET",
-        ORION_URL+"/v2/entities",
-        params={"type":"Bridge"},
+        ORION_URL+"/ngsi-ld/v1/entities/",
+        params={"type":"https://github.com/smart-data-models/dataModel.Building/tree/master/Building", "options": "keyValues"},
         headers={"Accept": "application/json","NGSILD-Tenant":FIWARE_SERVICE, "NGSILD-Path":"/"}
     )
 
@@ -213,10 +213,10 @@ def map_view():
     markers=[]
     for bridge in res.json():
         markers.append({
-            'lon':bridge['location']['value']['coordinates'][0],
-            'lat':bridge['location']['value']['coordinates'][1],
-            "popup":bridge["name"]["value"],
-            "status":bridge["status"]["value"],
+            'lon':bridge['location']['coordinates'][0],
+            'lat':bridge['location']['coordinates'][1],
+            "popup":bridge["https://schema.org/name"],
+            "status":bridge["BuildingStatus"],
             "id": bridge["id"],
         })
 
