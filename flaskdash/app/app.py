@@ -55,7 +55,9 @@ def perseo_post():
     print_request(request)
     return ''
 
-
+def map_status_update(bridgeid, status):
+    app.logger.info(f"UPDATE Bridge ID {bridgeid} {status}")
+    emit('update_bridge_status', {'bridgeid':bridgeid, "status":status},namespace="/", broadcast=True)
 
 @app.route('/map_update', methods=["PUT"])
 def map_update():
@@ -65,7 +67,8 @@ def map_update():
     app.logger.info(f"status {status}")
     app.logger.info(f"content_type {content_type}")
     app.logger.info(f"request-args {request.args}")
-    emit('update_bridge_status', {'bridgeid':bridgeid, "status":status},namespace="/", broadcast=True)
+    map_status_update(bridgeid, status)
+    #emit('update_bridge_status', {'bridgeid':bridgeid, "status":status},namespace="/", broadcast=True)
     #emit('update_bridge_status', {'bridgeid':status},)
     return ""
 
@@ -153,8 +156,9 @@ def sens_move():
                 break
         app.logger.info(f"Bridge id extracted {bridgeid}")
         if bridgeid:
-            #update_building_status_upsert_strategy(bridgeid)
+            update_building_status_upsert_strategy(bridgeid)
             update_building_status_patch_strategy(bridgeid, status="bad")
+            map_status_update(bridgeid,"bad")
         else:
             return Response(f"No Building id {bridgeid} found.", 404)
     return ""
@@ -215,7 +219,7 @@ def map_view():
         markers.append({
             'lon':bridge['location']['coordinates'][0],
             'lat':bridge['location']['coordinates'][1],
-            "popup":bridge["https://schema.org/name"],
+            "popup":bridge["https://schema.org/name"]+"  "+f'{bridge["id"]}',
             "status":bridge["BuildingStatus"],
             "id": bridge["id"],
         })

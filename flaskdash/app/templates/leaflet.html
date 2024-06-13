@@ -63,7 +63,7 @@
       html: `<span style="${markerHtmlStyles_bad}" />`
     })
     {% for marker in markers %}
-          if ("{{marker['status']}}" == "good"){
+          if ("{{marker['status']}}" == "good" || "{{marker['status']}}" == "ok"){
             icon = ok_icon;
           }else{
             icon = bad_icon;
@@ -74,8 +74,8 @@
     {% endfor %}
     namespace = '/'
     console.log(document.domain)
-    //socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
-    socket = io.connect("https://8000-aquarta-bigdataprojecta-oe6lq79ertz.ws-eu110.gitpod.io"+namespace);
+    socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
+    //socket = io.connect("https://8000-aquarta-bigdataprojecta-oe6lq79ertz.ws-eu114.gitpod.io"+namespace);
     // io('connection', socket => {
     //   socket.on('update_bridge_status', (msg) => {
     //     markers_map['urn:ngsi-ld:way:31061690'].setIcon(bad_icon)
@@ -93,7 +93,7 @@
         socket.on('update_bridge_status', (msg) => {
           console.log("update_bridge_status received");
           console.log('message: ' + msg);
-          if (msg.status == "good"){
+          if (msg.status == "good" || msg.status == "ok"){
             markers_map[msg.bridgeid].setIcon(ok_icon);
           }else{
             markers_map[msg.bridgeid].setIcon(bad_icon);
