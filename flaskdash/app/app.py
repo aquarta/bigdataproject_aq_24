@@ -20,7 +20,7 @@ CONTEXT_URL = "http://context/datamodels.context.jsonld"
 api = Blueprint('api',__name__, )
 v1_api = Blueprint('v1_api', __name__,url_prefix='/v1')
 
-
+TRESHOLD_VALUE = 2
 
 def print_request(r):
     app.logger.info("-"*100)
@@ -80,6 +80,10 @@ def get_sensor_attr_from_notification(data, attr_type):
             return attr
     return None
 
+def get_sensor_height_and_previous(height_sensor_notification_data):
+    height = height_sensor_notification_data.get("height").get("value")
+    return height, height_sensor_notification_data.get("height").get("previousValue",height)
+
 
 def update_building_status_upsert_strategy(bridgeid):
     url = ORION_URL+"/ngsi-ld/v1/entityOperations/upsert/?options=update"
@@ -119,9 +123,13 @@ def update_building_status_patch_strategy(bridgeid, status):
     app.logger.info(f"response patch {res.content}")
 
 
+def is_warning_event(height, previousheight):
+    return abs(height-previousheight)>TRESHOLD_VALUE
+
 @v1_api.route('/sens_notify', methods=["POST"])
 def sens_move():
     # Expected HeightSensor
+    app.logger.info(f"request {request.json}")
     notification_type = request.json.get('type',None)
     sensor_attr = get_sensor_attr_from_notification(request.json.get('data',None), HEIGHT_SENSOR_TYPE_STR)
     # if sensor_attr means that a sensorid is present
@@ -132,10 +140,20 @@ def sens_move():
 
     # device_id is internal reference for IOT agent
     device_id = sensid.split(":")[-1]
+    #    height = request.json.get('data',{}).get("height",{}).get('value',None)
+    height,previousheight = get_sensor_height_and_previous(
+        get_sensor_attr_from_notification(
+            request.json.get('data',{}),"HeightSensor"
+        )
+    )
+    app.logger.info(f"Sensor {sensid} - height {height} - previous {previousheight}")
+
     if notification_type != "Notification" or  sensor_attr['type'] != HEIGHT_SENSOR_TYPE_STR:
         return Response(f"Wrong type, expected {HEIGHT_SENSOR_TYPE_STR}", 400)
     if not sensid:
         return Response(f"No sensor id {sensid} found.", 404)
+    if not is_warning_event(height=height,previousheight=previousheight):
+        return Response(f"No warning {sensid}.", 204)
     url = IOTA_NORTH_URL+"/iot/devices/"+device_id
     app.logger.info(url)
     res = requests.request(
@@ -212,8 +230,8 @@ def map_view():
     )
 
     app.logger.info(res)
-    app.logger.info(res.text)
-    app.logger.info(res.json())
+    #app.logger.info(res.text)
+    #app.logger.info(res.json())
     markers=[]
     for bridge in res.json():
         markers.append({
