@@ -1,3 +1,6 @@
+
+
+
 from flask import Flask, render_template, request, Response, Blueprint, url_for
 from flask_assets import Environment
 from flask_socketio import SocketIO, send, emit
@@ -11,6 +14,7 @@ assets = Environment(app)
 
 ORION_URL = os.environ.get("ORION_URL", "http://orion:1026")
 IOTA_NORTH_URL = os.environ.get("IOTA_NORTH_URL", "http://iot-agent:14041")
+LORA_IOTA_NORTH_URL = os.environ.get("LORA_IOTA_NORTH_URL", "http://iotagent-lora:4041")
 
 HEIGHT_SENSOR_TYPE_STR = "HeightSensor"
 FIWARE_SERVICE = "openiot"
@@ -81,8 +85,15 @@ def get_sensor_attr_from_notification(data, attr_type):
     return None
 
 def get_sensor_height_and_previous(height_sensor_notification_data):
-    height = height_sensor_notification_data.get("height").get("value")
-    return height, height_sensor_notification_data.get("height").get("previousValue",height)
+    height = height_sensor_notification_data.get("height", {}).get("value", None)
+    previous_value = height_sensor_notification_data.get("height", {}).get("previousValue",height)
+    return height, previous_value
+
+def get_sensor_location_and_previous(sensor_notification_data):
+    height = sensor_notification_data.get("location", {}).get("value", None)
+    previous_value = sensor_notification_data.get("location", {}).get("previousValue",height)
+    return height, previous_value
+
 
 
 def update_building_status_upsert_strategy(bridgeid):
@@ -141,12 +152,29 @@ def sens_move():
     # device_id is internal reference for IOT agent
     device_id = sensid.split(":")[-1]
     #    height = request.json.get('data',{}).get("height",{}).get('value',None)
-    height,previousheight = get_sensor_height_and_previous(
-        get_sensor_attr_from_notification(
+    data = get_sensor_attr_from_notification(
             request.json.get('data',{}),"HeightSensor"
         )
-    )
-    app.logger.info(f"Sensor {sensid} - height {height} - previous {previousheight}")
+    height,previousheight = get_sensor_height_and_previous(
+                                data
+                            )
+    if height:
+        app.logger.info(f"Sensor {sensid} - height {height} - previous {previousheight}")
+        iota_url = IOTA_NORTH_URL
+    else:
+        app.logger.info(f"No height in notification")
+        location,previouslocation = get_sensor_location_and_previous(
+                                        data
+                                    )
+        if location is None or previouslocation is None:
+            app.logger.info(f"No location info")
+            return Response(f"No  info to update.", 204)
+        height,previousheight = location["altitude"],previouslocation["altitude"]
+        app.logger.info(f"Height from altitude {height,previousheight}")
+        if device_id.find("hsensor")<0:
+            device_id = "hsensor"+device_id
+        iota_url = LORA_IOTA_NORTH_URL
+
 
     if notification_type != "Notification" or  sensor_attr['type'] != HEIGHT_SENSOR_TYPE_STR:
         return Response(f"Wrong type, expected {HEIGHT_SENSOR_TYPE_STR}", 400)
@@ -154,7 +182,7 @@ def sens_move():
         return Response(f"No sensor id {sensid} found.", 404)
     if not is_warning_event(height=height,previousheight=previousheight):
         return Response(f"No warning {sensid}.", 204)
-    url = IOTA_NORTH_URL+"/iot/devices/"+device_id
+    url = iota_url+"/iot/devices/"+device_id
     app.logger.info(url)
     res = requests.request(
         "GET",
@@ -170,7 +198,8 @@ def sens_move():
         bridgeid = None
         for satt in sattrs:
             if satt.get("name") == "controlledAsset" and satt.get("type") == "Relationship":
-                bridgeid = satt.get("value")
+                bridgeid = satt.get("value") 
+                bridgeid = bridgeid if bridgeid else satt.get("object") 
                 break
         app.logger.info(f"Bridge id extracted {bridgeid}")
         if bridgeid:
