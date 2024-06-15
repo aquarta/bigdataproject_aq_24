@@ -146,25 +146,6 @@ services:
     environment:
       - "PERSEO_FE_URL=http://fiware-perseo-fe:${PERSEO_ENDPOINT_PORT:-9090}"
 
-  #perseo
-  perseofe:
-    labels:
-      org.fiware: 'bdataprj'
-    image: telefonicaiot/perseo-fe:latest
-    container_name: fiware-perseo-fe
-    hostname: fiware-perseo-fe
-    depends_on:
-      - perseoc
-      - mongo-db
-    expose:
-      - "${PERSEO_ENDPOINT_PORT:-9090}"
-    ports:
-      - "${PERSEO_ENDPOINT_PORT:-9090}:${PERSEO_ENDPOINT_PORT:-9090}"
-    environment:
-      - "PERSEO_CORE_URL=http://fiware-perseo-core:${PERSEO_CORE_PORT:-8080}"
-      - "PERSEO_ORION_URL=http://orion:${ORION_PORT}"
-      - "PERSEO_MONGO_HOST=mongo-db"
-      - "PERSEO_MONGO_ENDPOINT=mongo-db"
 
   # Databases
   mongo-db:
@@ -191,27 +172,6 @@ services:
       retries: 3
       start_period: 5s
 
-  # Databases
-  # mongo-pe-db:
-  #   labels:
-  #     org.fiware: 'bdataprj'
-  #   image: mongo:${MONGO_DB_VERSION}
-  #   hostname: mongo-pe-db
-  #   container_name: db-mongo-pe
-  #   expose:
-  #     - "${MONGO_DB_PE_PORT}"
-  #   ports:
-  #     - "${MONGO_DB_PE_PORT}:${MONGO_DB_PE_PORT}" # localhost:27018
-  #   networks:
-  #     - default
-  #   volumes:
-  #     - mongo-pe-db:/data
-  #   healthcheck:
-  #     test: ["CMD","mongosh", "--eval", "\"db.adminCommand('ping')\""]
-  #     interval: 5s
-  #     timeout: 5s
-  #     retries: 3
-  #     start_period: 5s
 
   mysql-db:
     restart: always
