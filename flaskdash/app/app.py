@@ -45,12 +45,7 @@ def print_request(r):
 
 @app.route('/')
 def empty():
-	return "Hello antonio!"
-
-
-@app.route("/oauth2/token",methods=['GET', 'POST'])
-def postman_test():
-    print_request(request)
+	return "Hello World!"
 
 
 
@@ -72,8 +67,7 @@ def map_update():
     app.logger.info(f"content_type {content_type}")
     app.logger.info(f"request-args {request.args}")
     map_status_update(bridgeid, status)
-    #emit('update_bridge_status', {'bridgeid':bridgeid, "status":status},namespace="/", broadcast=True)
-    #emit('update_bridge_status', {'bridgeid':status},)
+
     return ""
 
 def get_sensor_attr_from_notification(data, attr_type):
@@ -93,7 +87,6 @@ def get_sensor_location_and_previous(sensor_notification_data):
     height = sensor_notification_data.get("location", {}).get("value", None)
     previous_value = sensor_notification_data.get("location", {}).get("previousValue",height)
     return height, previous_value
-
 
 
 def update_building_status_upsert_strategy(bridgeid):
@@ -210,41 +203,41 @@ def sens_move():
             return Response(f"No Building id {bridgeid} found.", 404)
     return ""
 
-@app.route('/reset_building', methods=["PUT"])
-def reset_bridge():
-    bridgeid = request.form.get('buildingid',None)
-    if bridgeid:
-        res = requests.request(
-                "PUT",
-                ORION_URL+"/v2/entities/"+bridgeid+"/attrs/status",
-                json={
-                        "type":"Text",
-                        "value":"good"
-                    },
-                headers={"Accept": "application/json","NGSILD-Tenant":FIWARE_SERVICE, "NGSILD-Path":"/"}
-            )
-        app.logger.info(f"response status code put {res.status_code}")
-        app.logger.info(f"response put {res.content}")
+# @app.route('/reset_building', methods=["PUT"])
+# def reset_bridge():
+#     bridgeid = request.form.get('buildingid',None)
+#     if bridgeid:
+#         res = requests.request(
+#                 "PUT",
+#                 ORION_URL+"/v2/entities/"+bridgeid+"/attrs/status",
+#                 json={
+#                         "type":"Text",
+#                         "value":"good"
+#                     },
+#                 headers={"Accept": "application/json","NGSILD-Tenant":FIWARE_SERVICE, "NGSILD-Path":"/"}
+#             )
+#         app.logger.info(f"response status code put {res.status_code}")
+#         app.logger.info(f"response put {res.content}")
 
-    return ""
+#     return ""
 
-@app.route('/bad_bridge', methods=["PUT"])
-def bad_bridge():
-    bridgeid = request.form.get('buildingid',None)
-    if bridgeid:
-        res = requests.request(
-                "PUT",
-                ORION_URL+"/v2/entities/"+bridgeid+"/attrs/status",
-                json={
-                        "type":"Text",
-                        "value":"bad"
-                    },
-                headers={"Accept": "application/json","NGSILD-Tenant":FIWARE_SERVICE, "NGSILD-Path":"/"}
-            )
-        app.logger.info(f"response status code put {res.status_code}")
-        app.logger.info(f"response put {res.content}")
+# @app.route('/bad_bridge', methods=["PUT"])
+# def bad_bridge():
+#     bridgeid = request.form.get('buildingid',None)
+#     if bridgeid:
+#         res = requests.request(
+#                 "PUT",
+#                 ORION_URL+"/v2/entities/"+bridgeid+"/attrs/status",
+#                 json={
+#                         "type":"Text",
+#                         "value":"bad"
+#                     },
+#                 headers={"Accept": "application/json","NGSILD-Tenant":FIWARE_SERVICE, "NGSILD-Path":"/"}
+#             )
+#         app.logger.info(f"response status code put {res.status_code}")
+#         app.logger.info(f"response put {res.content}")
 
-    return ""
+#     return ""
 
 
 @app.route('/map/')
@@ -259,8 +252,7 @@ def map_view():
     )
 
     app.logger.info(res)
-    #app.logger.info(res.text)
-    #app.logger.info(res.json())
+
     markers=[]
     for bridge in res.json():
         markers.append({
