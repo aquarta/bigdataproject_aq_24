@@ -2,7 +2,7 @@ tasks:
   - name: Pull Images
     init: ./services create
   - name: Start
-    init: pip install python-dotenv invoke
+    init: pip install python-dotenv invoke && apt install mosquitto-clients -y
     command: invoke -c services build step2-ld
   - name: Postman
     init: npm install -g newman
