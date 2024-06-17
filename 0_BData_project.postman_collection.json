@@ -855,6 +855,56 @@
 					"response": []
 				},
 				{
+					"name": "[DBG] Add ONE device to IOT Agent WITH RELATIONSHP ATTR Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "fiware-service",
+								"value": "{{fw-service-name}}"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "{{fw-service-path}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"devices\": [\r\n    {\r\n      \"device_id\": \"hsensor31061690\",\r\n      \"entity_name\": \"urn:ngsi-ld:Device:hsensor:31061690\",\r\n      \"entity_type\": \"Device\",\r\n      \"timezone\": \"Europe/Rome\",\r\n      \"attributes\": [\r\n        {\r\n          \"object_id\": \"l\",\r\n          \"name\": \"location\",\r\n          \"type\": \"GeoProperty\"\r\n        },\r\n        {\r\n          \"object_id\": \"h\",\r\n          \"name\": \"height\",\r\n          \"type\": \"Property\",\r\n          \"metadata\": {\r\n            \"unitCode\": {\r\n              \"type\": \"Text\",\r\n              \"value\": \"m\"\r\n            }\r\n          }\r\n        },\r\n        {\r\n          \"object_id\": \"n\",\r\n          \"name\": \"name\",\r\n          \"type\": \"Property\"\r\n        },\r\n        {\r\n          \"object_id\": \"b\",\r\n          \"name\": \"batteryLevel\",\r\n          \"type\": \"Property\"\r\n        }\r\n      ],\r\n      \"static_attributes\": [\r\n        {\r\n          \"name\": \"controlledAsset\",\r\n          \"type\": \"Relationship\",\r\n          \"value\": \"urn:ngsi-ld:Building:waybridge31061690\"\r\n        }\r\n      ]\r\n    }\r\n  ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{iota_north}}/iot/devices",
+							"host": [
+								"{{iota_north}}"
+							],
+							"path": [
+								"iot",
+								"devices"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Add devices to IOT Agent",
 					"event": [
 						{
@@ -988,7 +1038,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "h|14",
+							"raw": "h|19",
 							"options": {
 								"raw": {
 									"language": "text"
@@ -996,7 +1046,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{iota_south_url}}/iot/d?k={{sg_api_key}}&i=hsensor229014481",
+							"raw": "{{iota_south_url}}/iot/d?k={{sg_api_key}}&i=hsensor31061690",
 							"host": [
 								"{{iota_south_url}}"
 							],
@@ -1011,7 +1061,7 @@
 								},
 								{
 									"key": "i",
-									"value": "hsensor229014481"
+									"value": "hsensor31061690"
 								}
 							]
 						}
@@ -1127,7 +1177,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"services\": [\r\n        {\r\n            \"entity_type\": \"WeatherObserved\",\r\n            \"apikey\": \"\",\r\n            \"resource\": \"70B3D57ED00006B2\",\r\n            \"cbroker\":     \"{{orion_url_mz}}\",\r\n            \"type\": \"multiSensor\",\r\n            \"attributes\": [\r\n                {\r\n                    \"object_id\": \"temperature_1\",\r\n                    \"name\": \"temperature\",\r\n                    \"type\": \"Number\"\r\n                },\r\n                {\r\n                    \"object_id\": \"barometric_pressure_0\",\r\n                    \"name\": \"pressure\",\r\n                    \"type\": \"Number\"\r\n                }\r\n            ],\r\n            \"static_attributes\": [\r\n                    {\"name\": \"category\", \"type\":\"Property\", \"value\": \"sensor\"},\r\n                    {\"name\": \"supportedProtocol\", \"type\":\"Property\", \"value\": \"ul20\"}\r\n            ],\r\n            \"internal_attributes\": {\r\n                \"lorawan\": {\r\n                    \"application_server\": {\r\n                        \"host\": \"mqtt\",\r\n                        \"username\": \"admin\",\r\n                        \"password\": \"password\",\r\n                        \"provider\": \"TTN\"\r\n                    },\r\n                    \"app_eui\": \"70B3D57ED00006B2\",\r\n                    \"application_id\": \"demoTTN\",\r\n                    \"application_key\": \"BE6996EEE2B2D6AFFD951383C1F3C3BD\",\r\n                    \"data_model\": \"cayennelpp\"\r\n                }\r\n            }\r\n        }\r\n    ]\r\n}",
+							"raw": "{\r\n    \"services\": [\r\n        {\r\n            \"entity_type\": \"HeightSensor\",\r\n            \"apikey\": \"\",\r\n            \"resource\": \"70B3D57ED00006F2\",\r\n            \"cbroker\": \"{{orion_url_mz}}\",\r\n            \"static_attributes\": [\r\n                {\r\n                    \"name\": \"category\",\r\n                    \"type\": \"Property\",\r\n                    \"value\": \"sensor\"\r\n                },\r\n                {\r\n                    \"name\": \"supportedProtocol\",\r\n                    \"type\": \"Property\",\r\n                    \"value\": \"ul20\"\r\n                },\r\n                {\r\n                    \"name\": \"controlledAsset\",\r\n                    \"type\": \"Relationship\"\r\n                }\r\n            ],\r\n            \"internal_attributes\": {\r\n                \"lorawan\": {\r\n                    \"application_server\": {\r\n                        \"host\": \"mqtt\",\r\n                        \"username\": \"admin\",\r\n                        \"password\": \"password\",\r\n                        \"provider\": \"TTN\"\r\n                    },\r\n                    \"app_eui\": \"70B3D57ED00006F2\",\r\n                    \"application_id\": \"sogeiTTN\",\r\n                    \"application_key\": \"BE6996EEE2B2D6AFFD951383C1F3C3BD\",\r\n                    \"data_model\": \"cayennelpp\"\r\n                }\r\n            },\r\n            \"attributes\": [\r\n                {\r\n                    \"object_id\": \"gps_1\",\r\n                    \"name\": \"location\",\r\n                    \"type\": \"Property\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1148,7 +1198,7 @@
 					"response": []
 				},
 				{
-					"name": "Add service to IOT Agent Copy 2",
+					"name": "Add LORA devices to IOT Agent WITH RELATIONSHP ATTR",
 					"event": [
 						{
 							"listen": "test",
@@ -1177,7 +1227,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"services\": [\r\n        {\r\n            \"entity_type\": \"WeatherObserved\",\r\n            \"apikey\": \"\",\r\n            \"resource\": \"70B3D57ED00006B2\",\r\n            \"cbroker\":     \"{{orion_url}}\",\r\n            \"type\": \"multiSensor\",\r\n            \"attributes\": [\r\n            { \"object_id\": \"h\", \"name\":\"height\", \"type\":\"Number\"},\r\n            { \"object_id\": \"b\", \"name\":\"batteryLevel\", \"type\":\"Number\"},\r\n            { \"object_id\": \"gps\", \"name\":\"location\", \"type\":\"geo:point\"}\r\n            ],\r\n            \"static_attributes\": [\r\n                    {\"name\": \"category\", \"type\":\"Property\", \"value\": \"sensor\"},\r\n                    {\"name\": \"supportedProtocol\", \"type\":\"Property\", \"value\": \"ul20\"}\r\n            ],\r\n            \"internal_attributes\": {\r\n                \"lorawan\": {\r\n                    \"application_server\": {\r\n                        \"host\": \"mqtt\",\r\n                        \"username\": \"admin\",\r\n                        \"password\": \"password\",\r\n                        \"provider\": \"TTN\"\r\n                    },\r\n                    \"app_eui\": \"70B3D57ED00006B2\",\r\n                    \"application_id\": \"demoTTN\",\r\n                    \"application_key\": \"BE6996EEE2B2D6AFFD951383C1F3C3BD\",\r\n                    \"data_model\": \"cayennelpp\"\r\n                }\r\n            }\r\n        }\r\n    ]\r\n}",
+							"raw": "{\r\n  \"devices\": [\r\n    {\r\n      \"device_id\": \"hsensor31061690_1\",\r\n      \"entity_name\": \"urn:ngsi-ld:Device:hsensor:31061690_1\",\r\n      \"entity_type\": \"Device\",\r\n      \"attributes\": [\r\n        {\r\n          \"object_id\": \"gps_1\",\r\n          \"name\": \"location\",\r\n          \"type\": \"Property\"\r\n        }\r\n      ],\r\n      \"internal_attributes\": {\r\n            \"lorawan\": {\r\n                \"application_server\": {\r\n                    \"host\": \"mqtt\",\r\n                    \"username\": \"admin\",\r\n                    \"password\": \"password\",\r\n                    \"provider\": \"TTN\"\r\n                },\r\n                \"app_eui\": \"70B3D57ED00006F2\",\r\n                \"application_id\": \"sogeiTTN\",\r\n                \"application_key\": \"BE6996EEE2B2D6AFFD951383C1F3C3BD\",\r\n                \"data_model\": \"cayennelpp\"\r\n            }\r\n        },\r\n      \"static_attributes\": [\r\n        {\r\n          \"name\": \"controlledAsset\",\r\n          \"type\": \"Relationship\",\r\n          \"object\": \"urn:ngsi-ld:Building:waybridge31061690\"\r\n        }\r\n      ]\r\n    }\r\n  ]\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1185,70 +1235,20 @@
 							}
 						},
 						"url": {
-							"raw": "{{fw-iota-lora}}/iot/services",
+							"raw": "{{fw-iota-lora-dmz}}/iot/devices",
 							"host": [
-								"{{fw-iota-lora}}"
+								"{{fw-iota-lora-dmz}}"
 							],
 							"path": [
 								"iot",
-								"services"
+								"devices"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Add service to IOT Agent LORA ORIGINAL",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 201\", function () {\r",
-									"    pm.response.to.have.status(201);\r",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "fiware-service",
-								"value": "{{fw-service-name}}"
-							},
-							{
-								"key": "fiware-servicepath",
-								"value": "{{fw-service-path}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"services\": [\r\n        {\r\n            \"entity_type\": \"WeatherObserved\",\r\n            \"apikey\": \"\",\r\n            \"resource\": \"70B3D57ED00006B2\",\r\n            \"attributes\": [\r\n                {\r\n                    \"object_id\": \"temperature_1\",\r\n                    \"name\": \"temperature\",\r\n                    \"type\": \"Number\"\r\n                },\r\n                {\r\n                    \"object_id\": \"barometric_pressure_0\",\r\n                    \"name\": \"pressure\",\r\n                    \"type\": \"Number\"\r\n                },\r\n                {\r\n                    \"object_id\": \"relative_humidity_2\",\r\n                    \"name\": \"relative_humidity\",\r\n                    \"type\": \"Number\"\r\n                }\r\n            ],\r\n            \"internal_attributes\": {\r\n                \"lorawan\": {\r\n                    \"application_server\": {\r\n                        \"host\": \"mqtt\",\r\n                        \"username\": \"admin\",\r\n                        \"password\": \"password\",\r\n                        \"provider\": \"TTN\"\r\n                    },\r\n                    \"app_eui\": \"70B3D57ED00006B2\",\r\n                    \"application_id\": \"demoTTN\",\r\n                    \"application_key\": \"BE6996EEE2B2D6AFFD951383C1F3C3BD\",\r\n                    \"data_model\": \"cayennelpp\"\r\n                }\r\n            }\r\n        }\r\n    ]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{fw-iota-lora}}/iot/services",
-							"host": [
-								"{{fw-iota-lora}}"
-							],
-							"path": [
-								"iot",
-								"services"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "New Request",
+					"name": "Get Lora devices",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -1262,19 +1262,19 @@
 							}
 						],
 						"url": {
-							"raw": "{{fw-iota-lora}}/iot/services/?resource=70B3D57ED00006B2&apikey=",
+							"raw": "{{fw-iota-lora-dmz}}/iot/devices/?resource=70B3D57ED00006F2&apikey=",
 							"host": [
-								"{{fw-iota-lora}}"
+								"{{fw-iota-lora-dmz}}"
 							],
 							"path": [
 								"iot",
-								"services",
+								"devices",
 								""
 							],
 							"query": [
 								{
 									"key": "resource",
-									"value": "70B3D57ED00006B2"
+									"value": "70B3D57ED00006F2"
 								},
 								{
 									"key": "apikey",
@@ -1286,7 +1286,7 @@
 					"response": []
 				},
 				{
-					"name": "New Request Copy",
+					"name": "[DBG] Delete service",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -1326,7 +1326,7 @@
 			]
 		},
 		{
-			"name": "Subscribe Perseo to Orion",
+			"name": "Subscribe FlaskDash to Orion",
 			"item": [
 				{
 					"name": "Subscribe flaskdash to orion sensors Height changes",
@@ -1678,400 +1678,6 @@
 					"response": []
 				}
 			]
-		},
-		{
-			"name": "Perseo rules",
-			"item": [
-				{
-					"name": "Add Delta Elevation rule to perseo Copy",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json"
-							},
-							{
-								"key": "fiware-service",
-								"value": "{{fw-service-name}}"
-							},
-							{
-								"key": "fiware-servicepath",
-								"value": "{{fw-service-path}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n   \"name\":\"height_delta_greater_than_2\",\r\n   \"text\":\"select *,cast(cast(height?,String),float)-cast(cast(height__metadata__previousValue?,String),float) as DELTA, id as evt_id from iotEvent where (cast(cast(height?,String),float)-cast(cast(height__metadata__previousValue?,String),float) )>2\",\r\n    \r\n   \"action\":{\r\n      \"type\":\"post\",\r\n      \"parameters\":{\r\n        \"url\": \"{{flask_dash}}/sens_move\",\r\n         \"method\": \"PUT\",\r\n         \"headers\": {\r\n            \"Content-type\": \"application/json\"\r\n         },\r\n         \"json\":{\"sensid\":\"${evt_id}\"}\r\n         \r\n      }\r\n   }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{addr-perseo-host-fwd}}/rules",
-							"host": [
-								"{{addr-perseo-host-fwd}}"
-							],
-							"path": [
-								"rules"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add Delta Elevation rule to perseo Copy 2",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json"
-							},
-							{
-								"key": "fiware-service",
-								"value": "{{fw-service-name}}"
-							},
-							{
-								"key": "fiware-servicepath",
-								"value": "{{fw-service-path}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n   \"name\":\"height_delta_greater_than_2\",\r\n   \"text\":\"select *,cast(cast(height?,String),float)-cast(cast(height__metadata__previousValue?,String),float) as DELTA, id as evt_id from iotEvent where (cast(cast(height?,String),float)-cast(cast(height__metadata__previousValue?,String),float) )>2\",\r\n    \r\n   \"action\":{\r\n      \"type\":\"post\",\r\n      \"parameters\":{\r\n        \"url\": \"{{flask_dash}}/sens_move\",\r\n         \"method\": \"PUT\",\r\n         \"headers\": {\r\n            \"Content-type\": \"application/json\"\r\n         },\r\n         \"json\":{\"sensid\":\"${evt_id}\"}\r\n         \r\n      }\r\n   }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{addr-perseo-host-fwd}}/rules",
-							"host": [
-								"{{addr-perseo-host-fwd}}"
-							],
-							"path": [
-								"rules"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "[DBG] Add Height Delta Elevation []",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/ld+json",
-								"disabled": true
-							},
-							{
-								"key": "fiware-service",
-								"value": "{{fw-service-name}}",
-								"disabled": true
-							},
-							{
-								"key": "fiware-servicepath",
-								"value": "{{fw-service-path}}"
-							},
-							{
-								"key": "NGSILD-Tenant",
-								"value": "{{fw-service-name}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n   \"name\":\"height_delta_greater_than_2_19\",\r\n   \"text\":\"select *, id as evt_id, height? as h,previousValue? as p from iotEvent\",\r\n    \r\n   \"action\":{\r\n      \"type\":\"post\",\r\n      \"parameters\":{\r\n        \"url\": \"{{flask_dash}}/perseo_post\",\r\n         \"method\": \"PUT\",\r\n         \"headers\": {\r\n            \"Content-type\": \"application/json\"\r\n         },\r\n         \"json\":{\"sensid\":\"${evt_id}\",\"controlcode\":\"19\", \"h\":\"${h}\",\"r\":\"${ruleName}\", \"p\":\"${p}\",}\r\n         \r\n      }\r\n   }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{addr-perseo-host-fwd}}/rules",
-							"host": [
-								"{{addr-perseo-host-fwd}}"
-							],
-							"path": [
-								"rules"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add Bridge status rule to perseo",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json"
-							},
-							{
-								"key": "fiware-service",
-								"value": "{{fw-service-name}}"
-							},
-							{
-								"key": "fiware-servicepath",
-								"value": "{{fw-service-path}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n   \"name\":\"bridge_status_update\",\r\n   \"text\":\"select *, cast(status?,String) as bstatus, id as evt_id, cast(type?,String) as stype from iotEvent where cast(type?,String)='Bridge'\",    \r\n   \"action\":{\r\n      \"type\":\"post\",\r\n      \"parameters\":{\r\n        \"url\": \"{{flask_dash}}/map_update\",\r\n         \"method\": \"PUT\",\r\n         \"headers\": {\r\n            \"Content-type\": \"text/plain\"\r\n         },\r\n         \"qs\":{\"status\":\"${bstatus}\", \"bridgeid\":\"${evt_id}\"}\r\n      }\r\n   }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{addr-perseo-host-fwd}}/rules",
-							"host": [
-								"{{addr-perseo-host-fwd}}"
-							],
-							"path": [
-								"rules"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Delta Elevation rule to perseo",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "fiware-service",
-								"value": "{{fw-service-name}}",
-								"type": "text"
-							},
-							{
-								"key": "fiware-servicepath",
-								"value": "{{fw-service-path}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n   \"name\":\"elevation_delta_greater_than_2\",\r\n   \"text\":\"select *,cast(cast(elevation?,String),float)-cast(cast(elevation__metadata__previousValue?,String),float) as DELTA, id as evt_id from iotEvent where (cast(cast(elevation?,String),float)-cast(cast(elevation__metadata__previousValue?,String),float) )>2\",\r\n    \r\n   \"action\":{\r\n      \"type\":\"post\",\r\n      \"parameters\":{\r\n        \"url\": \"{{flask_dash}}/sens_move\",\r\n         \"method\": \"PUT\",\r\n         \"headers\": {\r\n            \"Content-type\": \"application/json\"\r\n         },\r\n         \"json\":{\"sensid\":\"${evt_id}\"}\r\n         \r\n      }\r\n   }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{addr-perseo-host-fwd}}/rules/elevation_delta_greater_than_2",
-							"host": [
-								"{{addr-perseo-host-fwd}}"
-							],
-							"path": [
-								"rules",
-								"elevation_delta_greater_than_2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Brdige Status rule to perseo",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "fiware-service",
-								"value": "{{fw-service-name}}",
-								"type": "text"
-							},
-							{
-								"key": "fiware-servicepath",
-								"value": "{{fw-service-path}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n   \"name\":\"bridge_status_update\",\r\n   \"text\":\"select *, cast(bridge_status?,String) as bstatus, id as evt_id, cast(type?,String) as stype from iotEvent where cast(type?,String)='Bridge'\",    \r\n   \"action\":{\r\n      \"type\":\"post\",\r\n      \"parameters\":{\r\n        \"url\": \"{{flask_dash}}/map_update\",\r\n         \"method\": \"PUT\",\r\n         \"headers\": {\r\n            \"Content-type\": \"text/plain\"\r\n         },\r\n         \"qs\":{\"status\":\"${bstatus}\", \"bridgeid\":\"${evt_id}\"}\r\n      }\r\n   }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{addr-perseo-host-fwd}}/rules/bridge_status_update",
-							"host": [
-								"{{addr-perseo-host-fwd}}"
-							],
-							"path": [
-								"rules",
-								"bridge_status_update"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Perseo Rules",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "fiware-service",
-								"value": "{{fw-service-name}}",
-								"type": "text"
-							},
-							{
-								"key": "fiware-servicepath",
-								"value": "{{fw-service-path}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{addr-perseo-host-fwd}}/rules",
-							"host": [
-								"{{addr-perseo-host-fwd}}"
-							],
-							"path": [
-								"rules"
-							]
-						},
-						"description": "``` bash\ncurl -iX PUT \\\n  --url 'http://localhost:1026/v2/entities/urn:ngsi-ld:Product:001/attrs/price/value' \\\n  --header 'Content-Type: text/plain' \\\n  --data 89\n\n ```"
-					},
-					"response": []
-				},
-				{
-					"name": "Get Perseo Version",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "fiware-service",
-								"value": "{{fw-service-name}}"
-							},
-							{
-								"key": "fiware-servicepath",
-								"value": "{{fw-service-path}}"
-							}
-						],
-						"url": {
-							"raw": "{{addr-perseo-host-fwd}}/version",
-							"host": [
-								"{{addr-perseo-host-fwd}}"
-							],
-							"path": [
-								"version"
-							]
-						},
-						"description": "``` bash\ncurl -iX PUT \\\n  --url 'http://localhost:1026/v2/entities/urn:ngsi-ld:Product:001/attrs/price/value' \\\n  --header 'Content-Type: text/plain' \\\n  --data 89\n\n ```"
-					},
-					"response": []
-				}
-			],
-			"description": "In this folder there are the calls required to add perseo plain rules for Delta elevation updates that exeeds a defined trigger value."
 		},
 		{
 			"name": "Keyrock",
@@ -4662,6 +4268,18 @@
 		},
 		{
 			"key": "variable_key",
+			"value": ""
+		},
+		{
+			"key": "iot_sensor1-access-token",
+			"value": ""
+		},
+		{
+			"key": "iot_sensor1-access-token-expire",
+			"value": ""
+		},
+		{
+			"key": "iot_sensor1-refresh-tk",
 			"value": ""
 		}
 	]
