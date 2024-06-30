@@ -53,7 +53,7 @@ def waitFor(c,cname="db-mongo", comment="MongoDB"):
         if res.stdout.find("healthy")==0:
             healthy=True
             break
-        sleep(1)
+        sleep(3)
     if not healthy:
         raise ValueError
     print(fr"✅ Done for \033[1m{comment}\033[0m to be available")
