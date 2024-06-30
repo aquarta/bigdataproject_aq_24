@@ -96,6 +96,41 @@ services:
       interval: 15s
 
 
+  iot-agent-json:
+    labels:
+      org.fiware: 'bdataprj'
+    image: quay.io/fiware/iotagent-json:${IOTA_JSON_VERSION}
+    hostname: iot-agent-json
+    container_name: fiware-iot-agent-json
+    depends_on:
+      - mongo-db-iotaj
+      - orion-ld
+    networks:
+      - default
+    expose:
+      - ${IOTAJ_NORTH_PORT}
+      - ${IOTAJ_SOUTH_PORT}
+    ports:
+      - "${IOTAJ_NORTH_PORT}:${IOTAJ_NORTH_PORT}" # localhost:4041
+      - "${IOTAJ_SOUTH_PORT}:${IOTAJ_SOUTH_PORT}" # localhost:7896
+    environment:
+      - IOTA_CB_HOST=orion # name of the context broker to update context
+      - IOTA_CB_PORT=${ORION_PORT} # port the context broker listens on to update context
+      - IOTA_NORTH_PORT=${IOTAJ_NORTH_PORT}
+      - IOTA_REGISTRY_TYPE=mongodb #Whether to hold IoT device info in memory or in a database
+      - IOTA_LOG_LEVEL=DEBUG # The log level of the IoT Agent
+      - IOTA_TIMESTAMP=true # Supply timestamp information with each measurement
+      - IOTA_CB_NGSI_VERSION=ld # use NGSIv2 when sending updates for active attributes
+      - IOTA_JSON_LD_CONTEXT=http://context/datamodels.context.jsonld
+      - IOTA_MONGO_HOST=mongo-db-iotaj # The host name of MongoDB
+      # Here we use the MONGO_DB port since is the 'internal network port'
+      - IOTA_MONGO_PORT=${MONGO_DB} # The port mongoDB is listening on
+      - IOTA_MONGO_DB=iotagentjson # The name of the database used in mongoDB
+      - IOTA_HTTP_PORT=${IOTAJ_SOUTH_PORT} # The port used for device traffic over HTTP
+      - IOTA_PROVIDER_URL=http://iot-agent-json:${IOTAJ_NORTH_PORT}
+      - IOTA_FALLBACK_TENANT=openiot
+
+
   # Keyrock is an Identity Management Front-End
   keyrock:
     labels:
@@ -105,7 +140,7 @@ services:
     hostname: keyrock
     networks:
       default:
-        ipv4_address: 172.18.5.5
+        ipv4_address: 172.18.5.59
     depends_on:
       - mysql-db
     ports:
@@ -128,23 +163,6 @@ services:
     healthcheck:
       interval: 5s
 
-
-
-
-  # perseo
-  perseoc:
-    labels:
-      org.fiware: 'bdataprj'
-    image: telefonicaiot/perseo-core:latest
-    container_name: fiware-perseo-core
-    hostname: fiware-perseo-core
-    depends_on:
-      - mongo-db
-      - orion-ld
-    ports:
-      - "${PERSEO_CORE_PORT:-8080}:${PERSEO_CORE_PORT:-8080}"
-    environment:
-      - "PERSEO_FE_URL=http://fiware-perseo-fe:${PERSEO_ENDPOINT_PORT:-9090}"
 
 
   # Databases
@@ -173,6 +191,31 @@ services:
       start_period: 5s
 
 
+  # Databases
+  mongo-db-iotaj:
+    labels:
+      org.fiware: 'bdataprj'
+    image: mongo:${MONGO_DB_VERSION}
+    hostname: mongo-db-iotaj
+    container_name: db-mongo-iotaj
+    expose:
+      - "${MONGO_DB_IOTAJ}"
+    ports:
+      - "${MONGO_DB_IOTAJ}:${MONGO_DB_PORT}" # localhost:27017
+    networks:
+      - default
+    volumes:
+      - mongo-db-iotaj:/data
+    healthcheck:
+      #test: ["CMD","mongosh", "--eval", "\"db.adminCommand('ping')\""]
+      test: |
+        host=`hostname --ip-address || echo '127.0.0.1'`; 
+        mongo --quiet $host/test --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 2)' && echo 0 || echo 1    
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
   mysql-db:
     restart: always
     labels:
@@ -186,10 +229,10 @@ services:
       - "${MYSQL_DB_PORT}:${MYSQL_DB_PORT}" # localhost:3306
     networks:
       default:
-        ipv4_address: 172.18.5.6
+        ipv4_address: 172.18.5.60
     environment:
       - "MYSQL_ROOT_PASSWORD_FILE=/run/secrets/my_secret_data"
-      - "MYSQL_ROOT_HOST=172.18.5.5" # Allow Keyrock to access this database
+      - "MYSQL_ROOT_HOST=172.18.5.59" # Allow Keyrock to access this database
     volumes:
       - mysql-db:/var/lib/mysql
       #- ../mysql-data:/docker-entrypoint-initdb.d/:ro
@@ -329,6 +372,7 @@ volumes:
   grafana: ~
   mysql-db: ~
   mongo-db: ~
+  mongo-db-iotaj: ~
   mongo-pe-db: ~
   mqtt_data: ~
   data-models:
