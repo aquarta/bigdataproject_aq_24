@@ -1407,7 +1407,7 @@
 					"response": []
 				},
 				{
-					"name": "[DBG] Subscribe perseo to orion sensors Height changes",
+					"name": "Subscribe Quantum Leap",
 					"event": [
 						{
 							"listen": "test",
@@ -1427,7 +1427,7 @@
 						}
 					},
 					"request": {
-						"method": "PATCH",
+						"method": "POST",
 						"header": [
 							{
 								"key": "Fiware-Service",
@@ -1448,7 +1448,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"description\": \"Notify perseo of all height changes\",\r\n  \"name\": \"Notify_perseo\",\r\n  \"id\":\"urn:S23\",\r\n  \"type\": \"Subscription\",\r\n  \"entities\": [{\"type\": \"HeightSensor\"}],\r\n  \"notification\": {\r\n    \"format\": \"normalized\",\r\n    \"endpoint\": {\r\n      \"uri\": \"{{perseo-fe-url}}/notices\",\r\n      \"accept\": \"application/json\"\r\n    },\r\n    \"showChanges\": true\r\n  },\r\n   \"@context\": \"http://context/datamodels.context.jsonld\"\r\n}",
+							"raw": "{\r\n  \"description\": \"Notify Quantum Leap of all sensor motions\",\r\n  \"name\": \"Notify_quantumleap_sens_motion\",\r\n  \"type\": \"Subscription\",\r\n  \"entities\": [{\"type\": \"HeightSensor\"}],\r\n  \"notification\": {\r\n    \"format\": \"normalized\",\r\n    \"endpoint\": {\r\n      \"uri\": \"{{quantumleap_mz}}/v2/notify\",\r\n      \"accept\": \"application/json\"\r\n    },\r\n    \"showChanges\": true\r\n  },\r\n   \"@context\": \"http://context/datamodels.context.jsonld\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1530,7 +1530,8 @@
 								"subscriptions",
 								"urn:ngsi-ld:subscription:f94ad270-2959-11ef-bc1d-0242ac120513"
 							]
-						}
+						},
+						"description": "With this request we are able to reactivate a subscription when an endpoint was unreachable for some time and the previous request were failing."
 					},
 					"response": []
 				},
@@ -4150,6 +4151,53 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Grafana",
+			"item": [
+				{
+					"name": "Add CrateDB datasource to Grafana",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"CrateDB\",\r\n    \"isDefault\":true,\r\n    \"type\":\"postgres\",\r\n    \"url\":\"{{crate_db_url}}\",\r\n    \"access\":\"proxy\",\r\n    \"database\":\"mtopeniot\",\r\n    \"user\":\"crate\",\"password\":\"\", \r\n    \"sslmode\": \"disable\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{grafana_url}}/api/datasources",
+							"host": [
+								"{{grafana_url}}"
+							],
+							"path": [
+								"api",
+								"datasources"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
@@ -4177,6 +4225,10 @@
 	"variable": [
 		{
 			"key": "X-Auth-token",
+			"value": ""
+		},
+		{
+			"key": "variable_key",
 			"value": ""
 		}
 	]
