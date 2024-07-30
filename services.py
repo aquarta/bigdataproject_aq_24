@@ -48,6 +48,11 @@ def pepproxy_build(c, dfile="wilma"):
     c.run(f"{dockerCmd} -f docker-compose/{dfile}.yml up -d", echo=True)
     c.run(f"gp ports visibility 7897:public", echo=True)
 
+@task
+def flaskdash_build(c, dfile="compose"):
+    c.run(f"{dockerCmd} -f flaskdash/{dfile}.yaml up -d", echo=True)
+    c.run(f"gp ports visibility 8000:public", echo=True)
+
 
 def waitFor(c,cname="db-mongo", comment="MongoDB"):
     print(fr"⏳ Waiting for \033[1m{comment}\033[0m to be available")

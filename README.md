@@ -67,7 +67,7 @@ newman run  -e Dev.postman_environment_with_runtime_tokens.json --folder "IOT se
 ## Starting FlaskDash application
 
 ```
-docker compose -f flaskdash/compose.yaml up
+invoke -c services flaskdash-build
 ```
 
 
