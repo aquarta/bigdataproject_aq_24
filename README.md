@@ -64,3 +64,12 @@ newman run  -e pman_env.json --folder "Keyrock_login" --folder "get token info" 
 ```
 invoke -c services pepproxy-build
 ```
+
+## Restart services after a reboot
+
+You can start services after a reboot with:
+
+```
+invoke -c services docker-start-compose
+```
+
