@@ -1,12 +1,12 @@
+image: gitpod/workspace-base
+
 tasks:
-  - name: Pull Images
-    init: ./services create
-  - name: Start
-    init: pip install python-dotenv invoke && apt install mosquitto-clients -y
-    command: invoke -c services build step2-ld
-  - name: Postman
-    init: npm install -g newman
-    command: newman run -e ./Dev.postman_environment.json --folder "Add Bridges to Orion" --folder "Add service to IOT Agent" --folder "Add devices to IOT Agent" 0_BData_project.postman_collection.json
+  - name: Start with dependencies
+    init: >
+     sudo apt-get update && sudo apt install mosquitto-clients python3-pip nodejs npm -y &&
+      sudo apt install openjdk-17-jre -y  && pip install python-dotenv invoke &&
+       invoke -c services build -p && sudo npm install -g newman
+
 
 ports:
   - name: Orion
@@ -25,7 +25,7 @@ ports:
     description: Ultralight HTTP measures
     port: 7896
     onOpen: ignore
-- name: Pep proxy
+  - name: Pep proxy
     description: Ultralight HTTP measures
     port: 7897
     onOpen: ignore
