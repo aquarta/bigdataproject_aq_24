@@ -40,7 +40,7 @@ newman run -e Dev.postman_environment.json --folder "Add Bridges to Orion" --fol
 
 add subscription
 ```
-newman run -e Dev.postman_environment.json --folder "Subscribe flaskdash to orion sensors Height changes" --folder "Subscribe flaskdash to orion building changes"  0_BData_project.postman_collection.json
+newman run -e Dev.postman_environment.json --folder "Subscribe flaskdash to orion sensors Height changes" --folder "Subscribe flaskdash to orion building changes" --folder "Subscribe Quantum Leap"  0_BData_project.postman_collection.json
 ```
 
 add apps id to keyrock

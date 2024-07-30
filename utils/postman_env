@@ -1,0 +1,16 @@
+orion_url=https://1026-aquarta-bigdataprojecta-k4sb5zk5v7k.ws-eu115.gitpod.io
+iota_north=https://14041-aquarta-bigdataprojecta-k4sb5zk5v7k.ws-eu115.gitpod.io
+iota_south_url=https://7896-aquarta-bigdataprojecta-k4sb5zk5v7k.ws-eu115.gitpod.io
+perseo-fe-url=https://9090-aquarta-bigdataprojecta-k4sb5zk5v7k.ws-eu115.gitpod.io
+wilma_url=https://7897-aquarta-bigdataprojecta-k4sb5zk5v7k.ws-eu115.gitpod.io
+keyrock_url=https://13005-aquarta-bigdataprojecta-k4sb5zk5v7k.ws-eu115.gitpod.io
+fw-service-name=openiot
+fw-service-path=/
+sg_api_key=dummykey
+flask_dash=https://8000-aquarta-bigdataprojecta-k4sb5zk5v7k.ws-eu115.gitpod.io
+mz_flask_dash=http://flaskdash:8000
+fw-iota-lora-dmz=https://6041-aquarta-bigdataprojecta-k4sb5zk5v7k.ws-eu115.gitpod.io
+orion_url_mz=http://orion:1026
+quantumleap_mz=
+grafana_url=
+crate_db_url=
