@@ -5,7 +5,7 @@ tasks:
     init: >
      sudo apt-get update && sudo apt install mosquitto-clients python3-pip nodejs npm -y &&
       sudo apt install openjdk-17-jre -y  && pip install python-dotenv invoke &&
-       invoke -c services build -p && sudo npm install -g newman
+       invoke -c services build -p && sudo npm install -g newman newman-reporter-json-summary
 
 
 ports:

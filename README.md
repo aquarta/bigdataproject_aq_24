@@ -35,28 +35,19 @@ invoke -c services build step2-ld
 
 setup orion
 ```
-newman run -e Dev.postman_environment.json --folder "Add Bridges to Orion" --folder "Add service to IOT Agent" --folder "Add devices to IOT Agent" 0_BData_project.postman_collection.json
+newman run -e Dev.postman_environment.json --folder "Add Bridges to Orion" --folder "Add service to IOT Agent" --folder "Add devices to IOT Agent WITH RELATIONSHP ATTR" 0_BData_project.postman_collection.json
 ```
 
 add subscription
 ```
-newman run -e Dev.postman_environment.json --folder "Subscribe perseo to orion sensors Height changes"  0_BData_project.postman_collection.json
+newman run -e Dev.postman_environment.json --folder "Subscribe flaskdash to orion sensors Height changes" --folder "Subscribe flaskdash to orion building changes"  0_BData_project.postman_collection.json
 ```
-
-setup perseo actions
-
-```
-newman run -e pman_env.json --folder "Add Bridge status rule to perseo" --folder "Subscribe perseo to orion Bridge Status"  0_BData_project.postman_collection.json
-```
-
 
 add apps id to keyrock
 
 
 ```
-newman run  -e pman_env.json --folder "Keyrock_login" --folder "get token info" --folder "Add application" 0_BData_project.postman_collection.json
- -reporters cli,json   --reporter-json-export outputfile.json 
- 
+newman run  -e Dev.postman_environment.json --folder "Keyrock_login" --folder "get token info" --folder "Add application" --folder "Create new pep proxy" 0_BData_project.postman_collection.json  --reporters cli,json   --reporter-json-export outputfile.json --verbose
 ```
 ## Create PEP Proxy with IDs create on keyrock
 
