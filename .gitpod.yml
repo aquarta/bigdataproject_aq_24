@@ -4,7 +4,7 @@ tasks:
   - name: Start with dependencies
     init: >
      sudo apt-get update && sudo apt install mosquitto-clients python3-pip nodejs npm -y &&
-      sudo apt install openjdk-17-jre -y  && pip install python-dotenv invoke &&
+      sudo apt install openjdk-17-jre -y  && pip install python-dotenv invoke jupyter notebook &&
        invoke -c services build -p && sudo npm install -g newman newman-reporter-json-summary
 
 
