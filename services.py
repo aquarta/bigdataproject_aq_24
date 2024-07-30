@@ -27,9 +27,15 @@ def set_gitpod_public_ports(c,):
 
 
 @task
-def build(c, dfile="orion-wilma-perseo"):
+def build(c, dfile="orion-wilma-perseo", pull_only=False):
     set_gitpod_public_ports(c)
-    c.run(f"{dockerCmd} -f docker-compose/{dfile}.yml up -d --remove-orphans", echo=True)
+    if pull_only:
+        action = "pull"
+        flags = ""
+    else:
+        action = "up"
+        flags = "-d --remove-orphans"
+    c.run(f"{dockerCmd} -f docker-compose/{dfile}.yml {action} {flags}", echo=True)
 
 @task
 def start_docker_compose(c, dfile="orion-wilma-perseo"):
@@ -40,8 +46,7 @@ def start_docker_compose(c, dfile="orion-wilma-perseo"):
 @task
 def pepproxy_build(c, dfile="wilma"):
     c.run(f"{dockerCmd} -f docker-compose/{dfile}.yml up -d", echo=True)
-    c.run(f"gp ports visibility 7896:public", echo=True)
-    
+    c.run(f"gp ports visibility 7897:public", echo=True)
 
 
 def waitFor(c,cname="db-mongo", comment="MongoDB"):
@@ -58,8 +63,6 @@ def waitFor(c,cname="db-mongo", comment="MongoDB"):
         raise ValueError
     print(fr"✅ Done for \033[1m{comment}\033[0m to be available")
 
-	
-	
 @task
 def step2(c):
     waitFor(c,cname="fiware-keyrock", comment="KeyRock")
@@ -85,7 +88,7 @@ def step2(c):
 
 
     waitFor(c,cname="fiware-orion", comment="ORION")
-    
+
 
 @task
 def step2_ld(c):
@@ -135,14 +138,20 @@ def setup_orion_perseo_subs(c):
 
 @task
 def remove_db_volumes(c):
-    c.run(onlydocker_cmd+ " volume rm fiware_mysql-db",echo=True)
-    c.run(onlydocker_cmd+ " volume rm fiware_mongo-db",echo=True)
-    c.run(onlydocker_cmd+ " volume rm fiware_mqtt_data",echo=True)
-     
+    c.run(onlydocker_cmd+ " volume rm fiware_mysql-db",warn=True)
+    c.run(onlydocker_cmd+ " volume rm fiware_mongo-db",warn=True)
+    c.run(onlydocker_cmd+ " volume rm fiware_mqtt_data",warn=True)
+    c.run(onlydocker_cmd+ " volume rm fiware_crate-db",warn=True)
+    c.run(onlydocker_cmd+ " volume rm fiware_grafana",warn=True)
+    c.run(onlydocker_cmd+ " volume rm fiware_mongo-db-iotaj",warn=True)
+    c.run(onlydocker_cmd+ " volume rm fiware_redis-db",warn=True)
+
+
 
 @task
 def down(c, dfile="orion-wilma-perseo"):
     c.run(onlydocker_cmd+f" compose -f docker-compose/{dfile}.yml down", echo=True)
+    c.run(f"{dockerCmd} -f docker-compose/wila.yml down", echo=True)
 
 @task
 def rem_network(c, net="fiware_default"):
@@ -153,7 +162,6 @@ def purge(c):
     down(c)
     remove_db_volumes(c)
     rem_network(c)
-
 
 
 @task
