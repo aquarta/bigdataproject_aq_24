@@ -5,8 +5,15 @@ import os
 #loading the .env file in dir
 load_dotenv()
 
-dockerCmd="docker-compose"
-onlydocker_cmd = "docker"
+CONTAINER_HOST = os.environ.get("DOCKER_HOST", "docker.sock")
+
+if CONTAINER_HOST.find("podman")<0:
+   dockerCmd="docker-compose"
+   onlydocker_cmd = "docker"
+else:
+   dockerCmd="podman compose"
+   onlydocker_cmd = "podman"
+   
 IS_GITPOD_WORKSPACE = os.environ.get("GITPOD_REPO_ROOT", None) is not None
 
 @task
