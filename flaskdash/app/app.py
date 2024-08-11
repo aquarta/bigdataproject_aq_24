@@ -7,6 +7,14 @@ from flask_socketio import SocketIO, send, emit
 import os
 import requests
 import logging
+
+# Import smtplib for the actual sending function
+import smtplib
+
+# Import the email modules we'll need
+from email.message import EmailMessage
+
+
 app = Flask(__name__)
 #socketio = SocketIO(app, cors_allowed_origins="*", logger=True, engineio_logger=True)
 socketio = SocketIO(app, cors_allowed_origins="*", )
@@ -47,7 +55,19 @@ def print_request(r):
 def empty():
 	return "Hello World!"
 
+def send_email(bridgeid):
+    msg = EmailMessage()
 
+    msg['Subject'] = f'Building Warning {bridgeid}: status {status}'
+    msg['From'] = os.environ("EMAIL_SENDER","antonio.quarta1@studenti.unisalento.it")
+    msg['To'] = os.environ("EMAIL_RECIPIENT","antonio.quarta1+SOGEI@studenti.unisalento.it")
+    MSG_CONTENT = f"""
+    The bridge {bridgeid} require attention: status {status}
+    """
+    msg.set_content(MSG_CONTENT)
+    SMTP_SERVER = os.environ("SMTP_SERVER","localhost")
+    s = smtplib.SMTP()
+    s.send_message(msg)
 
 @app.route("/perseo_post",methods=['GET', 'POST', 'PUT'])
 def perseo_post():
@@ -66,6 +86,7 @@ def map_update():
     app.logger.info(f"status {status}")
     app.logger.info(f"content_type {content_type}")
     app.logger.info(f"request-args {request.args}")
+    send_email(bridgeid, status)
     map_status_update(bridgeid, status)
 
     return ""
