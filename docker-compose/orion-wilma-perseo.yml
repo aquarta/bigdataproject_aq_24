@@ -84,7 +84,7 @@ services:
       - IOTA_LOG_LEVEL=DEBUG # The log level of the IoT Agent
       - IOTA_TIMESTAMP=true # Supply timestamp information with each measurement
       - IOTA_CB_NGSI_VERSION=ld # use NGSIv2 when sending updates for active attributes
-      - IOTA_JSON_LD_CONTEXT=http://context/datamodels.context.jsonld
+      - IOTA_JSON_LD_CONTEXT=http://context/ngsi-context.jsonld
       - IOTA_MONGO_HOST=mongo-db # The host name of MongoDB
       - IOTA_MONGO_PORT=${MONGO_DB_PORT} # The port mongoDB is listening on
       - IOTA_MONGO_DB=iotagentul # The name of the database used in mongoDB
@@ -121,7 +121,7 @@ services:
       - IOTA_LOG_LEVEL=DEBUG # The log level of the IoT Agent
       - IOTA_TIMESTAMP=true # Supply timestamp information with each measurement
       - IOTA_CB_NGSI_VERSION=ld # use NGSIv2 when sending updates for active attributes
-      - IOTA_JSON_LD_CONTEXT=http://context/datamodels.context.jsonld
+      - IOTA_JSON_LD_CONTEXT=http://context/ngsi-context.jsonld
       - IOTA_MONGO_HOST=mongo-db-iotaj # The host name of MongoDB
       # Here we use the MONGO_DB port since is the 'internal network port'
       - IOTA_MONGO_PORT=${MONGO_DB} # The port mongoDB is listening on
@@ -283,7 +283,7 @@ services:
       - IOTA_MONGO_DB=iotagentlora # The name of the database used in mongoDB
       - IOTA_TIMESTAMP=true # Supply timestamp information with each measurement
       - IOTA_CB_NGSI_VERSION=ld # use NGSIv2 when sending updates for active attributes
-      - IOTA_JSON_LD_CONTEXT=http://context/datamodels.context.jsonld
+      - IOTA_JSON_LD_CONTEXT=http://context/ngsi-context.jsonld
 
   quantumleap:
     labels:
