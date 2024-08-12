@@ -1,6 +1,6 @@
+setuptools
 flask
 flask-socketio
 Flask-Assets
 requests
-email
 pymongo[srv]

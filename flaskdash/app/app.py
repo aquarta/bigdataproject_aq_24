@@ -27,7 +27,7 @@ LORA_IOTA_NORTH_URL = os.environ.get("LORA_IOTA_NORTH_URL", "http://iotagent-lor
 HEIGHT_SENSOR_TYPE_STR = "HeightSensor"
 FIWARE_SERVICE = "openiot"
 NGSI_PATH = "/"
-CONTEXT_URL = "http://context/datamodels.context.jsonld"
+CONTEXT_URL = "http://context/ngsi-context.jsonld"
 
 api = Blueprint('api',__name__, )
 v1_api = Blueprint('v1_api', __name__,url_prefix='/v1')
@@ -268,14 +268,21 @@ def map_view():
     res = requests.request(
         "GET",
         ORION_URL+"/ngsi-ld/v1/entities/",
-        params={"type":"https://github.com/smart-data-models/dataModel.Building/tree/master/Building", "options": "keyValues"},
+        params={
+            #"type":"https://github.com/smart-data-models/dataModel.Building/tree/master/Building", 
+            "type":"https://uri.fiware.org/ns/dataModels#Building", 
+            "options": "keyValues",
+            "limit": 200,
+            },
         headers={"Accept": "application/json","NGSILD-Tenant":FIWARE_SERVICE, "NGSILD-Path":"/"}
     )
 
-    app.logger.info(res)
 
     markers=[]
-    for bridge in res.json():
+    bridges = res.json()
+    app.logger.info(f"Number of bridges {len(bridges)} ")
+    for bridge in bridges:
+        app.logger.info(bridge)
         markers.append({
             'lon':bridge['location']['coordinates'][0],
             'lat':bridge['location']['coordinates'][1],

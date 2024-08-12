@@ -370,7 +370,7 @@ services:
       - '8000:8000'
     hostname: flaskdash
     networks:
-      - fiware_default
+      - default
 
 networks:
   default:
