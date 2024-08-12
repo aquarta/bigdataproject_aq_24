@@ -35,7 +35,7 @@ invoke -c services build step2-ld
 
 setup orion
 ```
-newman run -e Dev.postman_environment.json --folder "Add Bridges to Orion" --folder "Add service to IOT Agent" --folder "Add devices to IOT Agent WITH RELATIONSHP ATTR" 0_BData_project.postman_collection.json
+newman run -e Local.postman_environment.json --folder "Add Bridges to Orion" --folder "Add Brindisi's Bridges to Orion" --folder "Add service to IOT Agent" --folder "Add devices to IOT Agent WITH RELATIONSHP ATTR" --folder "Add Brindisi's devices to IOT Agent WITH RELATIONSHP ATTR"  0_BData_project.postman_collection.json
 ```
 
 add subscription
