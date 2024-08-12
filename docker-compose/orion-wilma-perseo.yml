@@ -359,6 +359,19 @@ services:
       default:
         ipv4_address: 172.18.5.55
 
+  flaskdashweb:
+    build:
+      context: ../flaskdash/app
+
+    # flask requires SIGINT to stop gracefully
+    # (default stop signal from Compose is SIGTERM)
+    stop_signal: SIGINT
+    ports:
+      - '8000:8000'
+    hostname: flaskdash
+    networks:
+      - fiware_default
+
 networks:
   default:
     labels:
