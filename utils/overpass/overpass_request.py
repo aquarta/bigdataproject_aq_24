@@ -67,10 +67,7 @@ bridge_template = {
       "type": "GeoProperty",
       "value": {
         "type": "Point",
-        "coordinates": [
-          16.381560309072327,
-          39.3374211887976
-        ]
+        "coordinates": []
       }
     },
     "name": {
@@ -88,11 +85,12 @@ buildings = []
 for gfeature in filtered_feature_collection_geojson:
     bridge_template_wc = cp.deepcopy(bridge_template)
     bridge_template_wc['id']=f"urn:ngsi-ld:Building:waybridge{gfeature['properties']['id']}"
-    bridge_template_wc['location']['coordinates'] = gfeature['geometry']['coordinates'][0]
+    bridge_template_wc['name']['value']=gfeature['properties']['tags']['name']
+    bridge_template_wc['location']["value"]['coordinates'] = gfeature['geometry']['coordinates'][0]
     buildings.append(bridge_template_wc)
 
 with open("buildings.json",'w') as f:
-   json.dump(buildings, f,indent=2)
+   json.dump(buildings, f,)
 
 
 device_id_template = {
@@ -149,6 +147,6 @@ for gfeature in filtered_feature_collection_geojson:
     devices.append(device_id_template_wc)
 
 with open("devices.json",'w') as f:
-   json.dump(devices, f,indent=2)
+   json.dump(devices, f,)
 
 
