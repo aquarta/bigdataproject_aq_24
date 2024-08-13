@@ -55,19 +55,32 @@ def print_request(r):
 def empty():
 	return "Hello World!"
 
-def send_email(bridgeid):
+def send_email(bridgeid, status):
     msg = EmailMessage()
 
     msg['Subject'] = f'Building Warning {bridgeid}: status {status}'
-    msg['From'] = os.environ("EMAIL_SENDER","antonio.quarta1@studenti.unisalento.it")
-    msg['To'] = os.environ("EMAIL_RECIPIENT","antonio.quarta1+SOGEI@studenti.unisalento.it")
+    msg['From'] = sender =  os.environ.get("EMAIL_SENDER","antonio.quarta1+SOGEI@studenti.unisalento.it")
+    msg['To'] = os.environ.get("EMAIL_RECIPIENT","antonio.quarta1+SOGEI@studenti.unisalento.it")
     MSG_CONTENT = f"""
     The bridge {bridgeid} require attention: status {status}
     """
     msg.set_content(MSG_CONTENT)
-    SMTP_SERVER = os.environ("SMTP_SERVER","localhost")
-    s = smtplib.SMTP()
-    s.send_message(msg)
+    SMTP_SERVER = os.environ.get("SMTP_SERVER","smtp.gmail.com")
+    #SMTP_SERVER = os.environ.get("SMTP_SERVER","warnsmtp")
+
+    
+    try:
+        #with smtplib.SMTP(SMTP_SERVER, 2525) as smtp_server:
+        with smtplib.SMTP_SSL(SMTP_SERVER, 465) as smtp_server:
+        
+            smtp_server.set_debuglevel(2)
+            smtp_server.login(sender, "jdhsnwxqgfvgdcht")
+            #tdij xaie ayiv legj
+            #smtp_server.sendmail(sender, recipients, msg.as_string())
+            app.logger.info(f"SEND MAIL {bridgeid} {status}")
+            smtp_server.send_message(msg)
+    except Exception as e:
+        app.logger.error(f"Fail to send email {e}")
 
 @app.route("/perseo_post",methods=['GET', 'POST', 'PUT'])
 def perseo_post():
@@ -76,6 +89,7 @@ def perseo_post():
 
 def map_status_update(bridgeid, status):
     app.logger.info(f"UPDATE Bridge ID {bridgeid} {status}")
+    send_email(bridgeid, status)
     emit('update_bridge_status', {'bridgeid':bridgeid, "status":status},namespace="/", broadcast=True)
 
 @app.route('/map_update', methods=["PUT"])
@@ -224,41 +238,6 @@ def sens_move():
             return Response(f"No Building id {bridgeid} found.", 404)
     return ""
 
-# @app.route('/reset_building', methods=["PUT"])
-# def reset_bridge():
-#     bridgeid = request.form.get('buildingid',None)
-#     if bridgeid:
-#         res = requests.request(
-#                 "PUT",
-#                 ORION_URL+"/v2/entities/"+bridgeid+"/attrs/status",
-#                 json={
-#                         "type":"Text",
-#                         "value":"good"
-#                     },
-#                 headers={"Accept": "application/json","NGSILD-Tenant":FIWARE_SERVICE, "NGSILD-Path":"/"}
-#             )
-#         app.logger.info(f"response status code put {res.status_code}")
-#         app.logger.info(f"response put {res.content}")
-
-#     return ""
-
-# @app.route('/bad_bridge', methods=["PUT"])
-# def bad_bridge():
-#     bridgeid = request.form.get('buildingid',None)
-#     if bridgeid:
-#         res = requests.request(
-#                 "PUT",
-#                 ORION_URL+"/v2/entities/"+bridgeid+"/attrs/status",
-#                 json={
-#                         "type":"Text",
-#                         "value":"bad"
-#                     },
-#                 headers={"Accept": "application/json","NGSILD-Tenant":FIWARE_SERVICE, "NGSILD-Path":"/"}
-#             )
-#         app.logger.info(f"response status code put {res.status_code}")
-#         app.logger.info(f"response put {res.content}")
-
-#     return ""
 
 
 @app.route('/map/')
