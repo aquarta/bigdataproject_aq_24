@@ -8,12 +8,16 @@ import os
 import requests
 import logging
 
+import database
+import model.models
+
 # Import smtplib for the actual sending function
 import smtplib
 
 # Import the email modules we'll need
 from email.message import EmailMessage
 
+from blueprints import email_actions
 
 app = Flask(__name__)
 #socketio = SocketIO(app, cors_allowed_origins="*", logger=True, engineio_logger=True)
@@ -274,6 +278,7 @@ def map_view():
     return render_template('leaflet.html',  markers=markers)
 
 # this has to be configured after definition of routes
+v1_api.register_blueprint(email_actions.bp)
 api.register_blueprint(v1_api, url_prefix='/v1')
 app.register_blueprint(api, url_prefix='/api')
 

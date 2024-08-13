@@ -362,7 +362,8 @@ services:
   flaskdashweb:
     build:
       context: ../flaskdash/app
-
+    environment:
+      - MONGO_HOST=mongo-db
     # flask requires SIGINT to stop gracefully
     # (default stop signal from Compose is SIGTERM)
     stop_signal: SIGINT
