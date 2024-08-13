@@ -35,11 +35,8 @@ class EmailAction( Model):
 
 
     def __init__(self, email_action_obj) -> None:
-        """ The constructor for User class.
+        """ The constructor for EmailAction class.
 
-        Parameters:
-            username (str): User's username
-            password (str): User's password
         """
 
         self.email_action_obj = email_action_obj
@@ -72,5 +69,99 @@ class EmailAction( Model):
         
         return res
 
-    def get_one(self, oid):
-        [i for i in dbm.neo_nodes.find({"_id": ObjectId(oid)})]
+    def update(self, oid, obj):
+        collection_name = dbname['email_actions']
+
+        query = { "_id": ObjectId(oid) }
+        newvalues = { "$set": obj }
+
+        res = collection_name.update_one(query, newvalues)
+
+        after_query = { "_id": res.upserted_id }
+        print(res.upserted_id)
+        res = collection_name.find(after_query)
+        print(res)
+        return json_util.loads(json_util.dumps(res))
+
+
+    def delete(self, oid, obj):
+        collection_name = dbname['email_actions']
+
+        query = { "_id": ObjectId(oid) }
+        newvalues = { "$set": obj }
+
+        res = collection_name.delete_one(query, newvalues)
+
+
+        print(res)
+        return json_util.loads(json_util.dumps(res))
+
+
+class HttpAction( Model):
+    """ HttpAction's model class.
+
+    
+    """
+    collection_name = "http_actions"
+
+    def __init__(self, http_action_obj) -> None:
+        """ The constructor for HttpAction class.
+
+        """
+
+        self.http_action_obj = http_action_obj
+    
+    
+    def serialize(self) -> dict:
+        """Serialize the object attributes values into a dictionary.
+
+        Returns:
+           dict: a dictionary containing the attributes values
+        """
+
+        data = self.http_action_obj
+
+        return data
+
+
+    def add(self):
+        collection_name = dbname[collection_name]
+        res = collection_name.insert_one(self.http_action_obj)
+        self.http_action_obj['_id'] = str(res.inserted_id)
+        return  self.http_action_obj
+
+    def get_all(self):
+        collection_name = dbname[collection_name]
+        res = []
+        for x in collection_name.find():
+            x['_id'] = str(x['_id'])
+            res.append(x) 
+        
+        return res
+
+    def update(self, oid, obj):
+        collection_name = dbname[collection_name]
+
+        query = { "_id": ObjectId(oid) }
+        newvalues = { "$set": obj }
+
+        res = collection_name.update_one(query, newvalues)
+
+        after_query = { "_id": res.upserted_id }
+        print(res.upserted_id)
+        res = collection_name.find(after_query)
+        print(res)
+        return json_util.loads(json_util.dumps(res))
+
+
+    def delete(self, oid, obj):
+        collection_name = dbname[collection_name]
+
+        query = { "_id": ObjectId(oid) }
+        newvalues = { "$set": obj }
+
+        res = collection_name.delete_one(query, newvalues)
+
+
+        print(res)
+        return json_util.loads(json_util.dumps(res))

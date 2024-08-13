@@ -8,8 +8,8 @@ import os
 import requests
 import logging
 
-import database
-import model.models
+import database as db
+import model.models as mdl
 
 # Import smtplib for the actual sending function
 import smtplib
@@ -60,25 +60,35 @@ def empty():
 	return "Hello World!"
 
 def send_email(bridgeid, status):
-    msg = EmailMessage()
+    email_acts = mdl.EmailAction({}).get_all()
+    for email_action in email_acts:
 
-    msg['Subject'] = f'Building Warning {bridgeid}: status {status}'
-    msg['From'] = sender =  os.environ.get("EMAIL_SENDER","antonio.quarta1+SOGEI@studenti.unisalento.it")
-    msg['To'] = os.environ.get("EMAIL_RECIPIENT","antonio.quarta1+SOGEI@studenti.unisalento.it")
-    MSG_CONTENT = f"""
-    The bridge {bridgeid} require attention: status {status}
-    """
-    msg.set_content(MSG_CONTENT)
-    SMTP_SERVER = os.environ.get("SMTP_SERVER","smtp.gmail.com")
-    #SMTP_SERVER = os.environ.get("SMTP_SERVER","warnsmtp")
+        msg = EmailMessage()
 
-    
+        #msg['Subject'] = f'Building Warning {bridgeid}: status {status}'
+        msg['Subject'] = email_action.get("subject", f'Building Warning {bridgeid}: status {status}')
+        
+        msg['From'] = sender =  email_action.get("usernanme","antonio.quarta1+SOGEI@studenti.unisalento.it")
+        msg['To'] = email_action.get("usernanme","antonio.quarta1+SOGEI@studenti.unisalento.it")
+        MSG_CONTENT_DEFAULT = f"""
+        The bridge {bridgeid} require attention: status {status}
+        """
+
+        msg.set_content(email_action.get("message",MSG_CONTENT_DEFAULT))
+        SMTP_SERVER = email_action.get("SMTP_SERVER","smtp.gmail.com")
+        #SMTP_SERVER = os.environ.get("SMTP_SERVER","warnsmtp")
+        SMTP_PORT = email_action.get("port",465)
+        PASSWORD = email_action.get("password","")
+        if email_action.get("SSL_auth",False):
+            smtp_conn = smtplib.SMTP_SSL
+        else:
+            smtp_conn = smtplib.SMTP
     try:
         #with smtplib.SMTP(SMTP_SERVER, 2525) as smtp_server:
-        with smtplib.SMTP_SSL(SMTP_SERVER, 465) as smtp_server:
+        with smtp_conn(SMTP_SERVER, SMTP_PORT) as smtp_server:
         
             smtp_server.set_debuglevel(2)
-            smtp_server.login(sender, "jdhsnwxqgfvgdcht")
+            smtp_server.login(sender, PASSWORD)
             #tdij xaie ayiv legj
             #smtp_server.sendmail(sender, recipients, msg.as_string())
             app.logger.info(f"SEND MAIL {bridgeid} {status}")
