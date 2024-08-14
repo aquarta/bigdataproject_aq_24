@@ -17,6 +17,9 @@ import smtplib
 # Import the email modules we'll need
 from email.message import EmailMessage
 
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
 from blueprints import email_actions
 
 app = Flask(__name__)
@@ -59,42 +62,56 @@ def print_request(r):
 def empty():
 	return "Hello World!"
 
-def send_email(bridgeid, status):
+def send_email(bridgeid, status, building_info):
     email_acts = mdl.EmailAction({}).get_all()
     for email_action in email_acts:
 
         msg = EmailMessage()
 
-        #msg['Subject'] = f'Building Warning {bridgeid}: status {status}'
-        msg['Subject'] = email_action.get("subject", f'Building Warning {bridgeid}: status {status}')
-        
+        msg['Subject'] = email_action.get("subject", f'Building Warning {bridgeid}: status {status}')+f" building id {bridgeid}"      
         msg['From'] = sender =  email_action.get("usernanme","antonio.quarta1+SOGEI@studenti.unisalento.it")
         msg['To'] = email_action.get("usernanme","antonio.quarta1+SOGEI@studenti.unisalento.it")
+        msg.add_header('Content-Type','text/html')
         MSG_CONTENT_DEFAULT = f"""
         The bridge {bridgeid} require attention: status {status}
         """
+        lat = building_info.get("location").get("value").get("coordinates")[1]
+        lon = building_info.get("location").get("value").get("coordinates")[0]
+        name = building_info.get("name").get("value")
+        openstreetmap_template = """
+        <h2>Building {name} [{bid}]  require attention</h2>
+        <br/><a href="https://www.openstreetmap.org/?mlat={lat}&amp;mlon={lon}#map=14/{lat}/{lon}&amp;layers=N">View Map Marker</a>
+        """
+        message_text = email_action.get("message",MSG_CONTENT_DEFAULT)+openstreetmap_template.format(box_lat_min=lat-0.01,box_lon_min=lon-0.01,
+        box_lat_max=lat+0.01,box_lon_max=lon+0.01,
+         lat=lat, lon=lon, bid=bridgeid,name=name)
 
-        msg.set_content(email_action.get("message",MSG_CONTENT_DEFAULT))
         SMTP_SERVER = email_action.get("SMTP_SERVER","smtp.gmail.com")
-        #SMTP_SERVER = os.environ.get("SMTP_SERVER","warnsmtp")
         SMTP_PORT = email_action.get("port",465)
         PASSWORD = email_action.get("password","")
+
+        
+        html_part = MIMEText(message_text, 'html')
+        msg.set_content(html_part)
+
         if email_action.get("SSL_auth",False):
             smtp_conn = smtplib.SMTP_SSL
         else:
             smtp_conn = smtplib.SMTP
-    try:
-        #with smtplib.SMTP(SMTP_SERVER, 2525) as smtp_server:
-        with smtp_conn(SMTP_SERVER, SMTP_PORT) as smtp_server:
-        
-            smtp_server.set_debuglevel(2)
-            smtp_server.login(sender, PASSWORD)
-            #tdij xaie ayiv legj
-            #smtp_server.sendmail(sender, recipients, msg.as_string())
-            app.logger.info(f"SEND MAIL {bridgeid} {status}")
-            smtp_server.send_message(msg)
-    except Exception as e:
-        app.logger.error(f"Fail to send email {e}")
+        try:
+            with smtp_conn(SMTP_SERVER, SMTP_PORT) as smtp_server:
+            
+                smtp_server.set_debuglevel(2)
+                smtp_server.login(sender, PASSWORD)
+                app.logger.info(f"SEND MAIL {bridgeid} {status}")
+                smtp_server.sendmail(
+                    msg['From'],
+                    msg['To'],
+                    msg.as_string()
+                    )
+        except Exception as e:
+            app.logger.exception(e)
+            app.logger.error(f"Fail to send email {e}")
 
 @app.route("/perseo_post",methods=['GET', 'POST', 'PUT'])
 def perseo_post():
@@ -103,7 +120,8 @@ def perseo_post():
 
 def map_status_update(bridgeid, status):
     app.logger.info(f"UPDATE Bridge ID {bridgeid} {status}")
-    send_email(bridgeid, status)
+    building_info = get_building_info(bridgeid)
+    send_email(bridgeid, status, building_info)
     emit('update_bridge_status', {'bridgeid':bridgeid, "status":status},namespace="/", broadcast=True)
 
 @app.route('/map_update', methods=["PUT"])
@@ -174,6 +192,18 @@ def update_building_status_patch_strategy(bridgeid, status):
     )
     app.logger.info(f"response status code {bridgeid} put {res.status_code}")
     app.logger.info(f"response patch {res.content}")
+
+def get_building_info(bridgeid):
+    url = ORION_URL+f"/ngsi-ld/v1/entities/{bridgeid}"
+    app.logger.info(f"Building URL  {url}")
+    res = requests.request(
+        "GET",
+        url,
+        headers={ "Accept": "application/ld+json","NGSILD-Tenant":FIWARE_SERVICE, "NGSILD-Path":"/","Link":f"<{CONTEXT_URL}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""}
+    )
+    app.logger.info(f"response status code {bridgeid} get {res.status_code}")
+    app.logger.info(f"response get {res.content}")
+    return res.json()
 
 
 def is_warning_event(height, previousheight):
