@@ -20,7 +20,7 @@ from email.message import EmailMessage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-from blueprints import email_actions
+from blueprints import email_actions, http_actions
 
 app = Flask(__name__)
 #socketio = SocketIO(app, cors_allowed_origins="*", logger=True, engineio_logger=True)
@@ -61,6 +61,62 @@ def print_request(r):
 @app.route('/')
 def empty():
 	return "Hello World!"
+
+
+def send_http_action(bridgeid, status, building_info):
+    http_acts = mdl.HttpAction({}).get_all()
+    lat = building_info.get("location").get("value").get("coordinates")[1]
+    lon = building_info.get("location").get("value").get("coordinates")[0]
+    name = building_info.get("name").get("value")
+    for http_action in http_acts:
+        app.logger.info(http_action)
+        json_act = http_action.get("json", None)
+        if not json_act:
+            qs = http_action.get("qs", None)
+            for key,value in qs.items():
+                key = key.format(
+                    building_id=bridgeid,
+                    lat=lat,
+                    lon=lon,
+                    name=name,
+                    )
+                qs[key] = value.format(
+                    building_id=bridgeid,
+                    lat=lat,
+                    lon=lon,
+                    name=name,
+                    )
+                app.logger.info(f"{key},{value}")
+            app.logger.info(f"QS {qs}")
+            req_kwargs = {"params" : qs}
+        else:
+            for key,value in json_act.items():
+                key = key.format(
+                    building_id=bridgeid,
+                    lat=lat,
+                    lon=lon,
+                    name=name,
+                    )
+                json_act[key] = value.format(
+                    building_id=bridgeid,
+                    lat=lat,
+                    lon=lon,
+                    name=name,
+                    )
+                app.logger.info(f"{key},{value}")
+            app.logger.info(f"{json_act}")
+            req_kwargs = {"json" : json_act}
+        try:
+            res = requests.request(
+                http_action.get("method", None),
+                http_action.get("url", None),
+                
+                headers=http_action.get("headers", None),
+                **req_kwargs
+            )
+            app.logger.info(f"HTTPACTION RESULTS status {res.status_code} response put {res.content}")
+        except Exception as e:
+            app.logger.exception(e)
 
 def send_email(bridgeid, status, building_info):
     email_acts = mdl.EmailAction({}).get_all()
@@ -122,6 +178,7 @@ def map_status_update(bridgeid, status):
     app.logger.info(f"UPDATE Bridge ID {bridgeid} {status}")
     building_info = get_building_info(bridgeid)
     send_email(bridgeid, status, building_info)
+    send_http_action(bridgeid, status, building_info)
     emit('update_bridge_status', {'bridgeid':bridgeid, "status":status},namespace="/", broadcast=True)
 
 @app.route('/map_update', methods=["PUT"])
@@ -132,7 +189,6 @@ def map_update():
     app.logger.info(f"status {status}")
     app.logger.info(f"content_type {content_type}")
     app.logger.info(f"request-args {request.args}")
-    send_email(bridgeid, status)
     map_status_update(bridgeid, status)
 
     return ""
@@ -319,6 +375,7 @@ def map_view():
 
 # this has to be configured after definition of routes
 v1_api.register_blueprint(email_actions.bp)
+v1_api.register_blueprint(http_actions.bp)
 api.register_blueprint(v1_api, url_prefix='/v1')
 app.register_blueprint(api, url_prefix='/api')
 

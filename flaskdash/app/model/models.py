@@ -33,6 +33,7 @@ class EmailAction( Model):
     
     """
 
+    collection_name = "email_actions"
 
     def __init__(self, email_action_obj) -> None:
         """ The constructor for EmailAction class.
@@ -55,13 +56,13 @@ class EmailAction( Model):
 
 
     def add(self):
-        collection_name = dbname['email_actions']
+        collection_name = dbname[self.collection_name]
         res = collection_name.insert_one(self.email_action_obj)
         self.email_action_obj['_id'] = str(res.inserted_id)
         return  self.email_action_obj
 
     def get_all(self):
-        collection_name = dbname['email_actions']
+        collection_name = dbname[self.collection_name]
         res = []
         for x in collection_name.find():
             x['_id'] = str(x['_id'])
@@ -70,7 +71,7 @@ class EmailAction( Model):
         return res
 
     def update(self, oid, obj):
-        collection_name = dbname['email_actions']
+        collection_name = dbname[self.collection_name]
 
         query = { "_id": ObjectId(oid) }
         newvalues = { "$set": obj }
@@ -85,7 +86,7 @@ class EmailAction( Model):
 
 
     def delete(self, oid, obj):
-        collection_name = dbname['email_actions']
+        collection_name = dbname[self.collection_name]
 
         query = { "_id": ObjectId(oid) }
         newvalues = { "$set": obj }
@@ -125,13 +126,13 @@ class HttpAction( Model):
 
 
     def add(self):
-        collection_name = dbname[collection_name]
+        collection_name = dbname[self.collection_name]
         res = collection_name.insert_one(self.http_action_obj)
         self.http_action_obj['_id'] = str(res.inserted_id)
         return  self.http_action_obj
 
     def get_all(self):
-        collection_name = dbname[collection_name]
+        collection_name = dbname[self.collection_name]
         res = []
         for x in collection_name.find():
             x['_id'] = str(x['_id'])
@@ -140,7 +141,7 @@ class HttpAction( Model):
         return res
 
     def update(self, oid, obj):
-        collection_name = dbname[collection_name]
+        collection_name = dbname[self.collection_name]
 
         query = { "_id": ObjectId(oid) }
         newvalues = { "$set": obj }
@@ -155,7 +156,7 @@ class HttpAction( Model):
 
 
     def delete(self, oid, obj):
-        collection_name = dbname[collection_name]
+        collection_name = dbname[self.collection_name]
 
         query = { "_id": ObjectId(oid) }
         newvalues = { "$set": obj }
