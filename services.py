@@ -163,7 +163,7 @@ def remove_db_volumes(c):
 @task
 def down(c, dfile="orion-wilma-perseo"):
     c.run(onlydocker_cmd+f" compose -f docker-compose/{dfile}.yml down", echo=True)
-    c.run(f"{dockerCmd} -f docker-compose/wila.yml down", echo=True)
+    c.run(f"{dockerCmd} -f docker-compose/wilma.yml down", echo=True)
 
 @task
 def rem_network(c, net="fiware_default"):
