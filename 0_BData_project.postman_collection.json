@@ -43,7 +43,7 @@
 							},
 							{
 								"key": "Link",
-								"value": "<http://context/ngsi-context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+								"value": "<{{ngsi_context_url}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
 							},
 							{
 								"key": "Accept",
@@ -109,7 +109,7 @@
 							},
 							{
 								"key": "Link",
-								"value": "<http://context/ngsi-context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+								"value": "<{{ngsi_context_url}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
 							},
 							{
 								"key": "Accept",
@@ -175,7 +175,7 @@
 							},
 							{
 								"key": "Link",
-								"value": "<http://context/datamodels.context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+								"value": "<{{ngsi_context_url}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
 							},
 							{
 								"key": "Accept",
@@ -238,7 +238,7 @@
 							},
 							{
 								"key": "Link",
-								"value": "<http://context/datamodels.context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+								"value": "<{{ngsi_context_url}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
 							},
 							{
 								"key": "Accept",
@@ -293,7 +293,7 @@
 									},
 									{
 										"key": "Link",
-										"value": "<http://context/ngsi-context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+										"value": "<{{ngsi_context_url}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
 									},
 									{
 										"key": "Accept",
@@ -382,7 +382,7 @@
 							},
 							{
 								"key": "Link",
-								"value": "<http://context/datamodels.context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+								"value": "<{{ngsi_context_url}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
 								"disabled": true
 							},
 							{
@@ -406,7 +406,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "\r\n     [\r\n        {\r\n            \"@context\": \"http://context/datamodels.context.jsonld\",\r\n            \"id\": \"urn:ngsi-ld:Building:waybridge37879441/\",\r\n            \"type\": \"Building\",\r\n            \"BuildingStatus\": {\r\n                \"type\": \"Property\",\r\n                \"value\": \"bad\"\r\n            }\r\n        }\r\n    ]\r\n",
+							"raw": "\r\n     [\r\n        {\r\n            \"@context\": \"{{ngsi_context_url}}\",\r\n            \"id\": \"urn:ngsi-ld:Building:waybridge37879441/\",\r\n            \"type\": \"Building\",\r\n            \"BuildingStatus\": {\r\n                \"type\": \"Property\",\r\n                \"value\": \"bad\"\r\n            }\r\n        }\r\n    ]\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -449,7 +449,7 @@
 									},
 									{
 										"key": "Link",
-										"value": "<http://context/ngsi-context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+										"value": "<{{ngsi_context_url}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
 									},
 									{
 										"key": "Accept",
@@ -1449,7 +1449,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"description\": \"Notify flask of all height changes\",\r\n  \"name\": \"Notify_flask_sens_motion\",\r\n  \"type\": \"Subscription\",\r\n  \"entities\": [{\"type\": \"HeightSensor\"}],\r\n  \"notification\": {\r\n    \"format\": \"normalized\",\r\n    \"endpoint\": {\r\n      \"uri\": \"{{mz_flask_dash}}/api/v1/sens_notify\",\r\n      \"accept\": \"application/json\"\r\n    },\r\n    \"showChanges\": true\r\n  },\r\n   \"@context\": \"http://context/ngsi-context.jsonld\"\r\n}",
+							"raw": "{\r\n  \"description\": \"Notify flask of all height changes\",\r\n  \"name\": \"Notify_flask_sens_motion\",\r\n  \"type\": \"Subscription\",\r\n  \"entities\": [{\"type\": \"HeightSensor\"}],\r\n  \"notification\": {\r\n    \"format\": \"normalized\",\r\n    \"endpoint\": {\r\n      \"uri\": \"{{mz_flask_dash}}/api/v1/sens_notify\",\r\n      \"accept\": \"application/json\"\r\n    },\r\n    \"showChanges\": true\r\n  },\r\n   \"@context\": \"{{ngsi_context_url}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1514,7 +1514,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"description\": \"Notify flask of all Building changes\",\r\n  \"name\": \"Notify_flask\",\r\n  \"type\": \"Subscription\",\r\n  \"entities\": [{\"type\": \"Building\"}],\r\n  \"notification\": {\r\n    \"format\": \"normalized\",\r\n    \"endpoint\": {\r\n      \"uri\": \"{{flask_dash}}/perseo_post\",\r\n      \"accept\": \"application/json\"\r\n    },\r\n    \"showChanges\": true\r\n  },\r\n   \"@context\": \"http://context/datamodels.context.jsonld\"\r\n}",
+							"raw": "{\r\n  \"description\": \"Notify flask of all Building changes\",\r\n  \"name\": \"Notify_flask\",\r\n  \"type\": \"Subscription\",\r\n  \"entities\": [{\"type\": \"Building\"}],\r\n  \"notification\": {\r\n    \"format\": \"normalized\",\r\n    \"endpoint\": {\r\n      \"uri\": \"{{flask_dash}}/perseo_post\",\r\n      \"accept\": \"application/json\"\r\n    },\r\n    \"showChanges\": true\r\n  },\r\n   \"@context\": \"{{ngsi_context_url}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1579,7 +1579,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"description\": \"Notify Quantum Leap of all sensor motions\",\r\n  \"name\": \"Notify_quantumleap_sens_motion\",\r\n  \"type\": \"Subscription\",\r\n  \"entities\": [{\"type\": \"HeightSensor\"}],\r\n  \"notification\": {\r\n    \"format\": \"normalized\",\r\n    \"endpoint\": {\r\n      \"uri\": \"{{quantumleap_mz}}/v2/notify\",\r\n      \"accept\": \"application/json\"\r\n    },\r\n    \"showChanges\": true\r\n  },\r\n   \"@context\": \"http://context/ngsi-context.jsonld\"\r\n}",
+							"raw": "{\r\n  \"description\": \"Notify Quantum Leap of all sensor motions\",\r\n  \"name\": \"Notify_quantumleap_sens_motion\",\r\n  \"type\": \"Subscription\",\r\n  \"entities\": [{\"type\": \"HeightSensor\"}],\r\n  \"notification\": {\r\n    \"format\": \"normalized\",\r\n    \"endpoint\": {\r\n      \"uri\": \"{{quantumleap_mz}}/v2/notify\",\r\n      \"accept\": \"application/json\"\r\n    },\r\n    \"showChanges\": true\r\n  },\r\n   \"@context\": \"{{ngsi_context_url}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1643,7 +1643,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"isActive\": true,\r\n   \"@context\": \"http://context/datamodels.context.jsonld\"\r\n}",
+							"raw": "{\r\n  \"isActive\": true,\r\n   \"@context\": \"{{ngsi_context_url}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1755,6 +1755,36 @@
 								"subscriptions",
 								"urn:ngsi-ld:subscription:b59b4e4c-2959-11ef-be18-0242ac120513"
 							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "FlaskDash Complex Event Processing API",
+			"item": [
+				{
+					"name": "List email actions configired",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "List email actions configired Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"smtp\": \"smtp.gmail.com\",\r\n  \"port\": 465,\r\n  \"SSL_auth\": true,\r\n  \"usernanme\": \"antonio.quarta1@studenti.unisalento.it\",\r\n  \"password\": \"jdhsnwxqgfvgdcht\",\r\n  \"recipient\": \"antonio.quarta1+SOGEI@studenti.unisalento.it\",\r\n  \"subject\": \"[sogei] Warning Building\",\r\n  \"message\": \"test message\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						}
 					},
 					"response": []
