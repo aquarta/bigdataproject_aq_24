@@ -60,3 +60,21 @@ def email_actions_put(object_id) -> Response:
         }), 200)
 
     return response
+
+
+@bp.route('/<object_id>', methods=('DELETE',))
+def email_actions_put(object_id) -> Response:
+    """Delete
+
+    Returns:
+        response: flask.Response object with the application/json mimetype.
+    """
+
+    emailact = mdl.EmailAction({})
+    res = emailact.update(object_id, request.json)
+    current_app.logger.info(f"email_actions_put {request.json} {res}")
+    response = make_response(jsonify({
+            'status': 'success',
+        }), 200)
+
+    return response
