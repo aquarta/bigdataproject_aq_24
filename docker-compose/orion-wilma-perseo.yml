@@ -20,10 +20,10 @@ version: "3.8"
 services:
   ld-context:
     labels:
-      org.fiware: 'tutorial'
+      org.bigdata: bigdata
     image: httpd:alpine
     hostname: context
-    container_name: fiware-ld-context
+    container_name: bigdata-ld-context
     ports:
         - "3004:80"
     volumes:
@@ -37,10 +37,10 @@ services:
   # Orion is an NGSI-LD context broker
   orion-ld:
     labels:
-      org.fiware: 'bdataprj'
+      org.bigdata: 'bdataprj'
     image: fiware/orion-ld:1.6.0-PRE-1615
     hostname: orion
-    container_name: fiware-orion
+    container_name: bigdata-orion
     depends_on:
       - mongo-db
     networks:
@@ -61,10 +61,10 @@ services:
   # IoT-Agent is configured for the UltraLight Protocol
   iot-agent:
     labels:
-      org.fiware: 'bdataprj'
+      org.bigdata: 'bdataprj'
     image: quay.io/fiware/iotagent-ul:${ULTRALIGHT_VERSION}
     hostname: iot-agent
-    container_name: fiware-iot-agent
+    container_name: bigdata-iot-agent
     depends_on:
       - mongo-db
       - orion-ld
@@ -98,10 +98,10 @@ services:
 
   iot-agent-json:
     labels:
-      org.fiware: 'bdataprj'
+      org.bigdata: 'bdataprj'
     image: quay.io/fiware/iotagent-json:${IOTA_JSON_VERSION}
     hostname: iot-agent-json
-    container_name: fiware-iot-agent-json
+    container_name: bigdata-iot-agent-json
     depends_on:
       - mongo-db-iotaj
       - orion-ld
@@ -134,9 +134,9 @@ services:
   # Keyrock is an Identity Management Front-End
   keyrock:
     labels:
-      org.fiware: 'bdataprj'
+      org.bigdata: 'bdataprj'
     image: quay.io/fiware/idm:${KEYROCK_VERSION}
-    container_name: fiware-keyrock
+    container_name: bigdata-keyrock
     hostname: keyrock
     networks:
       default:
@@ -168,7 +168,7 @@ services:
   # Databases
   mongo-db:
     labels:
-      org.fiware: 'bdataprj'
+      org.bigdata: 'bdataprj'
     image: mongo:${MONGO_DB_VERSION}
     hostname: mongo-db
     container_name: db-mongo
@@ -194,7 +194,7 @@ services:
   # Databases
   mongo-db-iotaj:
     labels:
-      org.fiware: 'bdataprj'
+      org.bigdata: 'bdataprj'
     image: mongo:${MONGO_DB_VERSION}
     hostname: mongo-db-iotaj
     container_name: db-mongo-iotaj
@@ -219,7 +219,7 @@ services:
   mysql-db:
     restart: always
     labels:
-      org.fiware: 'bdataprj'
+      org.bigdata: 'bdataprj'
     image: mysql:${MYSQL_DB_VERSION}
     hostname: mysql-db
     container_name: db-mysql
@@ -244,9 +244,9 @@ services:
   mqtt:
     image: eclipse-mosquitto
     labels:
-        org.fiware: 'bdataprj'
+        org.bigdata: 'bdataprj'
     hostname: mqtt
-    container_name: fiware-mqtt
+    container_name: bigdata-mqtt
     volumes:
       - ./mosquitto/config:/mosquitto/config:rw
       - mqtt_data:/mosquitto/data/:rw
@@ -262,13 +262,13 @@ services:
 
   iotagent-lora:
     image: ioeari/iotagent-lora
-    container_name: fiware-iota-lora
+    container_name: bigdata-iota-lora
     expose:
       - 6041
     ports:
       - 6041:4041
     labels:
-        org.fiware: 'bdataprj'
+        org.bigdata: 'bdataprj'
     depends_on:
         - mongo-db
         - orion-ld
@@ -287,10 +287,10 @@ services:
 
   quantumleap:
     labels:
-      org.fiware: 'tutorial'
+      org.bigdata: bigdata
     image: orchestracities/quantumleap:${QUANTUMLEAP_VERSION}
     hostname: quantumleap
-    container_name: fiware-quantumleap
+    container_name: bigdata-quantumleap
     depends_on:
       - crate-db
       - redis-db
@@ -308,7 +308,7 @@ services:
 
   redis-db:
     labels:
-      org.fiware: 'tutorial'
+      org.bigdata: bigdata
     image: redis:${REDIS_VERSION}
     hostname: redis-db
     container_name: db-redis
@@ -324,7 +324,7 @@ services:
 
   crate-db:
     labels:
-      org.fiware: 'tutorial'
+      org.bigdata: bigdata
     image: crate:${CRATE_VERSION}
     hostname: crate-db
     container_name: db-crate
@@ -342,7 +342,7 @@ services:
   # Other services
   grafana:
     labels:
-      org.fiware: 'tutorial'
+      org.bigdata: bigdata
     image: grafana/grafana:8.5.27
     container_name: grafana
     depends_on:
@@ -376,7 +376,7 @@ services:
 networks:
   default:
     labels:
-      org.fiware: 'bdataprj'
+      org.bigdata: 'bdataprj'
     ipam:
       config:
         - subnet: 172.18.5.0/24

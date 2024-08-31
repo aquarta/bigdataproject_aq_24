@@ -63,7 +63,7 @@ def http_actions_put(object_id) -> Response:
     return response
 
 
-    @bp.route('/<object_id>', methods=('DELETE',))
+@bp.route('/<object_id>', methods=('DELETE',))
 def http_actions_delete(object_id) -> Response:
     """Register a new email actions.
 

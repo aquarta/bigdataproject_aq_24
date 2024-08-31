@@ -58,7 +58,8 @@ def pepproxy_build(c, dfile="wilma"):
 @task
 def flaskdash_build(c, dfile="compose"):
     c.run(f"{dockerCmd} -f flaskdash/{dfile}.yaml up -d", echo=True)
-    c.run(f"gp ports visibility 8000:public", echo=True)
+    if IS_GITPOD_WORKSPACE:
+        c.run(f"gp ports visibility 8000:public", echo=True)
 
 
 def waitFor(c,cname="db-mongo", comment="MongoDB"):
@@ -77,7 +78,7 @@ def waitFor(c,cname="db-mongo", comment="MongoDB"):
 
 @task
 def step2(c):
-    waitFor(c,cname="fiware-keyrock", comment="KeyRock")
+    waitFor(c,cname="bigdata-keyrock", comment="KeyRock")
     waitFor(c,"db-mongo", "MongoDB")
     os.environ["ORION_URL"]="http://orion:"+os.environ["ORION_PORT"]
     first_cmd = """ exec db-mongo mongosh --eval '
@@ -99,12 +100,12 @@ def step2(c):
     c.run(onlydocker_cmd + second_cmd)
 
 
-    waitFor(c,cname="fiware-orion", comment="ORION")
+    waitFor(c,cname="bigdata-orion", comment="ORION")
 
 
 @task
 def step2_ld(c):
-    waitFor(c,cname="fiware-keyrock", comment="KeyRock")
+    waitFor(c,cname="bigdata-keyrock", comment="KeyRock")
     waitFor(c,"db-mongo", "MongoDB")
 
     first_cmd = """ exec db-mongo mongo --eval '
@@ -150,13 +151,13 @@ def setup_orion_perseo_subs(c):
 
 @task
 def remove_db_volumes(c):
-    c.run(onlydocker_cmd+ " volume rm fiware_mysql-db",warn=True)
-    c.run(onlydocker_cmd+ " volume rm fiware_mongo-db",warn=True)
-    c.run(onlydocker_cmd+ " volume rm fiware_mqtt_data",warn=True)
-    c.run(onlydocker_cmd+ " volume rm fiware_crate-db",warn=True)
-    c.run(onlydocker_cmd+ " volume rm fiware_grafana",warn=True)
-    c.run(onlydocker_cmd+ " volume rm fiware_mongo-db-iotaj",warn=True)
-    c.run(onlydocker_cmd+ " volume rm fiware_redis-db",warn=True)
+    c.run(onlydocker_cmd+ " volume rm bigdata_mysql-db",warn=True)
+    c.run(onlydocker_cmd+ " volume rm bigdata_mongo-db",warn=True)
+    c.run(onlydocker_cmd+ " volume rm bigdata_mqtt_data",warn=True)
+    c.run(onlydocker_cmd+ " volume rm bigdata_crate-db",warn=True)
+    c.run(onlydocker_cmd+ " volume rm bigdata_grafana",warn=True)
+    c.run(onlydocker_cmd+ " volume rm bigdata_mongo-db-iotaj",warn=True)
+    c.run(onlydocker_cmd+ " volume rm bigdata_redis-db",warn=True)
 
 
 
@@ -166,7 +167,7 @@ def down(c, dfile="orion-wilma-perseo"):
     c.run(f"{dockerCmd} -f docker-compose/wilma.yml down", echo=True)
 
 @task
-def rem_network(c, net="fiware_default"):
+def rem_network(c, net="bigdata_default"):
     c.run(onlydocker_cmd+f"  network rm {net}")
 
 @task

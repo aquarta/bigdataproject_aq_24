@@ -348,8 +348,8 @@ def map_view():
         "GET",
         ORION_URL+"/ngsi-ld/v1/entities/",
         params={
-            #"type":"https://github.com/smart-data-models/dataModel.Building/tree/master/Building", 
-            "type":"https://uri.fiware.org/ns/dataModels#Building", 
+            "type":"https://github.com/smart-data-models/dataModel.Building/tree/master/Building", 
+            #"type":"https://uri.fiware.org/ns/dataModels#Building", 
             "options": "keyValues",
             "limit": 200,
             },
