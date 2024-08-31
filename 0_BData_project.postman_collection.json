@@ -1787,6 +1787,25 @@
 					"response": []
 				},
 				{
+					"name": "List http actions configured",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{flask_dash}}/api/v1/http_actions",
+							"host": [
+								"{{flask_dash}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"http_actions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Set email action",
 					"request": {
 						"method": "POST",
@@ -1821,7 +1840,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"url\": \"http://httpbin:80/post\",\r\n  \"method\": \"POST\",\r\n  \"headers\": {\r\n        \"X-Auth-token\": \"dummytoken\"\r\n  },\r\n  \"qs\": {\r\n    \"building_id\": \"{building_id}\",\r\n    \"name\": \"{name}\",\r\n    \"Coords\": \"[{lat},{lon}]\"\r\n  } \r\n}",
+							"raw": "{\r\n  \"url\": \"http://httpbin.org:80/post\",\r\n  \"method\": \"POST\",\r\n  \"headers\": {\r\n        \"X-Auth-token\": \"dummytoken\"\r\n  },\r\n  \"qs\": {\r\n    \"building_id\": \"{building_id}\",\r\n    \"name\": \"{name}\",\r\n    \"Coords\": \"[{lat},{lon}]\"\r\n  } \r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1850,7 +1869,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"url\": \"http://postputprinter:8051/\",\r\n  \"method\": \"POST\",\r\n  \"headers\": {\r\n        \"X-Auth-token\": \"dummytoken\"\r\n  },\r\n  \"qs\": {\r\n    \"building_id\": \"{building_id}\",\r\n    \"name\": \"{name}\",\r\n    \"Coords\": \"[{lat},{lon}]\"\r\n  } \r\n}",
+							"raw": "{\r\n  \"url\": \"http://postputprinter:8051/\",\r\n  \"method\": \"POST\",\r\n  \"headers\": {\r\n        \"X-Auth-token\": \"dummytoken\"\r\n  },\r\n  \"json\": {\r\n    \"building_id\": \"{building_id}\",\r\n    \"name\": \"{name}\",\r\n    \"Coords\": \"[{lat},{lon}]\"\r\n  } \r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
