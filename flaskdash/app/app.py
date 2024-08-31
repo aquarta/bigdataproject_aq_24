@@ -362,13 +362,14 @@ def map_view():
     app.logger.info(f"Number of bridges {len(bridges)} ")
     for bridge in bridges:
         app.logger.info(bridge)
-        markers.append({
-            'lon':bridge['location']['coordinates'][0],
-            'lat':bridge['location']['coordinates'][1],
-            "popup":bridge["https://schema.org/name"]+"  "+f'{bridge["id"]}',
-            "status":bridge["BuildingStatus"],
-            "id": bridge["id"],
-        })
+        if isinstance(bridge, dict):
+            markers.append({
+                'lon':bridge['location']['coordinates'][0],
+                'lat':bridge['location']['coordinates'][1],
+                "popup":bridge["https://schema.org/name"]+"  "+f'{bridge["id"]}',
+                "status":bridge["BuildingStatus"],
+                "id": bridge["id"],
+            })
 
 
     return render_template('leaflet.html',  markers=markers)
