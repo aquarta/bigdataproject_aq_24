@@ -120,8 +120,8 @@ def send_http_action(bridgeid, status, building_info):
 
 def send_email(bridgeid, status, building_info):
     email_acts = mdl.EmailAction({}).get_all()
-    for email_action in email_acts:
-
+    for idx,email_action in enumerate(email_acts):
+        app.logger.info(f"Process {idx} rule")
         msg = EmailMessage()
 
         msg['Subject'] = email_action.get("subject", f'Building Warning {bridgeid}: status {status}')+f" building id {bridgeid}"      
@@ -142,7 +142,7 @@ def send_email(bridgeid, status, building_info):
         box_lat_max=lat+0.01,box_lon_max=lon+0.01,
          lat=lat, lon=lon, bid=bridgeid,name=name)
 
-        SMTP_SERVER = email_action.get("SMTP_SERVER","smtp.gmail.com")
+        SMTP_SERVER = email_action.get("smtp","smtp.gmail.com")
         SMTP_PORT = email_action.get("port",465)
         PASSWORD = email_action.get("password","")
 

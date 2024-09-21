@@ -71,7 +71,7 @@ def email_actions_delete(object_id) -> Response:
     """
 
     emailact = mdl.EmailAction({})
-    #res = emailact.update(object_id, request.json)
+    res = emailact.delete(object_id, request.json)
     current_app.logger.info(f"email_actions_delete {request.json} {res}")
     response = make_response(jsonify({
             'status': 'success',

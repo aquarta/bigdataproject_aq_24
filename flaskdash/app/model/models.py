@@ -91,11 +91,9 @@ class EmailAction( Model):
         query = { "_id": ObjectId(oid) }
         newvalues = { "$set": obj }
 
-        res = collection_name.delete_one(query, newvalues)
-
-
-        print(res)
-        return json_util.loads(json_util.dumps(res))
+        res = collection_name.delete_one(query)
+       
+        return 
 
 
 class HttpAction( Model):
@@ -155,14 +153,11 @@ class HttpAction( Model):
         return json_util.loads(json_util.dumps(res))
 
 
-    def delete(self, oid, obj):
+    def delete(self, oid):
         collection_name = dbname[self.collection_name]
 
         query = { "_id": ObjectId(oid) }
-        newvalues = { "$set": obj }
 
-        res = collection_name.delete_one(query, newvalues)
+        res = collection_name.delete_one(query)
 
-
-        print(res)
-        return json_util.loads(json_util.dumps(res))
+        return 

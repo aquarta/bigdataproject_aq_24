@@ -72,11 +72,10 @@ def http_actions_delete(object_id) -> Response:
     """
 
     emailact = mdl.HttpAction({})
-    res = emailact.update(object_id, request.json)
-    current_app.logger.info(f"http_actions_put {request.json} {res}")
+    res = emailact.delete(object_id)
     response = make_response(jsonify({
             'status': 'success',
-            'data': res
+
         }), 200)
 
     return response
