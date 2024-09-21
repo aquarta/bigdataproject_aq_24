@@ -1812,7 +1812,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"smtp\": \"smtp.gmail.com\",\r\n  \"port\": 465,\r\n  \"SSL_auth\": true,\r\n  \"usernanme\": \"alertmail@alertmaindomain.org\",\r\n  \"password\": \"verysecretpasswork\",\r\n  \"recipient\": \"alertmail@alertmaindomain.org\",\r\n  \"subject\": \"[sogei] Warning Building\",\r\n  \"message\": \"test message\"\r\n}",
+							"raw": "{\r\n  \"smtp\": \"smtp.gmail.com\",\r\n  \"port\": 465,\r\n  \"SSL_auth\": true,\r\n  \"usernanme\": \"antonio.quarta1@studenti.unisalento.it\",\r\n  \"password\": \"jdhsnwxqgfvgdcht\",\r\n  \"recipient\": \"antonio.quarta1+SOGEI@studenti.unisalento.it\",\r\n  \"subject\": \"[sogei] Warning Building\",\r\n  \"message\": \"test message\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1828,6 +1828,63 @@
 								"api",
 								"v1",
 								"email_actions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set email action fakesmtp",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"smtp\": \"warnsmtp\",\r\n  \"port\": 25,\r\n  \"SSL_auth\": false,\r\n  \"usernanme\": \"testuser\",\r\n  \"password\": \"\",\r\n  \"recipient\": \"antonio.quarta1+SOGEI@studenti.unisalento.it\",\r\n  \"subject\": \"[sogei] Warning Building\",\r\n  \"message\": \"test message\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{flask_dash}}/api/v1/email_actions",
+							"host": [
+								"{{flask_dash}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"email_actions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete email action",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"smtp\": \"warnsmtp\",\r\n  \"port\": 25,\r\n  \"SSL_auth\": false,\r\n  \"usernanme\": \"testuser\",\r\n  \"password\": \"\",\r\n  \"recipient\": \"antonio.quarta1+SOGEI@studenti.unisalento.it\",\r\n  \"subject\": \"[sogei] Warning Building\",\r\n  \"message\": \"test message\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{flask_dash}}/api/v1/email_actions/66eede9882cabb9ac052aa45",
+							"host": [
+								"{{flask_dash}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"email_actions",
+								"66eede9882cabb9ac052aa45"
 							]
 						}
 					},
@@ -1856,6 +1913,36 @@
 								"api",
 								"v1",
 								"http_actions"
+							]
+						},
+						"description": "Add action that will do a post httpbin\n\nThe response will report the request done."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete http action Copy",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"url\": \"http://httpbin.org:80/post\",\r\n  \"method\": \"POST\",\r\n  \"headers\": {\r\n        \"X-Auth-token\": \"dummytoken\"\r\n  },\r\n  \"qs\": {\r\n    \"building_id\": \"{building_id}\",\r\n    \"name\": \"{name}\",\r\n    \"Coords\": \"[{lat},{lon}]\"\r\n  } \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{flask_dash}}/api/v1/http_actions/66eedf3b82cabb9ac052aa47",
+							"host": [
+								"{{flask_dash}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"http_actions",
+								"66eedf3b82cabb9ac052aa47"
 							]
 						},
 						"description": "Add action that will do a post httpbin\n\nThe response will report the request done."
