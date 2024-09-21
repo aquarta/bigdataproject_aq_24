@@ -40,14 +40,14 @@ newman run -e Local.postman_environment.json --folder "Add Bridges to Orion" --f
 
 add subscription
 ```
-newman run -e Dev.postman_environment.json --folder "Subscribe flaskdash to orion sensors Height changes" --folder "Subscribe flaskdash to orion building changes" --folder "Subscribe Quantum Leap"  0_BData_project.postman_collection.json
+newman run -e Local.postman_environment.json --folder "Subscribe flaskdash to orion sensors Height changes" --folder "Subscribe flaskdash to orion building changes" --folder "Subscribe Quantum Leap"  0_BData_project.postman_collection.json
 ```
 
 add apps id to keyrock
 
 
 ```
-newman run  -e Dev.postman_environment.json --folder "Keyrock_login" --folder "get token info" --folder "Add application" --folder "Create new pep proxy" --folder "Create new IOT Agent" 0_BData_project.postman_collection.json  --reporters cli,json   --reporter-json-export outputfile.json --verbose --export-environment Dev.postman_environment_with_runtime_tokens.json
+newman run  -e Local.postman_environment.json --folder "Keyrock_login" --folder "get token info" --folder "Add application" --folder "Create new pep proxy" --folder "Create new IOT Agent" 0_BData_project.postman_collection.json  --reporters cli,json   --reporter-json-export outputfile.json --verbose --export-environment Local.postman_environment_with_runtime_tokens.json
 ```
 ## Create PEP Proxy with IDs create on keyrock
 
@@ -60,7 +60,7 @@ invoke -c services pepproxy-build
 
 
 ```
-newman run  -e Dev.postman_environment_with_runtime_tokens.json --folder "IOT sensor request Access Token from Keyrock" --folder "Add authenticate measure with sensor"  0_BData_project.postman_collection.json  --reporters cli,json   --reporter-json-export outputfile.json --verbose 
+newman run  -e Local.postman_environment_with_runtime_tokens.json --folder "IOT sensor request Access Token from Keyrock" --folder "Add authenticate measure with sensor"  0_BData_project.postman_collection.json  --reporters cli,json   --reporter-json-export outputfile.json --verbose 
 ```
 
 
