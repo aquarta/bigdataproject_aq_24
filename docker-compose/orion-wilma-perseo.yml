@@ -38,7 +38,7 @@ services:
   orion-ld:
     labels:
       org.bigdata: 'bdataprj'
-    image: fiware/orion-ld:1.6.0-PRE-1615
+    image: fiware/orion-ld:1.6.0
     hostname: orion
     container_name: bigdata-orion
     depends_on:
