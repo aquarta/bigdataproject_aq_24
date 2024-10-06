@@ -4536,6 +4536,20 @@
 			"item": [
 				{
 					"name": "Add CrateDB datasource to Grafana",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"pm.environment.set('grafana_datasource_uid', response.datasource.uid);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "basic",
@@ -4553,6 +4567,141 @@
 							]
 						},
 						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"CrateDB\",\r\n    \"isDefault\":true,\r\n    \"type\":\"postgres\",\r\n    \"url\":\"{{crate_db_url}}\",\r\n    \"access\":\"proxy\",\r\n    \"database\":\"mtopeniot\",\r\n    \"user\":\"crate\",\"password\":\"\", \r\n    \"jsonData\": {\r\n        \"sslmode\": \"disable\",\r\n        \"tlsAuth\": false\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{grafana_url}}/api/datasources",
+							"host": [
+								"{{grafana_url}}"
+							],
+							"path": [
+								"api",
+								"datasources"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Grafana Dashboard",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{    \r\n    \"dashboard\": {\r\n        \"panels\": [\r\n            {\r\n                \"datasource\": {\r\n                    \"type\": \"postgres\",\r\n                    \"uid\": \"{{grafana_datasource_uid}}\"\r\n                },\r\n                \"fieldConfig\": {\r\n                    \"defaults\": {\r\n                        \"color\": {\r\n                            \"mode\": \"palette-classic\"\r\n                        },\r\n                        \"custom\": {\r\n                            \"axisLabel\": \"\",\r\n                            \"axisPlacement\": \"auto\",\r\n                            \"barAlignment\": 0,\r\n                            \"drawStyle\": \"line\",\r\n                            \"fillOpacity\": 0,\r\n                            \"gradientMode\": \"none\",\r\n                            \"hideFrom\": {\r\n                                \"legend\": false,\r\n                                \"tooltip\": false,\r\n                                \"viz\": false\r\n                            },\r\n                            \"lineInterpolation\": \"linear\",\r\n                            \"lineWidth\": 1,\r\n                            \"pointSize\": 5,\r\n                            \"scaleDistribution\": {\r\n                                \"type\": \"linear\"\r\n                            },\r\n                            \"showPoints\": \"auto\",\r\n                            \"spanNulls\": false,\r\n                            \"stacking\": {\r\n                                \"group\": \"A\",\r\n                                \"mode\": \"none\"\r\n                            },\r\n                            \"thresholdsStyle\": {\r\n                                \"mode\": \"off\"\r\n                            }\r\n                        },\r\n                        \"mappings\": [],\r\n                        \"thresholds\": {\r\n                            \"mode\": \"absolute\",\r\n                            \"steps\": [\r\n                                {\r\n                                    \"color\": \"green\",\r\n                                    \"value\": null\r\n                                },\r\n                                {\r\n                                    \"color\": \"red\",\r\n                                    \"value\": 80\r\n                                }\r\n                            ]\r\n                        }\r\n                    },\r\n                    \"overrides\": []\r\n                },\r\n                \"gridPos\": {\r\n                    \"h\": 9,\r\n                    \"w\": 12,\r\n                    \"x\": 0,\r\n                    \"y\": 0\r\n                },\r\n                \"id\": 2,\r\n                \"options\": {\r\n                    \"legend\": {\r\n                        \"calcs\": [],\r\n                        \"displayMode\": \"list\",\r\n                        \"placement\": \"bottom\"\r\n                    },\r\n                    \"tooltip\": {\r\n                        \"mode\": \"single\",\r\n                        \"sort\": \"none\"\r\n                    }\r\n                },\r\n                \"targets\": [\r\n                    {\r\n                        \"datasource\": {\r\n                            \"type\": \"postgres\",\r\n                            \"uid\": \"kHsC5akNz\"\r\n                        },\r\n                        \"format\": \"time_series\",\r\n                        \"group\": [],\r\n                        \"metricColumn\": \"none\",\r\n                        \"rawQuery\": false,\r\n                        \"rawSql\": \"SELECT\\n  time_index AS \\\"time\\\",\\n  entity_id,\\n  height\\nFROM etheightsensor\\nORDER BY 1\",\r\n                        \"refId\": \"A\",\r\n                        \"select\": [\r\n                            [\r\n                                {\r\n                                    \"params\": [\r\n                                        \"entity_id\"\r\n                                    ],\r\n                                    \"type\": \"column\"\r\n                                }\r\n                            ],\r\n                            [\r\n                                {\r\n                                    \"params\": [\r\n                                        \"height\"\r\n                                    ],\r\n                                    \"type\": \"column\"\r\n                                }\r\n                            ]\r\n                        ],\r\n                        \"table\": \"etheightsensor\",\r\n                        \"timeColumn\": \"time_index\",\r\n                        \"where\": []\r\n                    }\r\n                ],\r\n                \"title\": \"Panel Title\",\r\n                \"type\": \"timeseries\"\r\n            }\r\n        ],\r\n        \"refresh\": \"\",\r\n        \"schemaVersion\": 36,\r\n        \"style\": \"dark\",\r\n        \"tags\": [],\r\n        \"templating\": {\r\n            \"list\": []\r\n        },\r\n        \"time\": {\r\n            \"from\": \"now-3h\"\r\n        },\r\n        \"timepicker\": {},\r\n        \"timezone\": \"\",\r\n        \"title\": \"First Dashboard\",\r\n        \"version\": 1,\r\n        \"weekStart\": \"\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{grafana_url}}/api/dashboards/db",
+							"host": [
+								"{{grafana_url}}"
+							],
+							"path": [
+								"api",
+								"dashboards",
+								"db"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Grafana Dashboard",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"CrateDB\",\r\n    \"isDefault\":true,\r\n    \"type\":\"postgres\",\r\n    \"url\":\"{{crate_db_url}}\",\r\n    \"access\":\"proxy\",\r\n    \"database\":\"mtopeniot\",\r\n    \"user\":\"crate\",\"password\":\"\", \r\n    \"sslmode\": \"disable\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{grafana_url}}/api/dashboards/uid/FcDgt-kHz",
+							"host": [
+								"{{grafana_url}}"
+							],
+							"path": [
+								"api",
+								"dashboards",
+								"uid",
+								"FcDgt-kHz"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Grafana datasources Copy",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "raw",
