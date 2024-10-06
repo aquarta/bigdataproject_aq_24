@@ -53,7 +53,8 @@ def start_docker_compose(c, dfile="orion-wilma-perseo"):
 @task
 def pepproxy_build(c, dfile="wilma"):
     c.run(f"{dockerCmd} -f docker-compose/{dfile}.yml up -d", echo=True)
-    c.run(f"gp ports visibility 7897:public", echo=True)
+    if IS_GITPOD_WORKSPACE:
+        c.run(f"gp ports visibility 7897:public", echo=True)
 
 @task
 def flaskdash_build(c, dfile="compose"):
